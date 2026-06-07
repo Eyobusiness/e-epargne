@@ -1,0 +1,60 @@
+@import 'bootstrap/dist/css/bootstrap.min.css';
+@import 'bootstrap-icons/font/bootstrap-icons.css';
+@import './styles/abstracts/variables.css';
+@import './styles/components/buttons.css';
+@import './styles/components/filters.css';
+@import './styles/components/forms.css';
+@import './styles/components/stats.css';
+@import './app/shared/ui/app-page-header/app-page-header.component.css';
+@import './app/shared/ui/app-table/app-table.component.css';
+@import './app/shared/ui/app-pagination/app-pagination.component.css';
+@import './app/shared/ui/app-empty-state/app-empty-state.component.css';
+@import './app/shared/ui/app-status-badge/app-status-badge.component.css';
+@import './app/shared/ui/app-toast/app-toast.component.css';
+@import './app/shared/ui/app-confirm-dialog/app-confirm-dialog.component.css';
+@import './app/shared/ui/app-modal/app-modal.component.css';
+@import './app/shared/ui/app-input/app-input.component.css';
+@import './app/shared/ui/app-select/app-select.component.css';
+@import './app/shared/ui/app-button/app-button.component.css';
+@import './app/shared/ui/app-textarea/app-textarea.component.css';
+@import './app/shared/ui/app-breadcrumb/app-breadcrumb.component.css';
+
+@import './styles/forms.css';
+
+
+@import './app/features/parametres/pages/parametres.component.css';
+@import './app/features/parametres/components/parametre-table/parametre-table.component.css';
+@import './app/features/parametres/components/parametre-form/parametre-form.component.css';
+
+:root {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html,
+  body {
+    margin: 0;
+    min-height: 100%;
+  }
+
+  body {
+    background: var(--background-color);
+    color: var(--text-primary);
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  }
+
+  button,
+  input,
+  textarea,
+  select {
+    font: inherit;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+}
+

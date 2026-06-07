@@ -1,0 +1,191 @@
+/* Standardized Form Styles */
+
+.form-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.form-content {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-xl);
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.form-group.full-width {
+  grid-column: 1 / -1;
+}
+
+.form-wrapper label {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+}
+
+.form-wrapper input,
+.form-wrapper select,
+.form-wrapper textarea {
+  width: 100%;
+  padding: var(--space-md) var(--space-lg);
+  border: 1.5px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  font-size: var(--font-size-sm);
+  font-family: var(--font-family);
+  color: var(--text-primary);
+  background: white;
+  transition: border-color var(--transition-base), box-shadow var(--transition-base);
+}
+
+.form-wrapper input:focus,
+.form-wrapper select:focus,
+.form-wrapper textarea:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 4px rgba(26, 52, 92, 0.1);
+}
+
+.form-wrapper input::placeholder,
+.form-wrapper textarea::placeholder {
+  color: var(--text-light);
+}
+
+.form-wrapper input.invalid,
+.form-wrapper select.invalid,
+.form-wrapper textarea.invalid {
+  border-color: var(--danger-color);
+  background-color: var(--danger-light);
+}
+
+.form-wrapper textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+
+.form-error {
+  color: var(--danger-color);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  margin-top: 4px;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-lg);
+  padding-top: var(--space-xl);
+  border-top: 1px solid var(--border-color);
+}
+
+.btn-submit,
+.btn-primary {
+  min-width: 120px;
+  height: 44px;
+  border: none;
+  border-radius: var(--radius-lg);
+  background: var(--primary-color);
+  color: var(--text-white);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+  transition: background-color var(--transition-base), transform var(--transition-fast), box-shadow var(--transition-base);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-submit:hover:not(:disabled),
+.btn-primary:hover:not(:disabled) {
+  background: var(--primary-dark);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-submit:active:not(:disabled),
+.btn-primary:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.btn-submit:disabled,
+.btn-primary:disabled {
+  background: var(--gray-400);
+  cursor: not-allowed;
+  opacity: 0.8;
+}
+
+.btn-cancel,
+.btn-secondary {
+  min-width: 100px;
+  height: 44px;
+  border: 1.5px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  background: white;
+  color: var(--text-primary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+  transition: background-color var(--transition-base), border-color var(--transition-base);
+}
+
+.btn-cancel:hover:not(:disabled),
+.btn-secondary:hover:not(:disabled) {
+  background: var(--gray-50);
+  border-color: var(--gray-300);
+}
+
+.btn-cancel:disabled,
+.btn-secondary:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin var(--transition-slower) linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 768px) {
+  .form-content {
+    grid-template-columns: 1fr;
+  }
+
+  .form-actions {
+    flex-direction: column;
+  }
+
+  .btn-submit,
+  .btn-primary,
+  .btn-cancel,
+  .btn-secondary {
+    width: 100%;
+    min-width: auto;
+  }
+}
+::ng-deep .ng-select-container {
+  min-height: 45px !important;
+  border-radius: 10px !important;
+}
+
+::ng-deep .ng-dropdown-panel {
+  border-radius: 10px;
+}

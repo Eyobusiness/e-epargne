@@ -1,0 +1,87 @@
+.app-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-md);
+  min-height: 2.75rem;
+  border: none;
+  border-radius: var(--radius-lg);
+  background: var(--primary-color);
+  color: var(--text-white);
+  cursor: pointer;
+  font: inherit;
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-sm);
+  padding: var(--space-md) var(--space-lg);
+  transition: background-color var(--transition-base), transform var(--transition-fast), box-shadow var(--transition-base);
+  box-shadow: var(--shadow-sm);
+}
+
+.app-button:hover:not(:disabled) {
+  background: var(--primary-dark);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.app-button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.app-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+  box-shadow: none;
+}
+
+.app-button--secondary {
+  background: var(--gray-600);
+}
+
+.app-button--secondary:hover:not(:disabled) {
+  background: var(--gray-700);
+}
+
+.app-button--danger {
+  background: var(--danger-color);
+}
+
+.app-button--danger:hover:not(:disabled) {
+  background: var(--danger-dark);
+}
+
+.app-button--outline {
+  background: transparent;
+  border: 1.5px solid var(--border-color);
+  color: var(--text-primary);
+}
+
+.app-button--outline:hover:not(:disabled) {
+  background: var(--gray-50);
+  border-color: var(--gray-300);
+}
+
+.app-button__spinner {
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: spin var(--transition-slower) linear infinite;
+  flex-shrink: 0;
+}
+
+.app-button--outline .app-button__spinner {
+  border-color: rgba(17, 24, 39, 0.15);
+  border-top-color: var(--primary-color);
+}
+
+.app-button__text {
+  display: inline-flex;
+  align-items: center;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

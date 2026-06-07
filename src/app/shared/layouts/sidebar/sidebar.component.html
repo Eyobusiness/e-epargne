@@ -1,0 +1,60 @@
+<aside
+  class="sidebar"
+  [class.open]="isOpen()">
+  <nav class="sidebar-nav">
+    @for (item of visibleItems(); track item.label) {
+      <div class="nav-group">
+        @if (!item.children?.length) {
+          <a
+            [routerLink]="item.route"
+            routerLinkActive="active"
+            class="nav-link">
+            <i [class]="item.icon"></i>
+
+            <span>
+              {{ item.label }}
+            </span>
+          </a>
+        }
+
+        @if (item.children?.length) {
+          <button
+            type="button"
+            class="nav-link nav-dropdown-trigger"
+            [class.active-parent]="isItemActive(item)"
+            (click)="toggleGroup(item.label)">
+            <span class="dropdown-label">
+              <i [class]="item.icon"></i>
+
+              <span>
+                {{ item.label }}
+              </span>
+            </span>
+
+            <i
+              class="bi bi-chevron-down nav-caret"
+              [class.open]="isGroupExpanded(item.label)">
+            </i>
+          </button>
+
+          @if (isGroupExpanded(item.label)) {
+            <div class="dropdown-menu-custom">
+              @for (child of item.children; track child.label) {
+                <a
+                  [routerLink]="child.route"
+                  routerLinkActive="active"
+                  class="dropdown-link">
+                  <i [class]="child.icon"></i>
+
+                  <span>
+                    {{ child.label }}
+                  </span>
+                </a>
+              }
+            </div>
+          }
+        }
+      </div>
+    }
+  </nav>
+</aside>

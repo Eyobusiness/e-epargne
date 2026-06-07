@@ -1,0 +1,97 @@
+<app-page-header
+  title="Depenses"
+  description="Gestion des depenses"
+  buttonText="Nouvelle depense"
+  icon="bi bi-plus-lg"
+  (action)="openCreateModal()">
+</app-page-header>
+
+<div class="page-content">
+
+  <app-depense-stats [depenses]="depenses()"></app-depense-stats>
+
+  <app-depense-filter
+    [categories]="categories()"
+    (filterChange)="onFilterChange($event)">
+  </app-depense-filter>
+
+  @if (isPageLoading()) {
+    <div class="loading-state">Chargement...</div>
+  }
+
+  @if (!isPageLoading()) {
+    @if (hasFilteredResults()) {
+      <app-depense-table
+        [depenses]="paginatedDepenses()"
+        (view)="openDetailModal($event)"
+        (edit)="openEditModal($event)"
+        (delete)="openDeleteDialog($event)">
+      </app-depense-table>
+
+      @if (hasMultiplePages()) {
+        <app-pagination
+          [currentPage]="currentPage()"
+          [totalPages]="totalPages()"
+          (pageChange)="changePage($event)">
+        </app-pagination>
+      }
+    }
+
+    @if (isFilterEmpty()) {
+      <app-empty-state
+        title="Aucune depense trouvee"
+        description="Aucune depense ne correspond au filtre applique.">
+      </app-empty-state>
+    }
+
+    @if (isEmpty()) {
+      <app-empty-state
+        title="Aucune depense"
+        description="Aucune depense disponible actuellement">
+      </app-empty-state>
+    }
+  }
+
+</div>
+
+<app-modal
+  [isOpen]="isModalOpen()"
+  title="Depense"
+  description="Ajouter ou modifier une depense"
+  width="750px"
+  (close)="closeModal()">
+
+  <app-depense-form
+    [depense]="selectedDepense()"
+    [categories]="categories()"
+    [isLoading]="isLoading()"
+    (submitForm)="saveDepense($event)"
+    (cancel)="closeModal()">
+  </app-depense-form>
+
+</app-modal>
+
+<app-modal
+  [isOpen]="isDetailOpen()"
+  title="Detail depense"
+  description="Informations et document"
+  width="800px"
+  (close)="closeDetailModal()">
+
+  @if (detailDepense()) {
+    <app-depense-detail
+      [depense]="detailDepense()!"
+      (close)="closeDetailModal()">
+    </app-depense-detail>
+  }
+
+</app-modal>
+
+<app-confirm-dialog
+  [isOpen]="isDeleteOpen()"
+  [isLoading]="isDeleteLoading()"
+  title="Supprimer depense"
+  message="Voulez-vous supprimer cette depense ?"
+  (confirm)="deleteDepense()"
+  (cancel)="closeDeleteDialog()">
+</app-confirm-dialog>

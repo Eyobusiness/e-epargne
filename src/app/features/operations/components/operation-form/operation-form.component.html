@@ -1,0 +1,173 @@
+<form
+  class="custom-form"
+  [formGroup]="form"
+  (ngSubmit)="save()">
+
+  <div class="form-grid">
+
+    <div class="form-group">
+
+      <label for="adherent">
+        Adhérent
+      </label>
+
+      <select
+        id="adherent"
+        formControlName="adherent_id"
+        (change)="onAdherentChange($any($event.target).value)">
+
+        <option value="">
+          Sélectionner
+        </option>
+
+        @for (
+          item of adherents();
+          track item.id
+        ) {
+
+          <option [value]="item.id">
+            {{ item.name }}
+          </option>
+
+        }
+
+      </select>
+
+    </div>
+
+    <div class="form-group">
+
+      <label for="moyen_operation">
+        Moyen de paiement
+      </label>
+
+      <select
+        id="moyen_operation"
+        formControlName="moyen_operation">
+
+        <option value="ORANGE_MONEY">
+          Orange Money
+        </option>
+
+        <option value="MTN_MONEY">
+          MTN Money
+        </option>
+
+        <option value="WAVE">
+          Wave
+        </option>
+
+        <option value="CASH">
+          Espèces
+        </option>
+
+      </select>
+
+    </div>
+
+    <div class="form-group">
+
+      <label for="type_operation">
+        Type opération
+      </label>
+
+      <select
+        id="type_operation"
+        formControlName="type_operation">
+
+        <option value="DEPOT">
+          Dépôt
+        </option>
+
+        <option value="RETRAIT">
+          Retrait
+        </option>
+
+      </select>
+
+    </div>
+
+    <div class="form-group">
+
+      <label for="montant">
+        Montant
+      </label>
+
+      <input
+        id="montant"
+        type="number"
+        formControlName="montant">
+
+    </div>
+
+    <div class="form-group">
+
+      <label for="date_operation">
+        Date opération
+      </label>
+
+      <input
+        id="date_operation"
+        type="date"
+        formControlName="date_operation">
+
+    </div>
+
+    <!-- <div class="form-group full-width">
+
+      <label for="motif">
+        Motif
+      </label>
+
+      <input
+        id="motif"
+        type="text"
+        formControlName="motif">
+
+    </div> -->
+
+    <!-- <div class="form-group full-width">
+
+      <label for="description">
+        Description
+      </label>
+
+      <textarea
+        id="description"
+        rows="4"
+        formControlName="description">
+      </textarea>
+
+    </div> -->
+
+  </div>
+
+  <input
+    type="hidden"
+    formControlName="cotisation_adherent_id">
+
+  <div class="form-actions">
+
+    <button
+      type="button"
+      class="btn btn-cancel"
+      (click)="close()">
+
+      Annuler
+
+    </button>
+
+    <button
+      type="submit"
+      class="btn btn-primary"
+      [disabled]="isLoading()">
+
+      <i class="bi bi-cash-stack"></i>
+
+      Payer
+
+    </button>
+
+  </div>
+
+</form>

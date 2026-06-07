@@ -1,0 +1,41 @@
+.footer {
+  height: 70px;
+
+  background: white;
+
+  border-top:
+    1px solid var(--border-color);
+
+  padding: 0 24px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  color: var(--gray-color);
+
+  font-size: 14px;
+}
+
+.footer strong {
+  color: var(--secondary-color);
+}
+
+/* =====================================================
+RESPONSIVE
+===================================================== */
+
+@media (max-width: 768px) {
+
+  .footer {
+    height: auto;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    gap: 6px;
+
+    padding: 16px;
+  }
+}

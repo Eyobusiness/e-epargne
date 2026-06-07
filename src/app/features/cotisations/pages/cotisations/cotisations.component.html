@@ -1,0 +1,78 @@
+<app-page-header
+  title="Cotisations"
+  description="Gestion des cotisations"
+  buttonText="Nouvelle cotisation"
+  icon="bi bi-plus-lg"
+  (action)="openCreateModal()">
+</app-page-header>
+
+<div class="page-content">
+  <app-cotisation-stats [cotisations]="cotisations()"></app-cotisation-stats>
+
+  <app-cotisation-filter
+    [adherents]="adherents()"
+    (filterChange)="onFilterChange($event)">
+  </app-cotisation-filter>
+
+  @if (isPageLoading()) {
+    <div class="loading-state">Chargement...</div>
+  }
+
+  @if (!isPageLoading()) {
+    @if (hasFilteredResults()) {
+      <app-cotisation-table
+        [cotisations]="cotisations()"
+        (edit)="openEditModal($event)"
+        (delete)="openDeleteDialog($event)">
+      </app-cotisation-table>
+
+      @if (hasMultiplePages()) {
+        <app-pagination
+          [currentPage]="currentPage()"
+          [totalPages]="totalPages()"
+          (pageChange)="changePage($event)">
+        </app-pagination>
+      }
+    }
+
+    @if (isFilterEmpty()) {
+      <app-empty-state
+        title="Aucune cotisation trouvee"
+        description="Aucune cotisation ne correspond au filtre applique">
+      </app-empty-state>
+    }
+
+    @if (isEmpty()) {
+      <app-empty-state
+        title="Aucune cotisation"
+        description="Aucune cotisation disponible actuellement">
+      </app-empty-state>
+    }
+  }
+</div>
+
+<app-modal
+  [isOpen]="isModalOpen()"
+  title="Cotisation"
+  description="Ajouter ou modifier une cotisation"
+  width="850px"
+  (close)="closeModal()">
+
+  <app-cotisation-form
+    [cotisation]="selectedCotisation()"
+    [adherents]="adherents()"
+    [isLoading]="isLoading()"
+    (submitForm)="saveCotisation($event)"
+    (cancel)="closeModal()">
+  </app-cotisation-form>
+
+</app-modal>
+
+<app-confirm-dialog
+  [isOpen]="isDeleteOpen()"
+  [isLoading]="isDeleteLoading()"
+  title="Supprimer cotisation"
+  message="Voulez-vous supprimer cette cotisation ?"
+  (confirm)="deleteCotisation()"
+  (cancel)="closeDeleteDialog()">
+</app-confirm-dialog>

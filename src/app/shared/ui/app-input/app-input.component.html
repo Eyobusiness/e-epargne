@@ -1,0 +1,25 @@
+<div class="input-group" [class.has-error]="error()">
+  @if (label()) {
+    <label [for]="id()">{{ label() }}</label>
+  }
+  <div class="input-wrapper">
+    <input title="Renseigner le champs" 
+      [id]="id()" 
+      [type]="currentType()" 
+      [placeholder]="placeholder()" 
+      [value]="value()"
+      [disabled]="isDisabled()"
+      (input)="onInput($event)"
+      (blur)="onBlur()"
+      class="form-control"
+    >
+    @if (type() === 'password') {
+      <button title="Afficher le mot de passe" type="button" class="toggle-password" (click)="togglePasswordVisibility()">
+        <i [class]="showPassword() ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+      </button>
+    }
+  </div>
+  @if (error()) {
+    <span class="error-message">{{ error() }}</span>
+  }
+</div>

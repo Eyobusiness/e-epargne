@@ -1,0 +1,143 @@
+<!-- components/groupe-table/groupe-table.component.html -->
+
+<div class="table-wrapper">
+
+  <table class="custom-table">
+
+    <thead>
+
+      <tr>
+
+        <th>#</th>
+
+        <th>Nom</th>
+
+        <th>Description</th>
+
+        <th>Montant min</th>
+
+        <th>Montant max</th>
+
+        <th>Statut</th>
+
+        <th>Actions</th>
+
+      </tr>
+
+    </thead>
+
+    <tbody>
+
+      @for (
+        item of groupes();
+        track trackById($index, item)
+      ) {
+
+        <tr>
+
+          <td>
+            {{ getDisplayIndex($index) }}
+          </td>
+
+          <td>
+
+            <div class="group-cell">
+
+              <div class="group-avatar">
+                {{
+                  item.name.charAt(0)
+                }}
+              </div>
+
+              <div class="group-info">
+
+                <span class="group-name">
+                  {{ item.name }}
+                </span>
+
+              </div>
+
+            </div>
+
+          </td>
+
+          <td>
+
+            {{
+              item.description || '--'
+            }}
+
+          </td>
+
+          <td>
+
+            {{
+              item.montant_min
+                | number
+            }}
+            FCFA
+
+          </td>
+
+          <td>
+
+            {{
+              item.montant_max
+                | number
+            }}
+            FCFA
+
+          </td>
+
+          <td>
+
+            <span
+              class="status-badge"
+              [class.active]="isActive(item.status)"
+              [class.inactive]="!isActive(item.status)">
+
+              {{
+                statusLabel(item.status)
+              }}
+
+            </span>
+
+          </td>
+
+          <td class="actions">
+
+            <button title="DÃ©tails"
+              class="btn-action btn-view"
+              (click)="onDetail(item)">
+
+              <i class="bi bi-eye"></i>
+
+            </button>
+
+            <button title="Modifier"
+              class="btn-action btn-edit"
+              (click)="onEdit(item)">
+
+              <i class="bi bi-pencil-square"></i>
+
+            </button>
+
+            <button title="Supprimer"
+              class="btn-action btn-delete"
+              (click)="onDelete(item)">
+
+              <i class="bi bi-trash3"></i>
+
+            </button>
+
+          </td>
+
+        </tr>
+
+      }
+
+    </tbody>
+
+  </table>
+
+</div>

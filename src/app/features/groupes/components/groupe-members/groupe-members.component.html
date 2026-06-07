@@ -1,0 +1,99 @@
+<!-- components/groupe-members/groupe-members.component.html -->
+
+<div class="table-wrapper">
+
+  <table class="custom-table">
+
+    <thead>
+
+      <tr>
+
+        <th>Adhérent</th>
+
+        <th>Téléphone</th>
+
+        <th>Statut</th>
+
+        <th>Actions</th>
+
+      </tr>
+
+    </thead>
+
+    <tbody>
+
+      @for (
+        item of members();
+        track item.id
+      ) {
+
+        <tr>
+
+          <td>
+
+            <div class="member-cell">
+
+              <div class="avatar">
+
+                {{
+                  item.adherent?.name
+                    ?.charAt(0)
+                }}
+
+              </div>
+
+              <div class="member-info">
+
+                <div class="member-name">
+
+                  {{ item.adherent?.name || '-' }}
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </td>
+
+          <td>
+
+            {{ item.adherent?.phone || '-' }}
+
+          </td>
+
+          <td>
+
+            <span
+              class="status-badge"
+              [class.active]="isActive(item.status)"
+              [class.inactive]="!isActive(item.status)">
+
+              {{ statusLabel(item.status) }}
+
+            </span>
+
+          </td>
+
+          <td class="actions">
+
+            <button
+              title="Supprimer"
+              class="btn-action btn-delete"
+              (click)="removeMember(item)">
+
+              <i class="bi bi-trash3"></i>
+
+            </button>
+
+          </td>
+
+        </tr>
+
+      }
+
+    </tbody>
+
+  </table>
+
+</div>

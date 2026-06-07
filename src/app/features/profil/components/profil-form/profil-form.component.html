@@ -1,0 +1,95 @@
+<!-- components/profil-form/profil-form.component.html -->
+
+<form
+  class="custom-form"
+  [formGroup]="form"
+  (ngSubmit)="save()">
+
+  <div class="form-group">
+
+    <label for="libelle">
+      Libelle
+    </label>
+
+    <input id="libelle"
+      type="text"
+      formControlName="libelle">
+
+  </div>
+
+  <div class="form-group">
+
+    <label for="permission" >
+      Permission
+    </label>
+
+    <input id="permission"
+      type="text"
+      formControlName="permission">
+
+  </div>
+
+  <div class="menus-section">
+
+    <h3>
+      Menus accessibles
+    </h3>
+
+    <div class="menus-grid">
+
+      @for (
+        item of menus();
+        track item.id
+      ) {
+
+        <label
+          class="menu-item">
+
+          <input
+            type="checkbox"
+            [checked]="
+              isChecked(item.id)
+            "
+            (change)="
+              toggleMenu(item.id)
+            ">
+
+          <span>
+            {{ item.libelle }}
+          </span>
+
+        </label>
+
+      }
+
+    </div>
+
+  </div>
+
+  <div class="form-actions">
+
+    <button
+      type="button"
+      class="btn btn-cancel"
+      (click)="close()">
+
+      Annuler
+
+    </button>
+
+    <button
+      type="submit"
+      class="btn btn-primary"
+      [disabled]="isLoading()">
+
+      @if (isLoading()) {
+        <span class="loading-spinner"></span>
+      }
+
+      Enregistrer
+
+    </button>
+
+  </div>
+
+</form>

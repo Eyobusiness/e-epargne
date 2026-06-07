@@ -1,0 +1,80 @@
+/* components/profil-permissions/profil-permissions.component.css */
+
+.permissions-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.permissions-section h3 {
+  margin: 0;
+
+  font-size: 17px;
+  font-weight: 700;
+
+  color: #111827;
+}
+
+.permissions-grid {
+  display: grid;
+  grid-template-columns:
+    repeat(3, 1fr);
+
+  gap: 16px;
+}
+
+.permission-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  padding: 16px;
+
+  border: 1px solid #e5e7eb;
+
+  border-radius: 16px;
+
+  background: #fff;
+
+  cursor: pointer;
+
+  transition:
+    all 0.2s ease;
+}
+
+.permission-item:hover {
+  border-color: #2563eb;
+
+  background: #eff6ff;
+}
+
+.permission-item input {
+  width: 18px;
+  height: 18px;
+
+  accent-color: #2563eb;
+}
+
+.permission-item span {
+  font-size: 14px;
+  font-weight: 600;
+
+  color: #111827;
+}
+
+@media (max-width: 992px) {
+
+  .permissions-grid {
+    grid-template-columns:
+      repeat(2, 1fr);
+  }
+
+}
+
+@media (max-width: 768px) {
+
+  .permissions-grid {
+    grid-template-columns: 1fr;
+  }
+
+}

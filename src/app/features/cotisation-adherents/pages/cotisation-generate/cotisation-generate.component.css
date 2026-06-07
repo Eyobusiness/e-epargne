@@ -1,0 +1,20 @@
+:host {
+  display: block;
+}
+
+.form-grid {
+  grid-template-columns: 1fr;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.btn-generate {
+  min-width: 160px;
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.18);
+}
+

@@ -1,0 +1,105 @@
+<!-- components/document-form/document-form.component.html -->
+
+<form
+  class="document-form"
+  [formGroup]="form"
+  (ngSubmit)="save()">
+
+  <div class="form-grid">
+
+    <div class="form-group">
+
+      <label for="type">
+        Type document
+      </label>
+
+      <select id="type"
+        formControlName="type"
+        [class.invalid]="
+          hasError('type')
+        ">
+
+        <option value="">
+          Selectionner
+        </option>
+
+        <option value="CNI">
+          CNI
+        </option>
+
+        <option value="Passeport">
+          Passeport
+        </option>
+
+        <option value="Permis">Permis</option>
+      </select>
+
+      <small class="error-text" *ngIf="hasError('type')">Le type est obligatoire</small>
+
+    </div>
+
+    <div class="form-group">
+
+      <label>
+        Numero
+      </label>
+
+      <input
+        type="text"
+        formControlName="numero"
+        placeholder="Numero document">
+
+    </div>
+
+    <div class="form-group">
+
+      <label for="validite">
+        Date validite
+      </label>
+
+      <input id="validite"
+        type="date"
+        formControlName="validite">
+
+    </div>
+
+    <div class="form-group">
+
+      <label for="file">
+        Fichier
+      </label>
+
+      <input id="file"
+        type="file"
+        (change)="onFileChange($event)">
+
+    </div>
+
+  </div>
+
+  <div class="form-actions">
+
+    <button
+      type="button"
+      class="btn btn-cancel"
+      [disabled]="isLoading"
+      (click)="close()">
+
+      Annuler
+
+    </button>
+
+    <button
+      type="submit"
+      class="btn btn-primary"
+      [disabled]="isLoading">
+
+      <span class="spinner" *ngIf="isLoading"></span>
+
+      Enregistrer
+
+    </button>
+
+  </div>
+
+</form>

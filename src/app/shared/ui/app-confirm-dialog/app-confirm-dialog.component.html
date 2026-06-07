@@ -1,0 +1,49 @@
+@if (isOpen()) {
+
+  <div class="confirm-overlay">
+
+    <div class="confirm-dialog">
+
+      <div class="confirm-icon">
+
+        <i class="bi bi-exclamation-triangle-fill"></i>
+
+      </div>
+
+      <h2>
+        {{ title() }}
+      </h2>
+
+      <p>
+        {{ message() }}
+      </p>
+
+      <div class="confirm-actions">
+
+        <button
+          class="cancel-btn"
+          type="button"
+          [disabled]="isLoading()"
+          (click)="onCancel()">
+
+          {{ cancelLabel() }}
+
+        </button>
+
+        <button
+          class="confirm-btn"
+          type="button"
+          [disabled]="isLoading()"
+          (click)="onConfirm()">
+
+          {{ isLoading() ? 'Suppression...' : confirmLabel() }}
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+}

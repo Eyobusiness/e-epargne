@@ -1,0 +1,98 @@
+<!-- pages/groupes/groupes.component.html -->
+
+<app-page-header
+  title="Groupes"
+  description="Gestion des groupes de cotisation"
+  buttonText="Nouveau groupe"
+  icon="bi bi-plus-lg"
+  (action)="openCreateModal()">
+</app-page-header>
+
+<div class="page-content">
+
+  <app-groupe-stats
+    [groupes]="groupes()">
+  </app-groupe-stats>
+
+  <app-groupe-filter
+    (filterChange)="onFilterChange($event)">
+  </app-groupe-filter>
+
+  @if (isPageLoading()) {
+
+    <div class="loading-state">
+      Chargement...
+    </div>
+
+  }
+
+  @if (!isPageLoading()) {
+
+    @if (hasFilteredResults()) {
+
+      <app-groupe-table
+        [groupes]="paginatedGroupes()"
+        [startIndex]="(currentPage() - 1) * itemsPerPage"
+        (edit)="openEditModal($event)"
+        (delete)="openDeleteDialog($event)"
+        (detail)="viewDetail($event)">
+      </app-groupe-table>
+
+      @if (hasMultiplePages()) {
+
+        <app-pagination
+          [currentPage]="currentPage()"
+          [totalPages]="totalPages()"
+          (pageChange)="changePage($event)">
+        </app-pagination>
+
+      }
+
+    }
+
+    @if (isFilterEmpty()) {
+
+      <app-empty-state
+        title="Aucun groupe trouve"
+        description="Aucun groupe ne correspond au filtre applique">
+      </app-empty-state>
+
+    }
+
+    @if (isEmpty()) {
+
+      <app-empty-state
+        title="Aucun groupe"
+        description="Aucun groupe disponible actuellement">
+      </app-empty-state>
+
+    }
+
+  }
+
+</div>
+
+<app-modal
+  [isOpen]="isModalOpen()"
+  title="Groupe"
+  description="Ajouter ou modifier un groupe"
+  width="800px"
+  (close)="closeModal()">
+
+  <app-groupe-form
+    [groupe]="selectedGroupe()"
+    [isLoading]="isLoading()"
+    (submitForm)="saveGroupe($event)"
+    (cancel)="closeModal()">
+  </app-groupe-form>
+
+</app-modal>
+
+<app-confirm-dialog
+  [isOpen]="isDeleteOpen()"
+  [isLoading]="isDeleteLoading()"
+  title="Supprimer groupe"
+  message="Voulez-vous supprimer ce groupe ?"
+  (confirm)="deleteGroupe()"
+  (cancel)="closeDeleteDialog()">
+</app-confirm-dialog>

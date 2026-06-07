@@ -1,0 +1,153 @@
+<div class="filter-container">
+
+  <div class="row g-3 align-items-end">
+
+    <div class="col-md-3">
+      <div class="form-group">
+        <label for="adherent">
+          Adhérent
+        </label>
+
+        <select
+          id="adherent"
+          class="form-select"
+          [ngModel]="adherentId()"
+          (ngModelChange)="adherentId.set($event)">
+
+          <option value="">
+            Tous les adhérents
+          </option>
+
+          @for (
+            item of adherents();
+            track item.id
+          ) {
+
+            <option [value]="item.id">
+              {{ item.name }}
+            </option>
+
+          }
+
+        </select>
+      </div>
+    </div>
+
+    <div class="col-md-2">
+      <div class="form-group">
+        <label for="status">
+          Statut
+        </label>
+
+        <select
+          id="status"
+          class="form-select"
+          [ngModel]="status()"
+          (ngModelChange)="status.set($event)">
+
+          <option value="">
+            Tous
+          </option>
+
+          <option value="100">
+            En attente
+          </option>
+
+          <option value="200">
+            Payé
+          </option>
+
+          <option value="300">
+            Annulé
+          </option>
+
+        </select>
+      </div>
+    </div>
+
+    <div class="col-md-2">
+      <div class="form-group">
+        <label for="type">
+          Type
+        </label>
+
+        <select
+          id="type"
+          class="form-select"
+          [ngModel]="type()"
+          (ngModelChange)="type.set($event)">
+
+          <option value="">
+            Tous
+          </option>
+
+          <option value="DEPOT">
+            Dépôt
+          </option>
+
+          <option value="RETRAIT">
+            Retrait
+          </option>
+
+        </select>
+      </div>
+    </div>
+
+    <div class="col-md-2">
+      <div class="form-group">
+        <label for="date_debut">
+          Date début
+        </label>
+
+        <input
+          id="date_debut"
+          type="date"
+          class="form-control"
+          [ngModel]="startDate()"
+          (ngModelChange)="startDate.set($event)">
+      </div>
+    </div>
+
+    <div class="col-md-2">
+      <div class="form-group">
+        <label for="date_fin">
+          Date fin
+        </label>
+
+        <input
+          id="date_fin"
+          type="date"
+          class="form-control"
+          [ngModel]="endDate()"
+          (ngModelChange)="endDate.set($event)">
+      </div>
+    </div>
+
+    <div class="col-md-1">
+      <div class="d-grid">
+        <button
+          class="btn btn-primary"
+          (click)="applyFilters()">
+
+          <i class="bi bi-search"></i>
+          Filtrer
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="d-flex justify-content-end mt-3">
+
+    <button
+      class="btn btn-outline-secondary"
+      (click)="resetFilters()">
+
+      <i class="bi bi-arrow-counterclockwise"></i>
+      Réinitialiser
+
+    </button>
+
+  </div>
+
+</div>

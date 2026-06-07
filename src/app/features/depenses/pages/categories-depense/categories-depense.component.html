@@ -1,0 +1,98 @@
+<!-- pages/categories-depense/categories-depense.component.html -->
+
+<app-page-header
+  title="Categories depense"
+  description="Gestion des categories de depense"
+  buttonText="Nouvelle categorie"
+  icon="bi bi-plus-lg"
+  (action)="openCreateModal()">
+</app-page-header>
+
+<div class="page-content">
+
+ @if (isPageLoading()) {
+  <div class="loading-state">
+    Chargement...
+  </div>
+}
+  @if (!isPageLoading()) {
+
+    <div class="toolbar">
+
+      <div class="search-box">
+
+        <i class="bi bi-search"></i>
+
+        <input
+          type="text"
+          placeholder="Rechercher..."
+          [ngModel]="search()"
+          (ngModelChange)="onSearchChange($event)">
+
+      </div>
+
+    </div>
+
+    @if (hasFilteredResults()) {
+
+      <app-categorie-depense-table
+        [categories]="paginatedCategories()"
+        (edit)="openEditModal($event)"
+        (delete)="openDeleteDialog($event)">
+      </app-categorie-depense-table>
+
+      @if (hasMultiplePages()) {
+
+        <app-pagination
+          [currentPage]="currentPage()"
+          [totalPages]="totalPages()"
+          (pageChange)="changePage($event)">
+        </app-pagination>
+      }
+
+}
+    @if (isFilterEmpty()) {
+
+      <app-empty-state
+        title="Aucune categorie trouvee"
+        description="Aucune categorie ne correspond a la recherche.">
+
+      </app-empty-state>
+}
+    @if (isEmpty()) {
+
+      <app-empty-state
+        title="Aucune categorie"
+        description="Aucune categorie disponible actuellement">
+      </app-empty-state>
+}
+
+}
+</div>
+
+<app-modal
+  [isOpen]="isModalOpen()"
+  title="Categorie depense"
+  description="Ajouter ou modifier une categorie"
+  width="650px"
+  (close)="closeModal()">
+
+  <app-categorie-depense-form
+    [categorie]="selectedCategorie()"
+    [isLoading]="isLoading()"
+    (submitForm)="saveCategorie($event)"
+    (cancel)="closeModal()">
+  </app-categorie-depense-form>
+
+</app-modal>
+
+<app-confirm-dialog
+  [isOpen]="isDeleteOpen()"
+  [isLoading]="isDeleteLoading()"
+  title="Supprimer categorie"
+  message="Voulez-vous supprimer cette categorie ?"
+  (confirm)="deleteCategorie()"
+  (cancel)="closeDeleteDialog()">
+</app-confirm-dialog>
+
+

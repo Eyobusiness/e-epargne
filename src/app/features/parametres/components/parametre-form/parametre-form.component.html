@@ -1,0 +1,91 @@
+<form
+  class="parametre-form"
+  novalidate
+  (ngSubmit)="onSubmit()">
+
+  <div class="form-grid">
+
+    <app-input
+      label="Libelle"
+      placeholder="Libelle"
+      [ngModel]="form().libelle"
+      (ngModelChange)="updateField('libelle', $event)"
+      (blurred)="markAsTouched('libelle')"
+      [error]="getError('libelle')"
+      name="libelle">
+    </app-input>
+
+    <app-input
+      label="Nom"
+      placeholder="Nom"
+      [ngModel]="form().nom"
+      (ngModelChange)="updateField('nom', $event)"
+      (blurred)="markAsTouched('nom')"
+      [error]="getError('nom')"
+      name="nom">
+    </app-input>
+
+    <app-select
+      label="Type"
+      placeholder="Choisir un type"
+      [options]="typeOptions"
+      [ngModel]="form().type"
+      (ngModelChange)="updateField('type', $event)"
+      (blurred)="markAsTouched('type')"
+      [error]="getError('type')"
+      name="type">
+    </app-select>
+
+    <app-input
+      label="Valeur"
+      placeholder="Valeur"
+      [ngModel]="form().valeur"
+      (ngModelChange)="updateField('valeur', $event)"
+      (blurred)="markAsTouched('valeur')"
+      [error]="getError('valeur')"
+      name="valeur">
+    </app-input>
+
+    <app-input
+      label="Parent"
+      placeholder="Parent"
+      [ngModel]="form().parent"
+      (ngModelChange)="updateField('parent', $event)"
+      (blurred)="markAsTouched('parent')"
+      [error]="getError('parent')"
+      name="parent">
+    </app-input>
+
+    <app-select
+      label="Statut"
+      placeholder="Choisir un statut"
+      [options]="[
+        { label: 'Actif', value: '200' },
+        { label: 'Inactif', value: '100' }
+      ]"
+      [ngModel]="form().status"
+      (ngModelChange)="updateField('status', $event)"
+      (blurred)="markAsTouched('status')"
+      [error]="getError('status')"
+      name="status">
+    </app-select>
+
+  </div>
+
+  <div class="form-actions">
+    <app-button
+      type="button"
+      label="Annuler"
+      variant="secondary"
+      [disabled]="isLoading()"
+      (clicked)="onCancel()">
+    </app-button>
+
+    <app-button
+      type="submit"
+      label="Enregistrer"
+      [loading]="isLoading()">
+    </app-button>
+  </div>
+
+</form>

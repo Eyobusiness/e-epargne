@@ -1,0 +1,41 @@
+/* .breadcrumb-nav {
+  display: flex;
+  align-items: center;
+}
+
+.breadcrumb-list {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+}
+
+.breadcrumb-item {
+  display: flex;
+  align-items: center;
+  color: var(--text-color-secondary, #6b7280);
+}
+
+.breadcrumb-item.active {
+  color: var(--primary-color, #2563eb);
+  font-weight: 600;
+}
+
+.breadcrumb-link {
+  text-decoration: none;
+  color: inherit;
+  transition: color 0.2s ease;
+}
+
+.breadcrumb-link:hover {
+  color: var(--primary-color, #2563eb);
+}
+
+.breadcrumb-separator {
+  font-size: 0.75rem;
+  color: #d1d5db;
+  display: flex;
+} */

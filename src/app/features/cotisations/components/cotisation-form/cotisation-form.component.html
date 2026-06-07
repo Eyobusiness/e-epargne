@@ -1,0 +1,81 @@
+<form class="cotisation-form" [formGroup]="form" (ngSubmit)="save()">
+  <div class="form-grid">
+    <div class="form-group full-width">
+  <label for="periodicite">Périodicité</label>
+
+  <select
+  id="periodicite"
+  formControlName="periodicite"
+  [class.invalid]="hasError('periodicite')">
+
+  <option value="">
+    Sélectionner une périodicité
+  </option>
+
+  @for (item of periodicites; track item.value) {
+    <option [value]="item.value">
+      {{ item.label }}
+    </option>
+  }
+
+</select>
+
+  @if (hasError('periodicite')) {
+    <small class="error-text">
+      La périodicité est obligatoire
+    </small>
+  }
+</div>
+
+
+    <div class="form-group">
+      <label for="montant">Montant</label>
+      <input
+        id="montant"
+        type="number"
+        formControlName="montant"
+        placeholder="5000"
+        [class.invalid]="hasError('montant')">
+      @if (hasError('montant')) {
+        <small class="error-text">Montant invalide</small>
+      }
+    </div>
+
+    <div class="form-group">
+      <label for="adherent_id">Adherent (optionnel)</label>
+      <select id="adherent_id" formControlName="adherent_id">
+        <option value="">Aucun</option>
+        @for (item of adherents(); track item.id) {
+          <option [value]="item.id">{{ item.name }}</option>
+        }
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="date_debut">Date debut</label>
+      <input
+        id="date_debut"
+        type="date"
+        formControlName="date_debut"
+        [class.invalid]="hasError('date_debut')">
+    </div>
+
+    <div class="form-group">
+      <label for="date_fin">Date fin</label>
+      <input
+        id="date_fin"
+        type="date"
+        formControlName="date_fin"
+        [class.invalid]="hasError('date_fin')">
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <button type="button" class="btn btn-cancel" [disabled]="isLoading()" (click)="close()">
+      Annuler
+    </button>
+    <button type="submit" class="btn btn-primary" [disabled]="isLoading()">
+      {{ isEditMode() ? 'Modifier' : 'Enregistrer' }}
+    </button>
+  </div>
+</form>

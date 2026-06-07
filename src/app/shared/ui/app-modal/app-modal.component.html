@@ -1,0 +1,65 @@
+@if (isOpen()) {
+
+  <div
+    class="modal-overlay"
+    (click)="onClose()">
+
+    <!-- =====================================================
+    MODAL
+    ===================================================== -->
+
+    <div
+      class="modal-container"
+      [style.max-width]="width()"
+      (click)="$event.stopPropagation()">
+
+      <!-- =====================================================
+      HEADER
+      ===================================================== -->
+
+      <div class="modal-header">
+
+        <div class="modal-header-content">
+
+          <h2>
+            {{ title() }}
+          </h2>
+
+          @if (description()) {
+
+            <p>
+              {{ description() }}
+            </p>
+
+          }
+
+        </div>
+
+        <!-- CLOSE BUTTON -->
+
+        <button title="Fermer"
+          type="button"
+          class="modal-close-btn"
+          (click)="onClose()">
+
+          <i class="bi bi-x"></i>
+
+        </button>
+
+      </div>
+
+      <!-- =====================================================
+      BODY
+      ===================================================== -->
+
+      <div class="modal-body">
+
+        <ng-content></ng-content>
+
+      </div>
+
+    </div>
+
+  </div>
+
+}

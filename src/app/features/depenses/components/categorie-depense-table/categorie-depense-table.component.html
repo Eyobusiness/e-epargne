@@ -1,0 +1,100 @@
+<!-- components/categorie-depense-table/categorie-depense-table.component.html -->
+
+<div class="table-wrapper">
+
+  <table class="custom-table">
+
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Nom</th>
+        <th>Description</th>
+        <th>Code</th>
+        <th>Status</th>
+        <th>Date creation</th>
+        <th class="actions-column">Actions</th>
+      </tr>
+    </thead>
+
+    <tbody>
+
+  @for (
+    item of categories();
+    track trackById($index, item)
+  ) {
+
+    <tr>
+
+      <td>
+        {{ $index + 1 }}
+      </td>
+
+      <td>
+        <div class="name-cell">
+
+          <span class="name-badge"></span>
+
+          <span>
+            {{ item.name }}
+          </span>
+
+        </div>
+      </td>
+
+      <td>
+        {{ item.description }}
+      </td>
+
+      <td>
+        {{ item.code }}
+      </td>
+
+      <td>
+        <span
+          class="status"
+          [class.active]="item.status === '200'">
+
+          {{ item.status === '200' ? 'Actif' : 'Inactif' }}
+
+        </span>
+      </td>
+
+      <td>
+        {{
+          item.created_at
+            ? (item.created_at | date:'dd/MM/yyyy')
+            : '--'
+        }}
+      </td>
+
+      <td class="actions">
+
+        <button
+          class="btn-action btn-edit"
+          title="Modifier"
+          (click)="onEdit(item)">
+
+          <i class="bi bi-pencil-square"></i>
+
+        </button>
+
+        <button
+          class="btn-action btn-delete"
+          title="Supprimer"
+          (click)="onDelete(item)">
+
+          <i class="bi bi-trash3"></i>
+
+        </button>
+
+      </td>
+
+    </tr>
+
+  }
+
+</tbody>
+
+  </table>
+
+</div>

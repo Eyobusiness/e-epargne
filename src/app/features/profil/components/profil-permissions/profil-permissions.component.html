@@ -1,0 +1,36 @@
+<div class="permissions-section">
+
+  <h3>
+    Permissions
+  </h3>
+
+  <div class="permissions-grid">
+
+    @for (
+      item of permissions();
+      track item
+    ) {
+
+      <label
+        class="permission-item">
+
+        <input
+          type="checkbox"
+          [checked]="
+            isChecked(item)
+          "
+          (change)="
+            togglePermission(item)
+          ">
+
+        <span>
+          {{ item }}
+        </span>
+
+      </label>
+
+    }
+
+  </div>
+
+</div>

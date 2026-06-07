@@ -1,0 +1,123 @@
+<!-- components/profil-table/profil-table.component.html -->
+
+<div class="table-wrapper">
+
+  <table class="custom-table">
+
+    <thead>
+
+      <tr>
+
+        <th>Profil</th>
+
+        <th>Code</th>
+
+        <th>Permission</th>
+
+        <th>Menus</th>
+
+        <th>Actions</th>
+
+      </tr>
+
+    </thead>
+
+    <tbody>
+
+      @for (
+        item of profils();
+        track trackById($index, item)
+      ) {
+
+        <tr>
+
+          <td>
+
+            <div class="profil-cell">
+
+              <div class="avatar">
+
+                {{
+                  item.libelle
+                    .charAt(0)
+                }}
+
+              </div>
+
+              <span>
+                {{ item.libelle }}
+              </span>
+
+            </div>
+
+          </td>
+
+          <td>
+
+            {{
+              item.code
+              || '--'
+            }}
+
+          </td>
+
+          <td>
+
+            {{
+              item.permission
+              || '--'
+            }}
+
+          </td>
+
+          <td>
+
+            {{
+              item.profilMenus.length
+              || 0
+            }}
+
+            menus
+
+          </td>
+
+          <td class="actions">
+
+            <button
+              title="Details"
+              class="btn-action btn-view"
+              (click)="onDetail(item)">
+
+              <i class="bi bi-eye"></i>
+
+            </button>
+
+            <button
+              title="Modifier"
+              class="btn-action btn-edit"
+              (click)="onEdit(item)">
+
+              <i class="bi bi-pencil-square"></i>
+
+            </button>
+
+            <button
+              title="Supprimer"
+              class="btn-action btn-delete"
+              (click)="onDelete(item)">
+
+              <i class="bi bi-trash3"></i>
+
+            </button>
+
+          </td>
+
+        </tr>
+
+      }
+
+    </tbody>
+
+  </table>
+
+</div>

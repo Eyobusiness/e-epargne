@@ -1,0 +1,154 @@
+<!-- components/affectation-adherent-table/affectation-adherent-table.component.html -->
+
+<div class="table-wrapper">
+
+  <table class="custom-table">
+
+    <thead>
+
+      <tr>
+
+        <th>#</th>
+
+        <th>Adherent</th>
+
+        <th>Telephone</th>
+
+        <th>Groupe</th>
+
+        <th>Montant min</th>
+
+        <th>Montant max</th>
+
+        <th>Statut</th>
+
+        <th>Actions</th>
+
+      </tr>
+
+    </thead>
+
+    <tbody>
+
+      @for (
+        item of affectations();
+        track trackById($index, item)
+      ) {
+
+        <tr>
+
+          <td>
+            {{ getDisplayIndex($index) }}
+          </td>
+
+          <td>
+
+            <div class="user-cell">
+
+              <div class="avatar">
+
+                {{
+                  item.adherent?.name
+                    ?.charAt(0)
+                }}
+
+              </div>
+
+              <div class="user-info">
+
+                <span class="user-name">
+
+                  {{
+                    item.adherent?.name
+                  }}
+
+                </span>
+
+              </div>
+
+            </div>
+
+          </td>
+
+          <td>
+
+            {{
+              item.adherent?.phone
+            }}
+
+          </td>
+
+          <td>
+
+            {{
+              item.groupe?.name
+            }}
+
+          </td>
+
+          <td>
+
+            {{
+              item.groupe
+                ?.montant_min
+                | number
+            }}
+            FCFA
+
+          </td>
+
+          <td>
+
+            {{
+              item.groupe
+                ?.montant_max
+                | number
+            }}
+            FCFA
+
+          </td>
+
+          <td>
+
+            <span
+              class="status-badge"
+              [class.active]="isActive(item.status)"
+              [class.inactive]="!isActive(item.status)">
+
+              {{
+                statusLabel(item.status)
+              }}
+
+            </span>
+
+          </td>
+
+          <td class="actions">
+
+            <button title="Détails"
+              class="btn-action btn-edit"
+              (click)="onEdit(item)">
+
+              <i class="bi bi-pencil-square"></i>
+
+            </button>
+
+            <button title="Supprimer"
+              class="btn-action btn-delete"
+              (click)="onDelete(item)">
+
+              <i class="bi bi-trash3"></i>
+
+            </button>
+
+          </td>
+
+        </tr>
+
+      }
+
+    </tbody>
+
+  </table>
+
+</div>

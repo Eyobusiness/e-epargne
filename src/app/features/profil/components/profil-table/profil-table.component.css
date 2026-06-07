@@ -1,0 +1,81 @@
+/* components/profil-table/profil-table.component.css */
+
+.table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+
+  background: #fff;
+
+  border: 1px solid #e5e7eb;
+
+  border-radius: 20px;
+}
+
+.custom-table {
+  width: 100%;
+  min-width: 900px;
+
+  border-collapse: collapse;
+}
+
+thead {
+  background: #f9fafb;
+}
+
+th {
+  padding: 16px;
+
+  text-align: left;
+
+  font-size: 13px;
+  font-weight: 700;
+
+  color: #374151;
+
+  border-bottom:
+    1px solid #e5e7eb;
+}
+
+td {
+  padding: 16px;
+
+  border-bottom:
+    1px solid #f3f4f6;
+}
+
+tbody tr:hover {
+  background: #f9fafb;
+}
+
+.profil-cell {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.avatar {
+  width: 44px;
+  height: 44px;
+
+  border-radius: 50%;
+
+  background:
+    linear-gradient(
+      135deg,
+      #7c3aed,
+      #6d28d9
+    );
+
+  color: #fff;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-weight: 700;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+}

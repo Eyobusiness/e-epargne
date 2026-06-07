@@ -1,0 +1,7 @@
+<router-outlet />
+
+<app-toast
+  [isVisible]="toastService.isVisible()"
+  [message]="toastService.message()"
+  [type]="toastService.type()">
+</app-toast>

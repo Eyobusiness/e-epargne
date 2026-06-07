@@ -1,0 +1,129 @@
+<form class="adherent-form" [formGroup]="form" (ngSubmit)="save()">
+
+  <div class="form-grid">
+    <div class="form-group">
+      <label>Nom complet</label>
+      <input
+        type="text"
+        formControlName="name"
+        placeholder="Nom adherent"
+        [class.invalid]="hasError('name')">
+      @if (hasError('name')) {
+        <small class="error-text">Le nom est obligatoire</small>
+      }
+    </div>
+
+    <div class="form-group">
+      <label>Telephone</label>
+      <input
+        type="text"
+        formControlName="phone"
+        placeholder="0700000000"
+        [class.invalid]="hasError('phone')">
+      @if (hasError('phone')) {
+        <small class="error-text">Le telephone est obligatoire</small>
+      }
+    </div>
+
+    <div class="form-group">
+      <label>Adresse</label>
+      <input
+        type="text"
+        formControlName="address"
+        placeholder="Adresse adherent"
+        [class.invalid]="hasError('address')">
+      @if (hasError('address')) {
+        <small class="error-text">L'adresse est obligatoire</small>
+      }
+    </div>
+
+    <div class="form-group">
+      <label>Email</label>
+      <input
+        type="email"
+        formControlName="email"
+        placeholder="email@email.com"
+        [class.invalid]="hasError('email')">
+      @if (hasError('email')) {
+        <small class="error-text">Email invalide</small>
+      }
+    </div>
+
+    <div class="form-group">
+      <label>Matricule</label>
+      <input
+        type="text"
+        formControlName="matricule"
+        placeholder="CSS-73-2025"
+        [class.invalid]="hasError('matricule')">
+      @if (hasError('matricule')) {
+        <small class="error-text">Le matricule est obligatoire</small>
+      }
+    </div>
+
+    <div class="form-group">
+      <label>Mot de passe</label>
+      <input
+        type="password"
+        formControlName="password"
+        [placeholder]="isEditMode() ? 'Laisser vide pour ne pas changer' : 'Mot de passe'">
+      @if (!isEditMode() && hasError('password')) {
+        <small class="error-text">Le mot de passe est obligatoire</small>
+      }
+    </div>
+  </div>
+
+  <div class="documents-section">
+    <h4 class="section-title">Documents d'identite</h4>
+    <p class="section-hint">
+      @if (isEditMode()) {
+        Ajoutez de nouveaux fichiers uniquement si vous souhaitez les remplacer.
+      } @else {
+        Joignez au minimum la CNI recto et verso.
+      }
+    </p>
+
+    <div class="form-grid">
+      <div class="form-group">
+        <label for="recto_cni">CNI Recto</label>
+        <input
+          id="recto_cni"
+          type="file"
+          accept=".pdf,.png,.jpg,.jpeg,.webp"
+          (change)="onRectoChange($event)">
+        @if (rectoFileName()) {
+          <small class="file-name">{{ rectoFileName() }}</small>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="verso_cni">CNI Verso</label>
+        <input
+          id="verso_cni"
+          type="file"
+          accept=".pdf,.png,.jpg,.jpeg,.webp"
+          (change)="onVersoChange($event)">
+        @if (versoFileName()) {
+          <small class="file-name">{{ versoFileName() }}</small>
+        }
+      </div>
+    </div>
+
+    @if (hasDocumentError()) {
+      <small class="error-text">CNI recto et verso obligatoires a la creation</small>
+    }
+  </div>
+
+  <div class="form-actions">
+    <button type="button" class="btn btn-cancel" [disabled]="isLoading()" (click)="close()">
+      Annuler
+    </button>
+    <button type="submit" class="btn btn-primary" [disabled]="isLoading()">
+      @if (isLoading()) {
+        <span class="spinner"></span>
+      }
+      {{ isEditMode() ? 'Modifier' : 'Enregistrer' }}
+    </button>
+  </div>
+
+</form>

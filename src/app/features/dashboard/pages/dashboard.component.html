@@ -1,0 +1,130 @@
+<div class="dashboard-page">
+  <div class="dashboard-header">
+    <div>
+
+      <h1>
+        Tableau de bord
+      </h1>
+
+      <p>
+        Vue globale des performances et activites financieres
+      </p>
+    </div>
+
+    <div class="dashboard-date">
+      <span class="dashboard-date-label">
+        Periode
+      </span>
+
+      <span>
+        {{ currentPeriod }}
+      </span>
+    </div>
+  </div>
+
+  <div class="stats-grid stats-grid--4 dashboard-stats-grid">
+    @for (stat of stats; track stat.label) {
+      <div
+        class="stat-card stat-card--stacked"
+        [ngClass]="'stat-card--' + stat.tone">
+        <div class="stat-card-top">
+          <div
+            class="stat-icon"
+            [ngClass]="'stat-icon--' + stat.tone">
+            {{ stat.badge }}
+          </div>
+
+          <div class="stat-growth" [ngClass]="stat.trendType">
+            {{ stat.trend }}
+          </div>
+        </div>
+
+        <div class="stat-content">
+          <span class="stat-label">
+            {{ stat.label }}
+          </span>
+
+          <h3>
+            {{ stat.value }}
+          </h3>
+
+          <p class="stat-description">
+            {{ stat.description }}
+          </p>
+        </div>
+      </div>
+    }
+  </div>
+
+  <div class="dashboard-content-grid">
+    <div class="dashboard-card recent-activities">
+      <div class="dashboard-card-header">
+        <div>
+          <h3>
+            Activites recentes
+          </h3>
+
+          <p>
+            Dernieres operations enregistrees
+          </p>
+        </div>
+
+        <button class="btn dashboard-action-btn">
+          Voir plus
+        </button>
+      </div>
+
+      <div class="activity-list">
+        @for (activity of activities; track activity.title) {
+          <div class="activity-item">
+            <div class="activity-icon" [class]="activity.tone">
+              {{ activity.badge }}
+            </div>
+
+            <div class="activity-content">
+              <strong>
+                {{ activity.title }}
+              </strong>
+
+              <span>
+                {{ activity.subtitle }}
+              </span>
+            </div>
+
+            <small>
+              {{ activity.time }}
+            </small>
+          </div>
+        }
+      </div>
+    </div>
+
+    <div class="dashboard-card quick-overview">
+      <div class="dashboard-card-header">
+        <div>
+          <h3>
+            Apercu rapide
+          </h3>
+
+          <p>
+            Resume des indicateurs
+          </p>
+        </div>
+      </div>
+
+      <div class="overview-list">
+        @for (item of overview; track item.label) {
+          <div class="overview-item">
+            <span>
+              {{ item.label }}
+            </span>
+
+            <strong [class]="item.tone">
+              {{ item.value }}
+            </strong>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+</div>

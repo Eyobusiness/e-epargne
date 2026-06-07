@@ -1,0 +1,19 @@
+:host {
+  display: block;
+}
+
+.document-section {
+  border-top: 1px solid #e5e7eb;
+  padding-top: 1rem;
+}
+
+.section-title {
+  margin: 0 0 0.75rem;
+  font-size: 1rem;
+}
+
+.file-name {
+  display: block;
+  margin-top: 0.35rem;
+  color: #4b5563;
+}

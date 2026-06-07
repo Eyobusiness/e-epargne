@@ -1,0 +1,105 @@
+<form
+  class="generate-form"
+  [formGroup]="form"
+  (ngSubmit)="submit()">
+
+  <div class="form-grid">
+
+    <div class="form-group">
+
+      <label for="adherentId">
+        Adhérent
+      </label>
+
+      <select
+        id="adherentId"
+        formControlName="adherentId">
+
+        <option value="">
+          Tous les adhérents
+        </option>
+
+        @for (
+          item of adherents();
+          track item.id
+        ) {
+
+          <option [value]="item.id">
+            {{ item.name }}
+          </option>
+
+        }
+
+      </select>
+
+    </div>
+
+    <div class="form-group">
+
+      <label for="startDate">
+        Date début
+      </label>
+
+      <input
+        id="startDate"
+        type="date"
+        formControlName="startDate"
+        [class.invalid]="hasError('startDate')">
+
+      @if (hasError('startDate')) {
+
+        <small class="error-text">
+          Date début obligatoire
+        </small>
+
+      }
+
+    </div>
+
+    <div class="form-group">
+
+      <label for="endDate">
+        Date fin
+      </label>
+
+      <input
+        id="endDate"
+        type="date"
+        formControlName="endDate"
+        [class.invalid]="hasError('endDate')">
+
+      @if (hasError('endDate')) {
+
+        <small class="error-text">
+          Date fin obligatoire
+        </small>
+
+      }
+
+    </div>
+
+  </div>
+
+  <div class="form-actions">
+
+    <button
+      type="button"
+      class="btn btn-cancel"
+      (click)="close()">
+
+      Annuler
+
+    </button>
+
+    <button
+      type="submit"
+      class="btn btn-primary btn-generate"
+      [disabled]="isLoading()">
+
+      Générer
+
+    </button>
+
+  </div>
+
+</form>

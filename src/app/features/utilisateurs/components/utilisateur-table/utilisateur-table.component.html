@@ -1,0 +1,118 @@
+<div class="table-wrapper">
+
+  <table class="custom-table">
+
+    <thead>
+
+      <tr>
+
+        <th>Nom</th>
+
+        <th>Email</th>
+
+        <th>Telephone</th>
+
+        <th>Profil</th>
+
+        <th>Code</th>
+
+        <th>Statut</th>
+
+        <th>Actions</th>
+
+      </tr>
+
+    </thead>
+
+    <tbody>
+
+      @for (
+        item of utilisateurs();
+        track trackById($index, item)
+      ) {
+        @if (item) {
+
+        <tr>
+
+          <td>
+
+            <div class="user-cell">
+
+              <div class="avatar">
+                {{ item.name.charAt(0) }}
+              </div>
+
+              <div class="user-info">
+
+                <span class="user-name">
+                  {{ item.name }}
+                </span>
+
+              </div>
+
+            </div>
+
+          </td>
+
+          <td>
+            {{ item.email }}
+          </td>
+
+          <td>
+            {{ item.phone }}
+          </td>
+
+          <td>
+            {{ item.profil?.name || $any(item.profil)?.libelle || '--' }}
+          </td>
+
+          <td>
+            {{ item.code }}
+          </td>
+
+          <td>
+
+            <span
+              class="status-badge"
+              [class.active]="item.status === '200'"
+              [class.inactive]="item.status !== '200'">
+
+              {{ item.status === '200' ? 'Actif' : 'Inactif' }}
+
+            </span>
+
+          </td>
+
+          <td class="actions">
+
+            <button
+              title="Modifier"
+              class="btn-action btn-edit"
+              (click)="onEdit(item)">
+
+              <i class="bi bi-pencil-square"></i>
+
+            </button>
+
+            <button
+              title="Supprimer"
+              class="btn-action btn-delete"
+              (click)="onDelete(item)">
+
+              <i class="bi bi-trash3"></i>
+
+            </button>
+
+          </td>
+
+        </tr>
+
+        }
+
+      }
+
+    </tbody>
+
+  </table>
+
+</div>

@@ -1,0 +1,32 @@
+<div class="page-header">
+
+  <div class="page-header-content">
+
+    <h1>
+      {{ title() }}
+    </h1>
+
+    <p>
+      {{ description() }}
+    </p>
+
+  </div>
+
+  @if (buttonText()) {
+
+    <button
+      type="button"
+      class="page-header-btn btn-accent"
+      (click)="onAction()">
+
+      <i [class]="icon()"></i>
+
+      <span>
+        {{ buttonText() }}
+      </span>
+
+    </button>
+
+  }
+
+</div>

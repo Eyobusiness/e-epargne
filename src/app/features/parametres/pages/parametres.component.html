@@ -1,0 +1,103 @@
+<app-page-header
+  title="Parametres"
+  description="Gestion des parametres applicatifs"
+  buttonText="Nouveau parametre"
+  icon="bi bi-plus-lg"
+  (action)="openCreateModal()">
+</app-page-header>
+
+<div class="parametres-page">
+  @if (isPageLoading()) {
+    <div class="loading-state">
+      <div class="loading-spinner"></div>
+      <p>Chargement des parametres...</p>
+    </div>
+  }
+
+  @if (!isPageLoading()) {
+    <div class="table-toolbar">
+      <select
+        title="Filtrer"
+        class="filter-select"
+        [ngModel]="selectedType()"
+        (ngModelChange)="onTypeChange($event)">
+        <option value="all">Tous les types</option>
+        <option value="CODE">CODE</option>
+        <option value="CRYP">CRYP</option>
+        <option value="TONTINE_APP">TONTINE_APP</option>
+      </select>
+
+      <div class="search-box">
+        <i class="bi bi-search"></i>
+
+        <input
+          type="text"
+          placeholder="Rechercher un parametre..."
+          [ngModel]="search()"
+          (ngModelChange)="onSearchChange($event)">
+      </div>
+    </div>
+
+    @if (hasStoredParametres() || isFilterEmpty()) {
+      <div class="results-summary">
+        <span>{{ totalItems() }} parametre(s) trouve(s)</span>
+        <span>Page {{ currentPage() }} sur {{ totalPages() }}</span>
+      </div>
+    }
+
+    @if (hasFilteredResults()) {
+      <app-parametre-table
+        [parametres]="paginatedParametres()"
+        
+        (edit)="openEditModal($event)"
+        (delete)="openDeleteDialog($event)">
+      </app-parametre-table>
+
+      @if (hasMultiplePages()) {
+        <app-pagination
+          [currentPage]="currentPage()"
+          [totalPages]="totalPages()"
+          [disabled]="isLoading() || isDeleteLoading()"
+          (pageChange)="changePage($event)">
+        </app-pagination>
+      }
+    }
+
+    @if (isFilterEmpty()) {
+      <app-empty-state
+        title="Aucun parametre trouve"
+        description="Aucun parametre ne correspond au type ou a la recherche selectionne(e).">
+      </app-empty-state>
+    }
+
+    @if (isEmpty()) {
+      <app-empty-state
+        title="Aucun parametre"
+        [description]="emptyStateDescription()">
+      </app-empty-state>
+    }
+  }
+</div>
+
+<app-modal
+  [isOpen]="isModalOpen()"
+  title="Parametre"
+  description="Creer ou modifier un parametre"
+  width="700px"
+  (close)="closeModal()">
+  <app-parametre-form
+    [parametre]="selectedParametre()"
+    [isLoading]="isLoading()"
+    (submitForm)="saveParametre($event)"
+    (cancel)="closeModal()">
+  </app-parametre-form>
+</app-modal>
+
+<app-confirm-dialog
+  [isOpen]="isDeleteOpen()"
+  [isLoading]="isDeleteLoading()"
+  title="Supprimer parametre"
+  message="Voulez-vous vraiment supprimer ce parametre ?"
+  (confirm)="deleteParametre()"
+  (cancel)="closeDeleteDialog()">
+</app-confirm-dialog>

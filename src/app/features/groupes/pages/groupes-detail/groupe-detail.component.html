@@ -1,0 +1,202 @@
+<!-- pages/groupe-detail/groupe-detail.component.html -->
+
+@if (isLoading()) {
+
+  <div class="loading-state">
+    Chargement...
+  </div>
+
+}
+
+@if (groupe(); as item) {
+
+  <div class="detail-page">
+    <div class="detail-top">
+      <a routerLink="/groupes" class="btn btn-secondary">
+        <i class="bi bi-arrow-left"></i>
+        Retour a la liste
+      </a>
+    </div>
+
+    <div class="group-header">
+
+      <div class="group-info">
+
+        <div class="group-avatar">
+
+          {{
+            item.name.charAt(0)
+              .toUpperCase()
+          }}
+
+        </div>
+
+        <div class="group-content">
+
+          <h2>
+            {{ item.name }}
+          </h2>
+
+          <p>
+            {{
+              item.description || '--'
+            }}
+          </p>
+
+        </div>
+
+      </div>
+
+      <button
+        class="btn btn-add"
+        (click)="openCreateModal()">
+
+        <i class="bi bi-plus-lg"></i>
+
+        Ajouter membre
+
+      </button>
+
+    </div>
+
+    <div class="stats-grid stats-grid--3">
+
+      <div class="stat-card stat-card--blue">
+
+        <div class="stat-icon stat-icon--blue">
+
+
+      <i class="bi bi-people"></i>
+
+    </div>
+
+    <div class="stat-content">
+
+      <span>
+        Membres
+      </span>
+
+      <h3>
+        {{ totalMembers() }}
+      </h3>
+
+    </div>
+
+  </div>
+
+  <div class="stat-card stat-card--green">
+
+    <div class="stat-icon stat-icon--green">
+
+      <i class="bi bi-cash-stack"></i>
+
+    </div>
+
+    <div class="stat-content">
+
+      <span>
+        Montant minimum
+      </span>
+
+
+      <h3>
+        {{
+          item.montant_min
+            | number
+        }}
+        FCFA
+      </h3>
+
+
+    </div>
+
+  </div>
+
+  <div class="stat-card stat-card--orange">
+
+    <div class="stat-icon stat-icon--orange">
+
+      <i class="bi bi-wallet2"></i>
+
+    </div>
+
+    <div class="stat-content">
+
+      <span>
+        Montant maximum
+      </span>
+
+      <h3>
+        {{
+          item.montant_max
+            | number
+        }}
+        FCFA
+      </h3>
+
+
+    </div>
+
+  </div>
+
+</div>
+
+    <div class="members-section">
+
+      <div class="section-header">
+
+        <h3>
+          Membres du groupe
+        </h3>
+
+      </div>
+
+      @if (displayedMembers().length > 0) {
+
+        <app-groupe-members
+          [members]="displayedMembers()"
+          (remove)="openDeleteDialog($event)">
+        </app-groupe-members>
+
+      }
+
+      @if (displayedMembers().length === 0) {
+
+        <app-empty-state
+          title="Aucun membre"
+          description="Aucun adherent affecte a ce groupe">
+        </app-empty-state>
+
+      }
+
+    </div>
+
+  </div>
+
+}
+
+<app-modal
+  [isOpen]="isModalOpen()"
+  title="Affectation adherent"
+  description="Ajouter un adherent au groupe"
+  width="700px"
+  (close)="closeModal()">
+
+  <app-affectation-adherent-form
+    [adherents]="adherents()"
+    [groupes]="groupe() ? [groupe()!] : []"
+    [isLoading]="isSaveLoading()"
+    (submitForm)="saveAffectation($event)"
+    (cancel)="closeModal()">
+  </app-affectation-adherent-form>
+
+</app-modal>
+
+<app-confirm-dialog
+  [isOpen]="isDeleteOpen()"
+  [isLoading]="isDeleteLoading()"
+  title="Retirer membre"
+  message="Voulez-vous retirer ce membre du groupe ?"
+  (confirm)="removeMember()"
+  (cancel)="closeDeleteDialog()">
+</app-confirm-dialog>

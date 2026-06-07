@@ -1,0 +1,36 @@
+<!-- pages/portefeuille-detail/portefeuille-detail.component.html -->
+
+<app-page-header
+  title="Portefeuille"
+  description="Consultation du portefeuille adherent">
+</app-page-header>
+
+<div class="page-content">
+
+  @if (isLoading()) {
+
+    <div class="loading-state">
+      Chargement...
+    </div>
+
+  }
+
+  @if (!isLoading()) {
+
+    <app-portefeuille-stats
+  [portefeuille]="portefeuille()"
+  [operations]="operations()">
+</app-portefeuille-stats>
+
+    <app-portefeuille-resume
+  [portefeuille]="portefeuille()"
+  [adherent]="operations().length ? operations()[0].adherent ?? null : null">
+</app-portefeuille-resume>
+
+    <app-portefeuille-operations
+      [operations]="operations()">
+    </app-portefeuille-operations>
+
+  }
+
+</div>

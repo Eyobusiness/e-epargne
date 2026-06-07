@@ -1,0 +1,20 @@
+<button
+  [type]="type()"
+  [disabled]="disabled() || loading()"
+  [class]="'app-button app-button--' + variant()"
+  [class.app-button--loading]="loading()"
+  (click)="onClick()">
+
+  @if (loading()) {
+
+    <span class="app-button__spinner"></span>
+
+  }
+
+  <span class="app-button__text">
+
+    {{ label() }}
+
+  </span>
+
+</button>

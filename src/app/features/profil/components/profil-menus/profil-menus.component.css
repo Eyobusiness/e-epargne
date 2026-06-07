@@ -1,0 +1,71 @@
+/* components/profil-menus/profil-menus.component.css */
+
+.menus-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.menus-section h3 {
+  margin: 0;
+
+  font-size: 17px;
+  font-weight: 700;
+
+  color: #111827;
+}
+
+.menus-grid {
+  display: grid;
+  grid-template-columns:
+    repeat(2, 1fr);
+
+  gap: 16px;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  padding: 16px;
+
+  border: 1px solid #e5e7eb;
+
+  border-radius: 16px;
+
+  background: #fff;
+
+  cursor: pointer;
+
+  transition:
+    all 0.2s ease;
+}
+
+.menu-item:hover {
+  border-color: #7c3aed;
+
+  background: #faf5ff;
+}
+
+.menu-item input {
+  width: 18px;
+  height: 18px;
+
+  accent-color: #7c3aed;
+}
+
+.menu-item span {
+  font-size: 14px;
+  font-weight: 600;
+
+  color: #111827;
+}
+
+@media (max-width: 768px) {
+
+  .menus-grid {
+    grid-template-columns: 1fr;
+  }
+
+}

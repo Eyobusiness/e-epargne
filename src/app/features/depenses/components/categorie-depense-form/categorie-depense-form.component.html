@@ -1,0 +1,103 @@
+<form
+  class="categorie-form"
+  [formGroup]="form"
+  (ngSubmit)="save()">
+
+  <div class="form-grid">
+
+    <div class="form-group">
+
+      <label for="name">
+        Nom catégorie
+      </label>
+
+      <input
+        id="name"
+        type="text"
+        formControlName="name"
+        placeholder="Ex: Transport"
+        [class.invalid]="hasError('name')">
+
+      @if (hasError('name')) {
+        <small class="error-text">
+          Le nom est obligatoire
+        </small>
+      }
+
+    </div>
+
+      
+
+
+    <div class="form-group">
+
+      <label for="code">
+        Code
+      </label>
+
+      <input
+        id="code"
+        type="text"
+        formControlName="code"
+        placeholder="TRANSPORT"
+        [class.invalid]="hasError('code')">
+
+      @if (hasError('code')) {
+        <small class="error-text">
+          Le code est obligatoire
+        </small>
+      }
+
+    </div>
+
+    <div class="form-group">
+  
+        <label for="description">
+          Description
+        </label>
+  
+        <textarea
+          id="description"
+          formControlName="description"
+          placeholder="Description de la catégorie"
+          rows="3">
+        </textarea>
+
+      </div>
+
+    
+
+  </div>
+
+  <div class="form-actions">
+
+    <button
+      type="button"
+      class="btn btn-cancel"
+      (click)="close()"
+      [disabled]="isLoading()">
+
+      Annuler
+
+    </button>
+
+    <button
+      type="submit"
+      class="btn btn-primary"
+      [disabled]="isLoading()">
+
+      @if (isLoading()) {
+        <span class="spinner"></span>
+      }
+
+      {{
+        isEditMode()
+          ? 'Modifier'
+          : 'Enregistrer'
+      }}
+
+    </button>
+
+  </div>
+
+</form>

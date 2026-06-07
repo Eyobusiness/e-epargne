@@ -1,0 +1,121 @@
+<form class="depense-form" [formGroup]="form" (ngSubmit)="save()">
+
+  <div class="form-grid">
+
+    <div class="form-group">
+      <label for="categorie_depense_id">Categorie</label>
+      <select
+        id="categorie_depense_id"
+        formControlName="categorie_depense_id"
+        [class.invalid]="hasError('categorie_depense_id')">
+        <option value="">Selectionner categorie</option>
+        @for (item of categories(); track item.id) {
+          <option [value]="item.id">{{ item.name }}</option>
+        }
+      </select>
+      @if (hasError('categorie_depense_id')) {
+        <small class="error-text">La categorie est obligatoire</small>
+      }
+    </div>
+
+    <div class="form-group">
+      <label for="amount">Montant</label>
+      <input
+        id="amount"
+        type="number"
+        formControlName="amount"
+        placeholder="Ex: 25000"
+        [class.invalid]="hasError('amount')">
+      @if (hasError('amount')) {
+        <small class="error-text">Le montant est obligatoire</small>
+      }
+    </div>
+
+    <div class="form-group">
+      <label for="date_depense">Date depense</label>
+      <input
+        id="date_depense"
+        type="date"
+        formControlName="date_depense"
+        [class.invalid]="hasError('date_depense')">
+      @if (hasError('date_depense')) {
+        <small class="error-text">La date est obligatoire</small>
+      }
+    </div>
+
+    <div class="form-group full-width">
+      <label for="description">Description</label>
+      <textarea
+        id="description"
+        rows="3"
+        formControlName="description"
+        placeholder="Description depense"
+        [class.invalid]="hasError('description')">
+      </textarea>
+      @if (hasError('description')) {
+        <small class="error-text">La description est obligatoire</small>
+      }
+    </div>
+
+    <div class="form-group full-width document-section">
+      <h4 class="section-title">Document justificatif</h4>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="document_type">Type</label>
+          <select id="document_type" formControlName="document_type">
+            @for (type of documentTypes; track type) {
+              <option [value]="type">{{ type }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="document_numero">Numero</label>
+          <input
+            id="document_numero"
+            type="text"
+            formControlName="document_numero"
+            placeholder="Numero document">
+        </div>
+
+        <div class="form-group">
+          <label for="document_validite">Validite</label>
+          <input id="document_validite" type="date" formControlName="document_validite">
+        </div>
+
+        <div class="form-group full-width">
+          <label for="depense_document_file">Fichier</label>
+          <input
+            id="depense_document_file"
+            type="file"
+            accept=".pdf,.png,.jpg,.jpeg,.webp"
+            (change)="onFileChange($event)">
+          @if (selectedFileName()) {
+            <small class="file-name">{{ selectedFileName() }}</small>
+          }
+          @if (existingDocument() && !selectedFileName()) {
+            <small class="file-name">Document existant conserve si aucun nouveau fichier</small>
+          }
+          @if (hasDocumentError()) {
+            <small class="error-text">Un document est obligatoire pour une nouvelle depense</small>
+          }
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="form-actions">
+    <button type="button" class="btn btn-cancel" [disabled]="isLoading()" (click)="close()">
+      Annuler
+    </button>
+    <button type="submit" class="btn btn-primary" [disabled]="isLoading()">
+      @if (isLoading()) {
+        <span class="spinner"></span>
+      }
+      {{ isEditMode() ? 'Modifier' : 'Enregistrer' }}
+    </button>
+  </div>
+
+</form>

@@ -1,0 +1,29 @@
+<!-- components/document-preview/document-preview.component.html -->
+
+<div class="preview-container">
+
+  <div class="preview-header">
+
+    <h3>{{ title }}</h3>
+
+    <a class="btn-download" [href]="url" target="_blank">
+      <i class="bi bi-download"></i>
+      Ouvrir
+    </a>
+
+  </div>
+
+  <div *ngIf="isImage" class="image-preview">
+    <img title="image" [src]="url" [alt]="title">
+  </div>
+
+  <div *ngIf="isPdf" class="pdf-preview">
+    <iframe title="document" [src]="url" frameborder="0"></iframe>
+  </div>
+
+  <div *ngIf="!isImage && !isPdf" class="unsupported-preview">
+    <i class="bi bi-file-earmark"></i>
+    <p>Apercu non disponible</p>
+  </div>
+
+</div>

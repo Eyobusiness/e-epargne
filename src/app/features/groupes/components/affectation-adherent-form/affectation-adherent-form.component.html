@@ -1,0 +1,112 @@
+<!-- components/affectation-adherent-form/affectation-adherent-form.component.html -->
+
+<form
+  class="affectation-form"
+  [formGroup]="form"
+  (ngSubmit)="save()">
+
+  <div class="form-grid">
+
+    <div class="form-group">
+
+      <label>
+        Groupe
+      </label>
+
+      <select
+        title="Selectionner"
+        formControlName="groupe_id"
+        [class.invalid]="hasError('groupe_id')"
+      >
+
+        <option value="">
+          Selectionner un groupe
+        </option>
+
+        @for (
+          item of groupes();
+          track item.id
+        ) {
+
+          <option [value]="item.id">
+            {{ item.name }}
+          </option>
+
+
+        }
+
+      </select>
+
+      @if (hasError('groupe_id')) {
+
+        <small class="error-text">
+          Groupe obligatoire
+        </small>
+
+      }
+
+    </div>
+
+    <div class="form-group">
+
+      <label>
+        Adhérents (multi)
+      </label>
+
+      <select
+        title="Selectionner"
+        formControlName="adherent_ids"
+        multiple
+        size="6"
+        [class.invalid]="hasError('adherent_ids')"
+      >
+
+        @for (
+          item of adherents();
+          track item.id
+        ) {
+
+          <option [value]="item.id">
+            {{ item.name }}
+          </option>
+
+        }
+
+      </select>
+
+      @if (hasError('adherent_ids')) {
+
+        <small class="error-text">
+          Au moins un adhérent est obligatoire
+        </small>
+
+      }
+
+    </div>
+
+  </div>
+
+  <div class="form-actions">
+
+    <button
+      type="button"
+      class="btn btn-cancel"
+      [disabled]="isLoading()"
+      (click)="close()">
+
+      Annuler
+
+    </button>
+
+    <button
+      type="submit"
+      class="btn btn-primary"
+      [disabled]="isLoading()">
+
+      {{ isEditMode() ? 'Modifier' : 'Affecter' }}
+
+    </button>
+
+  </div>
+
+</form>

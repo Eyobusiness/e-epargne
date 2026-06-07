@@ -1,0 +1,19 @@
+<!-- <nav class="breadcrumb-nav" aria-label="Breadcrumb">
+
+  <ol class="breadcrumb-list">
+    <li class="breadcrumb-item">
+      <a routerLink="/dashboard" class="breadcrumb-link">Accueil</a>
+    </li>
+
+    @for (breadcrumb of breadcrumbs(); track breadcrumb.url; let last = $last) {
+      <li class="breadcrumb-separator">
+        /
+      </li>
+
+      <li class="breadcrumb-item" [class.active]="last">
+        <a *ngIf="!last" [routerLink]="breadcrumb.url" class="breadcrumb-link">{{ breadcrumb.label }}</a>
+        <span *ngIf="last">{{ breadcrumb.label }}</span>
+      </li>
+    }
+  </ol>
+</nav> -->

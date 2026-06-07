@@ -1,0 +1,33 @@
+/* pages/utilisateurs/utilisateurs.component.css */
+
+.page-content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.loading-state {
+  height: 220px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #fff;
+
+  border: 1px solid #e5e7eb;
+
+  border-radius: 18px;
+
+  color: #6b7280;
+
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+
+  .page-content {
+    gap: 18px;
+  }
+
+}

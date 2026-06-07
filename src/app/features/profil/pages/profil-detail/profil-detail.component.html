@@ -1,0 +1,112 @@
+<!-- pages/profil-detail/profil-detail.component.html -->
+
+<app-page-header
+  title="Detail profil"
+  description="Informations du profil">
+</app-page-header>
+
+<div class="page-content">
+
+  @if (isLoading()) {
+
+    <div class="loading-state">
+      Chargement...
+    </div>
+
+  }
+
+  @if (!isLoading() && profil()) {
+
+    <div class="detail-card">
+
+      <div class="profile-header">
+
+        <div class="avatar">
+          {{ initials() }}
+        </div>
+
+        <div class="profile-info">
+
+          <h2>
+            {{ profil()?.libelle }}
+          </h2>
+
+          <span>
+            Permission :
+            {{ profil()?.permission || '--' }}
+          </span>
+
+        </div>
+
+      </div>
+
+      <div class="detail-grid">
+
+        <div class="detail-item">
+
+          <label>Code</label>
+
+          <p>
+            {{ profil()?.code || '--' }}
+          </p>
+
+        </div>
+
+        <div class="detail-item">
+
+          <label>Permission</label>
+
+          <p>
+            {{ profil()?.permission || '--' }}
+          </p>
+
+        </div>
+
+      </div>
+
+      <div class="menus-section">
+
+        <h3>
+          Menus accessibles
+        </h3>
+
+        <div class="menus-grid">
+
+          @for (
+            item of profil()?.profilMenus ?? [];
+            track item.id_menu
+          ) {
+
+            <div class="menu-card">
+
+              <div class="menu-icon">
+
+                <i [class]="item.icon || 'bi bi-grid'"></i>
+
+              </div>
+
+              <div class="menu-info">
+
+                <strong>
+                  {{ item.code }}
+                </strong>
+
+                <span>
+                  {{ item.path }}
+                </span>
+
+              </div>
+
+            </div>
+
+          }
+
+        </div>
+
+      </div>
+
+    </div>
+
+  }
+
+</div>

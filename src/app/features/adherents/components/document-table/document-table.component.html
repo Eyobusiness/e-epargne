@@ -1,0 +1,32 @@
+<div class="documents-grid">
+  @for (item of documents(); track trackById($index, item)) {
+    <div class="document-card">
+      <div class="preview">
+        @if (isImage(item.extension)) {
+          <img [src]="getFileUrl(item)" [alt]="item.type">
+        } @else {
+          <div class="file-placeholder">
+            <i class="bi bi-file-earmark-pdf"></i>
+          </div>
+        }
+      </div>
+
+      <div class="document-content">
+        <div class="document-header">
+          <h4>{{ item.type }}</h4>
+          <span class="extension">{{ item.extension || '--' }}</span>
+        </div>
+        <div class="document-meta">
+          <span>Numero : {{ item.numero || '--' }}</span>
+          <span>Validite : {{ item.validite || '--' }}</span>
+        </div>
+      </div>
+
+      <div class="document-actions">
+        <a class="btn-action btn-view" [href]="getFileUrl(item)" target="_blank" rel="noopener">
+          <i class="bi bi-eye"></i>
+        </a>
+      </div>
+    </div>
+  }
+</div>

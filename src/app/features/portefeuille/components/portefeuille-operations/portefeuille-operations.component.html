@@ -1,0 +1,234 @@
+<div class="operations-card">
+
+  <div class="card-header">
+
+    <h2>
+      Historique des opérations
+    </h2>
+
+    <span>
+      {{ filteredOperations().length }}
+      opérations
+    </span>
+
+  </div>
+
+  <!-- FILTRES -->
+
+  <div class="row mb-3">
+
+    <div class="col-md-3">
+
+      <label for="date_debut" class="form-label">
+        Date début
+      </label>
+
+      <input id="date_debut"
+        type="date"
+        class="form-control"
+        [ngModel]="startDate()"
+        (ngModelChange)="startDate.set($event); applyFilter()">
+
+    </div>
+
+    <div class="col-md-3">
+
+      <label for="date_fin" class="form-label">
+        Date fin
+      </label>
+
+      <input id="date_fin"
+        type="date"
+        class="form-control"
+        [ngModel]="endDate()"
+        (ngModelChange)="endDate.set($event); applyFilter()">
+
+    </div>
+
+    <div class="col-md-3">
+
+      <label for="type" class="form-label">
+        Type
+      </label>
+
+      <select id="type"
+        class="form-select"
+        [ngModel]="type_operation()"
+        (ngModelChange)="type_operation.set($event); applyFilter()">
+
+        <option value="">
+          Tous
+        </option>
+
+        <option value="DEPOT">
+          Dépôt
+        </option>
+
+        <option value="RETRAIT">
+          Retrait
+        </option>
+
+        <option value="COTISATION">Cotisation</option>
+        
+      </select>
+
+    </div>
+  <div class="col-md-3">
+    <button class="btn btn-secondary mt-3"
+      (click)="resetFilters()">
+
+      <i class="bi bi-x-lg"></i>
+      Réinitialiser
+
+    </button>
+
+    <!-- <button class="btn btn-primary mt-3 ms-2"
+      (click)="applyFilter()">
+
+      <i class="bi bi-search"></i>
+      Filtrer
+    </button> -->
+</div>  
+
+
+  </div>
+
+  <div class="table-wrapper">
+
+    <table class="custom-table">
+
+      <thead>
+
+        <tr>
+
+          <th>#</th>
+
+          <th>Type</th>
+
+          <th>Montant</th>
+
+          <th>Moyen</th>
+
+          <th>Date</th>
+
+          <th>Statut</th>
+
+        </tr>
+
+      </thead>
+
+      <tbody>
+
+        @for (
+          item of paginatedOperations();
+          track trackById($index, item)
+        ) {
+
+          <tr>
+
+            <td>
+              {{
+                ((currentPage() - 1) * itemsPerPage)
+                + $index + 1
+              }}
+            </td>
+
+            <td>
+
+              <span class="type-badge">
+
+                {{ item.type_operation }}
+
+              </span>
+
+            </td>
+
+            <td>
+
+              {{ item.montant | number }}
+
+              FCFA
+
+            </td>
+
+            <td>
+
+              {{ item.moyen_operation }}
+
+            </td>
+
+            <td>
+
+              {{
+                item.date_operation
+                | date:'dd/MM/yyyy'
+              }}
+
+            </td>
+
+            <td>
+
+              <span
+                class="status-badge"
+                [class.valid]="item.status === '200'"
+                [class.pending]="item.status === '100'"
+                [class.cancel]="item.status === '300'">
+
+                {{
+                  getStatusLabel(
+                    item.status
+                  )
+                }}
+
+              </span>
+
+            </td>
+
+          </tr>
+
+        }
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+  <!-- PAGINATION -->
+
+  @if (totalPages() > 1) {
+
+    <div
+      class="d-flex justify-content-center align-items-center gap-2 mt-3">
+
+      <button
+        class="btn btn-outline-primary"
+        (click)="changePage(currentPage() - 1)"
+        [disabled]="currentPage() === 1">
+
+        Précédent
+
+      </button>
+
+      <span>
+
+        Page {{ currentPage() }}
+
+        / {{ totalPages() }}
+
+      </span>
+
+      <button
+        class="btn btn-outline-primary"
+        (click)="changePage(currentPage() + 1)"
+        [disabled]="currentPage() === totalPages()">
+
+        Suivant
+
+      </button>
+
+    </div>
+
+  }
+
+</div>

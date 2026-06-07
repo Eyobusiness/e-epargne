@@ -1,0 +1,168 @@
+/* =====================================================
+TABLE CARD
+===================================================== */
+
+.table-card {
+  background: white;
+
+  border-radius: 28px;
+
+  overflow: hidden;
+
+  border:
+    1px solid var(--border-color);
+
+  box-shadow:
+    var(--shadow-sm);
+}
+
+/* =====================================================
+TABLE
+===================================================== */
+
+.parametres-table {
+  width: 100%;
+
+  border-collapse: collapse;
+}
+
+.parametres-table thead {
+  background:
+    rgba(26,52,92,0.04);
+}
+
+.parametres-table th {
+  padding: 22px 20px;
+
+  text-align: left;
+
+  font-size: 14px;
+  font-weight: 700;
+
+  color: var(--primary-color);
+
+  border-bottom:
+    1px solid var(--border-color);
+
+  white-space: nowrap;
+}
+
+.parametres-table td {
+  padding: 20px;
+
+  border-bottom:
+    1px solid var(--border-color);
+
+  color: var(--text-secondary);
+
+  font-size: 14px;
+}
+
+.parametres-table tbody tr {
+  transition: var(--transition);
+}
+
+.parametres-table tbody tr:hover {
+  background:
+    rgba(124,161,196,0.05);
+}
+
+/* =====================================================
+TYPE BADGE
+===================================================== */
+
+.type-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  height: 34px;
+
+  padding: 0 14px;
+
+  border-radius: 40px;
+
+  background:
+    rgba(124,161,196,0.12);
+
+  color: var(--secondary-color);
+
+  font-size: 12px;
+  font-weight: 700;
+
+  text-transform: capitalize;
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 84px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(239, 68, 68, 0.12);
+  color: #dc2626;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.status-badge.active {
+  background: rgba(34, 197, 94, 0.12);
+  color: #16a34a;
+}
+
+/* =====================================================
+ACTIONS
+===================================================== */
+
+.actions-cell {
+  text-align: right;
+  vertical-align: middle;
+}
+
+.table-actions {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.table-actions button {
+  flex-shrink: 0;
+}
+
+/* =====================================================
+RESPONSIVE
+===================================================== */
+
+@media (max-width: 992px) {
+
+  .table-card {
+    overflow-x: auto;
+  }
+
+  .parametres-table {
+    min-width: 800px;
+  }
+
+}
+
+@media (max-width: 768px) {
+
+  .parametres-table th,
+  .parametres-table td {
+    padding: 16px;
+  }
+
+}
+
+@media (max-width: 576px) {
+
+  .table-actions button {
+    width: 38px;
+    height: 38px;
+
+    border-radius: 12px;
+  }
+
+}

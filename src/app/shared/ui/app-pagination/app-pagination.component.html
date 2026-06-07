@@ -1,0 +1,32 @@
+<div class="pagination">
+  <button title="page actuelle"
+    type="button"
+    class="pagination-btn"
+    [disabled]="disabled() || currentPage() === 1"
+    (click)="previous()">
+    <i class="bi bi-chevron-left"></i>
+  </button>
+
+  @for (page of pages(); track page) {
+    <button
+      type="button"
+      class="pagination-btn"
+      [class.active]="currentPage() === page"
+      [disabled]="disabled()"
+      (click)="goTo(page)">
+      {{ page }}
+    </button>
+  }
+
+  <span class="pagination-summary">
+    Page {{ currentPage() }} / {{ totalPages() }}
+  </span>
+
+  <button title="page suivante"
+    type="button"
+    class="pagination-btn"
+    [disabled]="disabled() || currentPage() === totalPages()"
+    (click)="next()">
+    <i class="bi bi-chevron-right"></i>
+  </button>
+</div>

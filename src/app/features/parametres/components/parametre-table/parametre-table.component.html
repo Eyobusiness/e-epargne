@@ -1,0 +1,65 @@
+<div class="table-card">
+  <table class="parametres-table">
+    <thead>
+      <tr>
+        <th>Libelle</th>
+        <th>Nom</th>
+        <th>Type</th>
+        <th>Valeur</th>
+        <th>Parent</th>
+        <th>Statut</th>
+        <th class="text-end">Actions</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      @for (item of parametres(); track item?.id || $index) {
+        @if (item) {
+        <tr>
+          <td>
+            {{ item.libelle }}
+          </td>
+
+          <td>
+            {{ item.nom }}
+          </td>
+
+          <td>
+            <span class="type-badge">
+              {{ item.type }}
+            </span>
+          </td>
+
+          <td>
+            {{ item.valeur }}
+          </td>
+
+          <td>
+            {{ item.parent || '--' }}
+          </td>
+
+          <td>
+            <span class="status-badge" [class.active]="item.status === '200'">
+              {{ item.status === '200' ? 'Actif' : 'Inactif' }}
+            </span>
+          </td>
+
+          <td class="actions-cell">
+            <div class="table-actions">
+              
+
+              <button type="button" title="Editer" class="btn-action btn-edit" (click)="onEdit(item)">
+                <i class="bi bi-pencil-square"></i>
+              </button>
+
+              <button type="button" title="Supprimer" class="btn-action btn-delete" (click)="onDelete(item)">
+                <i class="bi bi-trash"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
+        }
+      }
+    </tbody>
+  </table>
+</div>

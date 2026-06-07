@@ -1,0 +1,48 @@
+<div class="stats-grid stats-grid--3">
+
+  <div class="stat-card stat-card--green">
+    <div class="stat-icon stat-icon--green">
+      <i class="bi bi-cash-stack"></i>
+    </div>
+
+    <div class="stat-content">
+      <span>Montant total</span>
+
+      <h5>
+        {{ totalMontant() | number }}
+        FCFA
+      </h5>
+    </div>
+  </div>
+
+  <div class="stat-card stat-card--orange">
+    <div class="stat-icon stat-icon--orange">
+      <i class="bi bi-hourglass-split"></i>
+    </div>
+
+    <div class="stat-content">
+      <span>Montant en attente</span>
+
+      <h5>
+        {{ montantAttente() | number }}
+        FCFA
+      </h5>
+    </div>
+  </div>
+
+  <div class="stat-card stat-card--emerald">
+    <div class="stat-icon stat-icon--emerald">
+      <i class="bi bi-check-circle"></i>
+    </div>
+
+    <div class="stat-content">
+      <span>Montant payé</span>
+
+      <h5>
+        {{ montantPaye() | number }}
+        FCFA
+      </h5>
+    </div>
+  </div>
+
+</div>

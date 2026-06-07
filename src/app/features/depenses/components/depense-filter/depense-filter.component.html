@@ -1,0 +1,61 @@
+<div class="filter-container">
+
+  <div class="filter-grid">
+
+    <div class="form-group">
+      <label>Recherche</label>
+      <div class="search-box">
+        <i class="bi bi-search"></i>
+        <input
+          type="text"
+          placeholder="Rechercher..."
+          [ngModel]="search()"
+          (ngModelChange)="search.set($event)">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="categorie_depense_filter">Categorie</label>
+      <select
+        id="categorie_depense_filter"
+        [ngModel]="categorieId()"
+        (ngModelChange)="categorieId.set($event)">
+        <option [ngValue]="null">Toutes les categories</option>
+        @for (item of categories(); track item.id) {
+          <option [value]="item.id">{{ item.name }}</option>
+        }
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="date_debut">Date debut</label>
+      <input
+        title="date debut"
+        id="date_debut"
+        type="date"
+        [ngModel]="startDate()"
+        (ngModelChange)="startDate.set($event)">
+    </div>
+
+    <div class="form-group">
+      <label for="date_fin">Date fin</label>
+      <input
+        title="date fin"
+        id="date_fin"
+        type="date"
+        [ngModel]="endDate()"
+        (ngModelChange)="endDate.set($event)">
+    </div>
+
+  </div>
+
+  <div class="filter-actions">
+    <button type="button" class="btn btn-reset" (click)="resetFilters()">
+      Reinitialiser
+    </button>
+    <button type="button" class="btn btn-primary" (click)="applyFilters()">
+      Filtrer
+    </button>
+  </div>
+
+</div>

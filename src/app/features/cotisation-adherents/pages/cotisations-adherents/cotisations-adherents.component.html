@@ -1,0 +1,119 @@
+<app-page-header
+  title="Cotisations adherents"
+  description="Gestion des cotisations des adherents"
+  buttonText="Generer cotisations"
+  icon="bi bi-arrow-repeat"
+  (action)="openGenerateModal()">
+</app-page-header>
+
+<div class="page-content">
+
+  <app-cotisation-adherent-stats
+    [cotisations]="cotisations()">
+  </app-cotisation-adherent-stats>
+
+  <app-cotisation-adherent-filter
+    [adherents]="adherents()"
+    (filterChange)="onFilterChange($event)">
+  </app-cotisation-adherent-filter>
+
+  @if (isPageLoading()) {
+
+    <div class="loading-state">
+      Chargement...
+    </div>
+
+  }
+
+  @if (!isPageLoading()) {
+
+    @if (hasFilteredResults()) {
+
+      <app-cotisation-adherent-table
+        [cotisations]="cotisations()"
+        (edit)="openEditModal($event)"
+        (delete)="openDeleteDialog($event)">
+      </app-cotisation-adherent-table>
+
+      @if (hasMultiplePages()) {
+
+        <app-pagination
+          [currentPage]="currentPage()"
+          [totalPages]="totalPages()"
+          (pageChange)="changePage($event)">
+        </app-pagination>
+
+      }
+
+    }
+
+    @if (isFilterEmpty()) {
+
+      <app-empty-state
+        title="Aucune cotisation trouvee"
+        description="Aucune cotisation ne correspond au filtre applique">
+      </app-empty-state>
+
+    }
+
+    @if (isEmpty()) {
+
+      <app-empty-state
+        title="Aucune cotisation"
+        description="Aucune cotisation disponible actuellement">
+      </app-empty-state>
+
+    }
+
+  }
+
+</div>
+
+<!-- Modal Modification -->
+
+<app-modal
+  [isOpen]="isModalOpen()"
+  title="Modifier cotisation"
+  description="Modification d'une cotisation adherent"
+  width="850px"
+  (close)="closeModal()">
+
+  <app-cotisation-adherent-form
+    [cotisationAdherent]="selected()"
+    [adherents]="adherents()"
+    [cotisations]="cotisationsList()"
+    [isLoading]="isLoading()"
+    (submitForm)="save($event)"
+    (cancel)="closeModal()">
+  </app-cotisation-adherent-form>
+
+</app-modal>
+
+<!-- Modal Generation -->
+
+<app-modal
+  [isOpen]="isGenerateOpen()"
+  title="Generation des cotisations"
+  description="Generer les cotisations pour un adherent ou pour tous les adherents"
+  width="650px"
+  (close)="closeGenerateModal()">
+
+  <app-cotisation-generate
+    [adherents]="adherents()"
+    [isLoading]="isGenerateLoading()"
+    (generate)="generateCotisation($event)"
+    (cancel)="closeGenerateModal()">
+  </app-cotisation-generate>
+
+</app-modal>
+
+<!-- Confirmation suppression -->
+
+<app-confirm-dialog
+  [isOpen]="isDeleteOpen()"
+  [isLoading]="isDeleteLoading()"
+  title="Supprimer cotisation"
+  message="Voulez-vous supprimer cette cotisation ?"
+  (confirm)="delete()"
+  (cancel)="closeDeleteDialog()">
+</app-confirm-dialog>

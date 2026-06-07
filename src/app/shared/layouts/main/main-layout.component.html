@@ -1,0 +1,26 @@
+<div class="app-shell">
+  <app-header
+    (toggleSidebar)="toggleSidebar()">
+  </app-header>
+
+  <div class="app-body">
+    <app-sidebar
+      [isOpen]="sidebarOpen()">
+    </app-sidebar>
+
+    @if (sidebarOpen()) {
+      <button
+        type="button"
+        class="sidebar-overlay"
+        aria-label="Fermer le menu"
+        (click)="closeSidebar()">
+      </button>
+    }
+
+    <main class="app-content">
+      <router-outlet />
+    </main>
+  </div>
+
+  <app-footer></app-footer>
+</div>

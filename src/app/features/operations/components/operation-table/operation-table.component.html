@@ -1,0 +1,182 @@
+<div class="table-wrapper">
+
+  <table class="custom-table">
+
+    <thead>
+
+      <tr>
+
+        <th>#</th>
+
+        <th>Adhérent</th>
+
+        <th>Type</th>
+
+        <th>Montant</th>
+
+        <th>Moyen</th>
+
+        <th>Date</th>
+
+        <th>Statut</th>
+
+        <th>Actions</th>
+
+      </tr>
+
+    </thead>
+
+    <tbody>
+
+      @for (
+        item of operations();
+        track trackById($index, item)
+      ) {
+
+        <tr>
+
+          <td>
+            {{ $index + 1 }}
+          </td>
+
+          <td>
+
+            <div class="user-cell">
+
+              <div class="avatar">
+
+                {{
+                  item.adherent?.name?.charAt(0)
+                  || '?'
+                }}
+
+              </div>
+
+              <div class="user-info">
+
+                <span class="user-name">
+
+                  {{
+                    item.adherent?.name
+                    || '--'
+                  }}
+
+                </span>
+
+              </div>
+
+            </div>
+
+          </td>
+
+          <td>
+
+            {{
+              getTypeLabel(
+                item.type_operation
+              )
+            }}
+
+          </td>
+
+          <td>
+
+            {{
+              item.montant
+                | number
+            }}
+
+            FCFA
+
+          </td>
+
+          <td>
+
+            {{
+              getMoyenLabel(
+                item.moyen_operation
+              )
+            }}
+
+          </td>
+
+          <td>
+
+            {{
+              item.date_operation
+                | date:'dd/MM/yyyy'
+            }}
+
+          </td>
+
+          <td>
+
+            <span
+              class="status-badge"
+              [class.pending]="item.status === '100'"
+              [class.valid]="item.status === '200'"
+              [class.cancel]="item.status === '300'">
+
+              {{
+                getStatusLabel(
+                  item.status
+                )
+              }}
+
+            </span>
+
+          </td>
+
+          <td class="actions">
+
+            @if (
+              item.status === '100'
+            ) {
+
+              <button
+                title="Payer"
+                class="btn-action btn-pay"
+                (click)="onPay(item)">
+
+                <i class="bi bi-cash-stack"></i>
+
+              </button>
+
+            }
+
+            <button
+              title="Annuler"
+              class="btn-action btn-delete"
+              (click)="onDelete(item)">
+
+              <i class="bi bi-trash3"></i>
+
+            </button>
+
+          </td>
+
+        </tr>
+
+      }
+
+      @empty {
+
+        <tr>
+
+          <td
+            colspan="8"
+            class="empty-row">
+
+            Aucune opération trouvée
+
+          </td>
+
+        </tr>
+
+      }
+
+    </tbody>
+
+  </table>
+
+</div>

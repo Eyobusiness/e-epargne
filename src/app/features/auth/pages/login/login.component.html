@@ -1,0 +1,56 @@
+<!-- features/auth/pages/login/login.component.html -->
+
+<div class="login-page">
+  <div class="login-card">
+    <div class="login-header">
+      <h1>Connexion</h1>
+      <p>Accedez a votre espace de gestion</p>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="login()">
+      <div class="form-group">
+        <label for="username">Email</label>
+
+        <input
+          id="username"
+          type="email"
+          placeholder="Entrez votre email"
+          formControlName="username"
+          autocomplete="username"
+          [class.input-error]="emailControl.invalid && emailControl.touched">
+
+        @if (emailControl.invalid && emailControl.touched) {
+          <p class="field-error">L'email est obligatoire.</p>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="password">Mot de passe</label>
+        <input
+          id="password"
+          type="password"
+          placeholder="Entrez votre mot de passe"
+          formControlName="password"
+          autocomplete="current-password"
+          [class.input-error]="passwordControl.invalid && passwordControl.touched">
+        @if (passwordControl.invalid && passwordControl.touched) {
+          <p class="field-error">Le mot de passe est obligatoire.</p>
+        }
+      </div>
+
+      <div class="login-actions">
+        <a routerLink="/auth/forgot-password">Mot de passe oublie ?</a>
+      </div>
+
+      <button type="submit" class="btn btn-login" [disabled]="isLoading()">
+        @if (!isLoading()) {
+          Connexion
+        }
+        @if (isLoading()) {
+          <span class="spinner"></span>
+          Chargement...
+        }
+      </button>
+    </form>
+  </div>
+</div>

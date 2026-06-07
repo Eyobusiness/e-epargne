@@ -1,0 +1,116 @@
+<div class="table-wrapper">
+
+  <table class="custom-table">
+
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Adhérent</th>
+        <th>Groupe</th>
+        <th>Montant</th>
+        <th>Date cotisation</th>
+        <th>Statut</th>
+        <!-- <th>Actions</th> -->
+      </tr>
+    </thead>
+
+    <tbody>
+
+      @for (
+        item of cotisations();
+        track trackById($index, item)
+      ) {
+
+        <tr>
+
+          <td>
+            {{ $index + 1 }}
+          </td>
+
+          <td>
+
+            <div class="user-cell">
+
+              <div class="avatar">
+                {{ item.adherent?.name?.charAt(0) || '?' }}
+              </div>
+
+              <div class="user-info">
+
+                <span class="user-name">
+                  {{ item.adherent?.name || '--' }}
+                </span>
+
+              </div>
+
+            </div>
+
+          </td>
+
+          <td>
+            {{ item.groupe_cotisation?.name || '--' }}
+          </td>
+
+          <td>
+            {{ item.montant | number }} FCFA
+          </td>
+
+          <td>
+
+            {{
+              item.date_cotisation
+                ? (item.date_cotisation | date:'dd/MM/yyyy')
+                : '--'
+            }}
+
+          </td>
+
+          <td>
+
+            <span
+              class="status-badge"
+              [class.active]="item.status === '200'">
+
+              {{
+                item.status === '200'
+                  ? 'Payé'
+                  : item.status === '100'
+                  ? 'En attente'
+                  : 'Annulé'
+              }}
+
+            </span>
+
+          </td>
+
+          <!-- <td class="actions">
+
+            <button
+              title="Modifier"
+              class="btn-action btn-edit"
+              (click)="onEdit(item)">
+
+              <i class="bi bi-pencil-square"></i>
+
+            </button>
+
+            <button
+              title="Supprimer"
+              class="btn-action btn-delete"
+              (click)="onDelete(item)">
+
+              <i class="bi bi-trash3"></i>
+
+            </button>
+
+          </td> -->
+
+        </tr>
+
+      }
+
+    </tbody>
+
+  </table>
+
+</div>

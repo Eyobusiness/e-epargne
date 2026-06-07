@@ -1,0 +1,86 @@
+<div class="table-wrapper">
+  <!-- Search & Filters -->
+  @if (showSearch() || filters().length > 0) {
+    <div class="table-controls">
+      <!-- Search -->
+      @if (showSearch()) {
+        <div class="search-box">
+          <input
+            type="text"
+            class="search-input"
+            placeholder="Rechercher..."
+            [(ngModel)]="searchQuery"
+            (input)="$any($event)">
+          <span class="search-icon">🔍</span>
+        </div>
+      }
+
+      <!-- Filters -->
+      @if (filters().length > 0) {
+        <div class="filters">
+          @for (filter of filters(); track filter.key) {
+            <select title="filtre"
+              class="filter-select"
+              [value]="filterValues()[filter.key] || ''"
+              (change)="onFilterChange(filter.key, $any($event.target).value)">
+              <option value="">{{ filter.label }}</option>
+              @if (filter.type === 'select') {
+                @for (option of filter.options; track option.value) {
+                  <option [value]="option.value">{{ option.label }}</option>
+                }
+              }
+            </select>
+          }
+        </div>
+      }
+
+      <!-- Reset Filters -->
+      @if (hasActiveFilters()) {
+        <button class="btn-reset" (click)="resetFilters()">
+          ✕ Réinitialiser
+        </button>
+      }
+    </div>
+  }
+
+  <!-- Table -->
+  <div class="table-container">
+    <table class="app-table" [class.striped]="stripedRows()">
+      <thead>
+        <tr>
+          @for (column of columns(); track column) {
+            <th>{{ column }}</th>
+          }
+        </tr>
+      </thead>
+      <tbody>
+        @if (filteredData().length > 0) {
+          @for (row of filteredData(); track $index) {
+            <tr>
+              @for (column of columns(); track column) {
+                <td>{{ row[column] }}</td>
+              }
+            </tr>
+          }
+        }
+        @if (filteredData().length === 0) {
+          <tr class="empty-row">
+            <td [attr.colspan]="columns().length" class="empty-message">
+              Aucun résultat trouvé
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Results count -->
+  @if (showSearch() || filters().length > 0) {
+    <div class="table-footer">
+      <span class="results-count">
+        {{ filteredData().length }} résultat(s) sur {{ data().length }}
+      </span>
+    </div>
+  }
+</div>
+

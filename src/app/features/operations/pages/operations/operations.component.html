@@ -1,0 +1,86 @@
+<app-page-header
+  title="Paiements"
+  description="Gestion des paiements des cotisations"
+  buttonText=""
+  icon="bi bi-cash-stack">
+</app-page-header>
+
+<div class="page-content">
+
+  <app-operation-stats
+    [operations]="operations()">
+  </app-operation-stats>
+
+  <app-operation-filter
+    [adherents]="adherents()"
+    (filterChange)="onFilterChange($event)">
+  </app-operation-filter>
+
+  @if (isPageLoading()) {
+
+    <div class="loading-state">
+      Chargement...
+    </div>
+
+  }
+
+  @if (!isPageLoading()) {
+
+    @if (hasFilteredResults()) {
+
+      <app-operation-table
+        [operations]="operations()"
+        (pay)="openEditModal($event)"
+        (delete)="openDeleteDialog($event)">
+      </app-operation-table>
+
+      @if (hasMultiplePages()) {
+
+        <app-pagination
+          [currentPage]="currentPage()"
+          [totalPages]="totalPages()"
+          (pageChange)="changePage($event)">
+        </app-pagination>
+
+      }
+
+    }
+
+    @if (isEmpty()) {
+
+      <app-empty-state
+        title="Aucun paiement"
+        description="Aucun paiement disponible actuellement">
+      </app-empty-state>
+
+    }
+
+  }
+
+</div>
+
+<app-modal
+  [isOpen]="isModalOpen()"
+  title="Validation paiement"
+  description="Confirmer le paiement de la cotisation"
+  width="850px"
+  (close)="closeModal()">
+
+  <app-operation-form
+    [operation]="selected()"
+    [adherents]="adherents()"
+    [isLoading]="isLoading()"
+    (submitForm)="save($event)"
+    (cancel)="closeModal()">
+  </app-operation-form>
+
+</app-modal>
+
+<app-confirm-dialog
+  [isOpen]="isDeleteOpen()"
+  [isLoading]="isDeleteLoading()"
+  title="Annuler paiement"
+  message="Voulez-vous vraiment annuler ce paiement ?"
+  (confirm)="delete()"
+  (cancel)="closeDeleteDialog()">
+</app-confirm-dialog>

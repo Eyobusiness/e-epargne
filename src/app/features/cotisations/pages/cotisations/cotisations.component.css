@@ -1,0 +1,74 @@
+/* pages/cotisations/cotisations.component.css */
+
+.top-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 20px;
+}
+
+.btn-generate {
+  height: 46px;
+  border: none;
+  border-radius: 14px;
+  padding: 0 18px;
+  background:
+    linear-gradient(
+      135deg,
+      #7c3aed,
+      #6d28d9
+    );
+
+  color: #fff;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  transition: 0.2s ease;
+}
+
+.btn-generate:hover {
+  transform: translateY(-2px);
+}
+
+.page-content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.loading-state {
+  height: 220px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 18px;
+
+  background: #fff;
+
+  border: 1px solid #e5e7eb;
+
+  color: #6b7280;
+
+  font-weight: 600;
+}
+
+@media (max-width: 768px) {
+
+  .top-actions {
+    justify-content: stretch;
+  }
+
+  .btn-generate {
+    width: 100%;
+    justify-content: center;
+  }
+
+}

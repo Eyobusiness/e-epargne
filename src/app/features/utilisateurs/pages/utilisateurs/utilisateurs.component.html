@@ -1,0 +1,111 @@
+<!-- pages/utilisateurs/utilisateurs.component.html -->
+
+<app-page-header
+  title="Utilisateurs"
+  description="Gestion des utilisateurs"
+  buttonText="Nouvel utilisateur"
+  icon="bi bi-plus-lg"
+  (action)="openCreateModal()">
+</app-page-header>
+
+<div class="page-content">
+
+  <app-utilisateur-stats
+    [utilisateurs]="utilisateurs()">
+  </app-utilisateur-stats>
+
+  <app-utilisateur-filter
+    (filterChange)="
+      onFilterChange($event)
+    ">
+  </app-utilisateur-filter>
+
+  @if (isPageLoading()) {
+
+    <div class="loading-state">
+      Chargement...
+    </div>
+
+  }
+
+  @if (!isPageLoading()) {
+
+    @if (hasFilteredResults()) {
+
+      <app-utilisateur-table
+        [utilisateurs]="
+          paginatedUtilisateurs()
+        "
+        (edit)="openEditModal($event)"
+        (delete)="
+          openDeleteDialog($event)
+        ">
+      </app-utilisateur-table>
+
+      @if (hasMultiplePages()) {
+
+        <app-pagination
+          [currentPage]="
+            currentPage()
+          "
+          [totalPages]="
+            totalPages()
+          "
+          (pageChange)="
+            changePage($event)
+          ">
+        </app-pagination>
+
+      }
+
+    }
+
+    @if (isFilterEmpty()) {
+
+      <app-empty-state
+        title="Aucun utilisateur trouve"
+        description="Aucun utilisateur ne correspond au filtre applique">
+      </app-empty-state>
+
+    }
+
+    @if (isEmpty()) {
+
+      <app-empty-state
+        title="Aucun utilisateur"
+        description="Aucun utilisateur disponible actuellement">
+      </app-empty-state>
+
+    }
+
+  }
+
+</div>
+
+<app-modal
+  [isOpen]="isModalOpen()"
+  title="Utilisateur"
+  description="Ajouter ou modifier un utilisateur"
+  width="700px"
+  (close)="closeModal()">
+
+  <app-utilisateur-form
+    [utilisateur]="selected()"
+    [profils]="profils()"
+    [isLoading]="isLoading()"
+    (submitForm)="save($event)"
+    (cancel)="closeModal()">
+  </app-utilisateur-form>
+
+</app-modal>
+
+<app-confirm-dialog
+  [isOpen]="isDeleteOpen()"
+  [isLoading]="
+    isDeleteLoading()
+  "
+  title="Supprimer utilisateur"
+  message="Voulez-vous supprimer cet utilisateur ?"
+  (confirm)="delete()"
+  (cancel)="closeDeleteDialog()">
+</app-confirm-dialog>

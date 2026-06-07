@@ -1,0 +1,59 @@
+<div class="detail-container">
+
+  <div class="detail-grid">
+    <div class="detail-item">
+      <span class="label">Categorie</span>
+      <span class="value">{{ getCategorie() }}</span>
+    </div>
+    <div class="detail-item">
+      <span class="label">Montant</span>
+      <span class="value">{{ formatAmount(depense().amount) }} FCFA</span>
+    </div>
+    <div class="detail-item">
+      <span class="label">Date depense</span>
+      <span class="value">
+        {{
+          depense().date_depense
+            ? (depense().date_depense | date:'dd/MM/yyyy HH:mm')
+            : '--'
+        }}
+      </span>
+    </div>
+    <div class="detail-item">
+      <span class="label">Status</span>
+      <span class="value">{{ isActive() ? 'Actif' : 'Inactif' }}</span>
+    </div>
+    <div class="detail-item full-width">
+      <span class="label">Description</span>
+      <span class="value">{{ depense().description || '--' }}</span>
+    </div>
+  </div>
+
+  @if (depense().document?.lien) {
+    <div class="document-section">
+      <h4>Document</h4>
+      <div class="doc-meta">
+        <span><strong>Type:</strong> {{ depense().document?.type || '--' }}</span>
+        <span><strong>Numero:</strong> {{ depense().document?.numero || '--' }}</span>
+        <span><strong>Extension:</strong> {{ depense().document?.extension || '--' }}</span>
+      </div>
+
+      @if (isImage()) {
+        <img class="doc-preview" [src]="documentUrl()" alt="Document depense">
+      } @else if (isPdf()) {
+        <iframe class="doc-preview pdf" [src]="documentUrl()" title="Document PDF"></iframe>
+      } @else {
+        <a class="btn-link" [href]="documentUrl()" target="_blank" rel="noopener">
+          Ouvrir le document
+        </a>
+      }
+    </div>
+  } @else {
+    <p class="no-document">Aucun document joint</p>
+  }
+
+  <div class="detail-actions">
+    <button type="button" class="btn btn-cancel" (click)="onClose()">Fermer</button>
+  </div>
+
+</div>

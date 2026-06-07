@@ -1,0 +1,27 @@
+:host {
+  display: block;
+}
+
+.documents-section {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.section-title {
+  margin: 0 0 0.35rem;
+  font-size: 1rem;
+}
+
+.section-hint {
+  margin: 0 0 0.75rem;
+  color: #6b7280;
+  font-size: 0.85rem;
+}
+
+.file-name {
+  display: block;
+  margin-top: 0.35rem;
+  color: #4b5563;
+  font-size: 0.82rem;
+}

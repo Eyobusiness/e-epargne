@@ -1,0 +1,37 @@
+
+<div class="menus-section">
+
+  <h3>
+    Menus accessibles
+  </h3>
+
+  <div class="menus-grid">
+
+    @for (
+      item of menus();
+      track item.id
+    ) {
+
+      <label
+        class="menu-item">
+
+        <input
+          type="checkbox"
+          [checked]="
+            isChecked(item.id)
+          "
+          (change)="
+            toggleMenu(item.id)
+          ">
+
+        <span>
+          {{ item.libelle }}
+        </span>
+
+      </label>
+
+    }
+
+  </div>
+
+</div>

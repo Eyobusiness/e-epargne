@@ -1,0 +1,123 @@
+<!-- components/utilisateur-form/utilisateur-form.component.html -->
+
+<form
+  class="custom-form"
+  [formGroup]="form"
+  (ngSubmit)="save()">
+
+  <div class="form-grid">
+
+    <div class="form-group">
+      <label for="nom">Nom</label>
+
+      <input
+        id="nom"
+        type="text"
+        formControlName="name">
+    </div>
+
+    <div class="form-group">
+      <label for="email">Email</label>
+
+      <input
+        id="email"
+        type="email"
+        formControlName="email">
+    </div>
+
+    <div class="form-group">
+      <label for="phone">Telephone</label>
+
+      <input
+        id="phone"
+        type="text"
+        formControlName="phone">
+    </div>
+
+    <div class="form-group">
+      <label for="code">Code</label>
+
+      <input
+        id="code"
+        type="text"
+        formControlName="code">
+    </div>
+
+    <div class="form-group">
+      <label for="profil">Profil</label>
+
+      <select
+        id="profil"
+        formControlName="profil_id">
+
+        <option value="">
+          Selectionner un profil
+        </option>
+
+        @for (item of profils(); track item.id) {
+          <option [value]="item.id">
+            {{ item.libelle || item.name }}
+          </option>
+        }
+
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="status">Statut</label>
+
+      <select
+        id="status"
+        formControlName="status">
+
+        <option value="200">Actif</option>
+        <option value="100">Inactif</option>
+
+      </select>
+    </div>
+
+    @if (!isEditMode()) {
+      <div class="form-group full-width">
+        <label for="password">Mot de passe</label>
+
+        <input
+          id="password"
+          type="password"
+          formControlName="password">
+      </div>
+    }
+
+  </div>
+
+  <div class="form-actions">
+
+    <button
+      type="button"
+      class="btn btn-cancel"
+      [disabled]="isLoading()"
+      (click)="close()">
+      Annuler
+    </button>
+
+    <button
+      type="submit"
+      class="btn btn-primary"
+      [disabled]="isLoading()">
+
+      @if (isLoading()) {
+        <span class="spinner"></span>
+      }
+
+      @if (!isEditMode()) {
+        Ajouter
+      }
+
+      @if (isEditMode()) {
+        Modifier
+      }
+
+    </button>
+
+  </div>
+
+</form>

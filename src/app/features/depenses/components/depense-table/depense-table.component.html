@@ -1,0 +1,74 @@
+<div class="table-wrapper">
+
+  <table class="custom-table">
+
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Categorie</th>
+        <th>Description</th>
+        <th>Montant</th>
+        <th>Date</th>
+        <th>Document</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      @for (item of depenses(); track trackById($index, item)) {
+        <tr>
+          <td>{{ $index + 1 }}</td>
+          <td>
+            <div class="categorie-cell">
+              <span class="categorie-badge"></span>
+              <span>{{ getCategorieNom(item) }}</span>
+            </div>
+          </td>
+          <td>
+            <span class="description">
+              {{ item.description || 'Aucune description' }}
+            </span>
+          </td>
+          <td>
+            <span class="amount">
+              {{ formatAmount(item.amount) }} FCFA
+            </span>
+          </td>
+          <td>
+            {{
+              item.date_depense
+                ? (item.date_depense | date:'dd/MM/yyyy')
+                : (item.created_at | date:'dd/MM/yyyy')
+            }}
+          </td>
+          <td>
+            @if (hasDocument(item)) {
+              <span class="doc-badge">Oui</span>
+            } @else {
+              <span class="doc-badge muted">Non</span>
+            }
+          </td>
+          <td>
+            <span class="status" [class.active]="isActive(item.status)">
+              {{ isActive(item.status) ? 'Actif' : 'Inactif' }}
+            </span>
+          </td>
+          <td class="actions">
+            <button class="btn-action btn-view" title="Voir" (click)="onView(item)">
+              <i class="bi bi-eye"></i>
+            </button>
+            <button class="btn-action btn-edit" title="Modifier" (click)="onEdit(item)">
+              <i class="bi bi-pencil-square"></i>
+            </button>
+            <button class="btn-action btn-delete" title="Supprimer" (click)="onDelete(item)">
+              <i class="bi bi-trash3"></i>
+            </button>
+          </td>
+        </tr>
+      }
+    </tbody>
+
+  </table>
+
+</div>

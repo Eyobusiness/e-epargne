@@ -1,0 +1,173 @@
+<form
+  class="custom-form"
+  [formGroup]="form"
+  (ngSubmit)="save()">
+
+  <div class="form-grid">
+
+    <div class="form-group">
+
+      <label for="adherent">
+        Adhérent
+      </label>
+
+      <select
+        id="adherent"
+        formControlName="adherent_id"
+        [class.invalid]="hasError('adherent_id')">
+
+        <option value="">
+          Sélectionner
+        </option>
+
+        @for (
+          item of adherents();
+          track item.id
+        ) {
+
+          <option [value]="item.id">
+            {{ item.name }}
+          </option>
+
+        }
+
+      </select>
+
+      @if (hasError('adherent_id')) {
+
+        <small class="error-text">
+          Adhérent obligatoire
+        </small>
+
+      }
+
+    </div>
+
+    <div class="form-group">
+
+      <label for="cotisation">
+        Cotisation
+      </label>
+
+      <ng-select
+          [items]="cotisations()"
+          bindValue="id"
+          formControlName="cotisation_id"
+          placeholder="Sélectionner une cotisation"
+          notFoundText="Aucun résultat"
+          [searchable]="true"
+          [clearable]="true"
+          [class.is-invalid]="hasError('cotisation_id')">
+
+          <ng-template
+            ng-option-tmp
+            let-item="item">
+
+            {{ item.periodicite || '--' }}
+            -
+            {{ item.montant | number }}
+            FCFA
+
+          </ng-template>
+
+        </ng-select>
+
+      @if (hasError('cotisation_id')) {
+
+        <small class="error-text">
+          Cotisation obligatoire
+        </small>
+
+      }
+
+    </div>
+
+    <div class="form-group">
+
+      <label for="montant">
+        Montant
+      </label>
+
+      <input
+        id="montant"
+        type="number"
+        formControlName="montant"
+        [class.invalid]="hasError('montant')">
+
+      @if (hasError('montant')) {
+
+        <small class="error-text">
+          Montant invalide
+        </small>
+
+      }
+
+    </div>
+
+    <div class="form-group">
+
+      <label for="date_cotisation">
+        Date cotisation
+      </label>
+
+      <input
+        id="date_cotisation"
+        type="date"
+        formControlName="date_cotisation">
+
+    </div>
+
+    <div class="form-group">
+
+      <label for="status">
+        Statut
+      </label>
+
+      <select
+        id="status"
+        formControlName="status">
+
+        <option value="100">
+          En attente
+        </option>
+
+        <option value="200">
+          Payé
+        </option>
+
+        <option value="0">
+          Annulé
+        </option>
+
+      </select>
+
+    </div>
+
+  </div>
+
+  <div class="form-actions">
+
+    <button
+      type="button"
+      class="btn btn-cancel"
+      (click)="close()">
+
+      Annuler
+
+    </button>
+
+    <button
+      type="submit"
+      class="btn btn-primary"
+      [disabled]="isLoading()">
+
+      {{ isEditMode()
+          ? 'Modifier'
+          : 'Enregistrer'
+      }}
+
+    </button>
+
+  </div>
+
+</form>

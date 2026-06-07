@@ -1,0 +1,7 @@
+:host {
+  display: block;
+}
+
+.filter-grid {
+  --filter-columns: 3;
+}

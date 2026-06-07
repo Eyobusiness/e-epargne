@@ -1,0 +1,79 @@
+<div class="stats-grid stats-grid--4">
+
+  <div class="stat-card stat-card--blue">
+
+    <div class="stat-icon stat-icon--blue">
+      <i class="bi bi-wallet2"></i>
+    </div>
+
+    <div class="stat-content">
+
+      <span>Solde actuel</span>
+
+      <h5>
+        {{ solde() | number }}
+        FCFA
+      </h5>
+
+    </div>
+
+  </div>
+
+  <div class="stat-card stat-card--green">
+
+    <div class="stat-icon stat-icon--green">
+      <i class="bi bi-arrow-down-circle"></i>
+    </div>
+
+    <div class="stat-content">
+
+      <span>Total entrées</span>
+
+      <h5>
+        {{ totalEntrees() | number }}
+        FCFA
+      </h5>
+
+    </div>
+
+  </div>
+
+  <div class="stat-card stat-card--red">
+
+    <div class="stat-icon stat-icon--red">
+      <i class="bi bi-arrow-up-circle"></i>
+    </div>
+
+    <div class="stat-content">
+
+      <span>Total sorties</span>
+
+      <h5>
+        {{ totalSorties() | number }}
+        FCFA
+      </h5>
+
+    </div>
+
+  </div>
+
+  <div class="stat-card stat-card--emerald">
+
+    <div class="stat-icon stat-icon--emerald">
+      <i class="bi bi-clock-history"></i>
+    </div>
+
+    <div class="stat-content">
+
+      <span>Cotisations en attente</span>
+
+      <h5>
+        {{ totalCotisations() | number }}
+        FCFA
+      </h5>
+
+    </div>
+
+  </div>
+
+</div>

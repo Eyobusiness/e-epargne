@@ -1,0 +1,37 @@
+@if (isVisible()) {
+
+  <div
+    class="toast"
+    [class.success]="type() === 'success'"
+    [class.error]="type() === 'error'"
+    [class.warning]="type() === 'warning'">
+
+    <div class="toast-icon">
+
+      @if (type() === 'success') {
+
+        <i class="bi bi-check"></i>
+
+      }
+
+      @if (type() === 'error') {
+
+        <i class="bi bi-x"></i>
+
+      }
+
+      @if (type() === 'warning') {
+
+        <i class="bi bi-alert-triangle"></i>
+
+      }
+
+    </div>
+
+    <span>
+      {{ message() }}
+    </span>
+
+  </div>
+
+}

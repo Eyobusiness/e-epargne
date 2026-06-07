@@ -1,0 +1,98 @@
+<!-- pages/adherents/adherents.component.html -->
+
+<app-page-header
+  title="Adherents"
+  description="Gestion des adherents"
+  buttonText="Nouvel adherent"
+  icon="bi bi-plus-lg"
+  (action)="openCreateModal()">
+</app-page-header>
+
+<div class="page-content">
+
+  <app-adherent-stats
+    [adherents]="adherents()">
+  </app-adherent-stats>
+
+  <app-adherent-filter
+    (filterChange)="onFilterChange($event)">
+  </app-adherent-filter>
+
+  @if (isPageLoading()) {
+
+    <div class="loading-state">
+      Chargement...
+    </div>
+
+  }
+
+  @if (!isPageLoading()) {
+
+    @if (hasFilteredResults()) {
+
+      <app-adherent-table
+      [adherents]="paginatedAdherents()"
+      (edit)="openEditModal($event)"
+      (delete)="openDeleteDialog($event)"
+      (detail)="viewDetail($event)"
+      (wallet)="openWallet($event)">
+    </app-adherent-table>
+
+      @if (hasMultiplePages()) {
+
+        <app-pagination
+          [currentPage]="currentPage()"
+          [totalPages]="totalPages()"
+          (pageChange)="changePage($event)">
+        </app-pagination>
+
+      }
+
+    }
+
+    @if (isFilterEmpty()) {
+
+      <app-empty-state
+        title="Aucun adherent trouve"
+        description="Aucun adherent ne correspond au filtre applique">
+      </app-empty-state>
+
+    }
+
+    @if (isEmpty()) {
+
+      <app-empty-state
+        title="Aucun adherent"
+        description="Aucun adherent disponible actuellement">
+      </app-empty-state>
+
+    }
+
+  }
+
+</div>
+
+<app-modal
+  [isOpen]="isModalOpen()"
+  title="Adherent"
+  description="Ajouter ou modifier un adherent"
+  width="850px"
+  (close)="closeModal()">
+
+  <app-adherent-form
+    [adherent]="selectedAdherent()"
+    [isLoading]="isLoading()"
+    (submitForm)="saveAdherent($event)"
+    (cancel)="closeModal()">
+  </app-adherent-form>
+
+</app-modal>
+
+<app-confirm-dialog
+  [isOpen]="isDeleteOpen()"
+  [isLoading]="isDeleteLoading()"
+  title="Supprimer adherent"
+  message="Voulez-vous supprimer cet adherent ?"
+  (confirm)="deleteAdherent()"
+  (cancel)="closeDeleteDialog()">
+</app-confirm-dialog>

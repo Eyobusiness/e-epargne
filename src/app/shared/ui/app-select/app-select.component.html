@@ -1,0 +1,24 @@
+<div class="input-group" [class.has-error]="error()">
+  @if (label()) {
+    <label [for]="id()">{{ label() }}</label>
+  }
+  <select
+    title="selectionner"
+    [id]="id()"
+    class="form-select"
+    [value]="value()"
+    [disabled]="isDisabled()"
+    (change)="onSelectChange($event)"
+    (blur)="onBlur()"
+  >
+    <option value="">
+      {{ placeholder() }}
+    </option>
+    @for (option of options(); track option.value) {
+      <option [value]="option.value">{{ option.label }}</option>
+    }
+  </select>
+  @if (error()) {
+    <span class="error-message">{{ error() }}</span>
+  }
+</div>

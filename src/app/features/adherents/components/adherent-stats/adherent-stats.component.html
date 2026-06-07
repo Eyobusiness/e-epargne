@@ -1,0 +1,31 @@
+<div class="stats-grid stats-grid--3">
+  <div class="stat-card stat-card--total">
+    <div class="stat-icon stat-icon--total">
+      <i class="bi bi-people"></i>
+    </div>
+    <div class="stat-content">
+      <span class="stat-label">Total adherents</span>
+      <h3>{{ totalAdherents() }}</h3>
+    </div>
+  </div>
+
+  <div class="stat-card stat-card--active">
+    <div class="stat-icon stat-icon--active">
+      <i class="bi bi-person-check"></i>
+    </div>
+    <div class="stat-content">
+      <span class="stat-label">Actifs</span>
+      <h3>{{ activeAdherents() }}</h3>
+    </div>
+  </div>
+
+  <div class="stat-card stat-card--blocked">
+    <div class="stat-icon stat-icon--blocked">
+      <i class="bi bi-person-x"></i>
+    </div>
+    <div class="stat-content">
+      <span class="stat-label">Inactifs</span>
+      <h3>{{ inactiveAdherents() }}</h3>
+    </div>
+  </div>
+</div>

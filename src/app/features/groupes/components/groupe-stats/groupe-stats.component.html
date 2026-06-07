@@ -1,0 +1,73 @@
+<!-- components/groupe-stats/groupe-stats.component.html -->
+
+<div class="stats-grid stats-grid--3">
+
+  <div class="stat-card stat-card--blue">
+
+    <div class="stat-icon stat-icon--blue">
+      <i class="bi bi-collection"></i>
+    </div>
+
+    <div class="stat-content">
+
+      <span>
+        Total groupes
+      </span>
+
+      <h3>
+        {{ totalGroupes() }}
+      </h3>
+
+    </div>
+
+  </div>
+
+  <div class="stat-card stat-card--green">
+
+    <div class="stat-icon stat-icon--green">
+      <i class="bi bi-cash-stack"></i>
+    </div>
+
+    <div class="stat-content">
+
+      <span>
+        Total minimum
+      </span>
+
+      <h3>
+        {{
+          totalMontantMin()
+            | number
+        }}
+        FCFA
+      </h3>
+
+    </div>
+
+  </div>
+
+  <div class="stat-card stat-card--orange">
+
+    <div class="stat-icon stat-icon--orange">
+      <i class="bi bi-wallet2"></i>
+    </div>
+
+    <div class="stat-content">
+
+      <span>
+        Total maximum
+      </span>
+
+      <h3>
+        {{
+          totalMontantMax()
+            | number
+        }}
+        FCFA
+      </h3>
+
+    </div>
+
+  </div>
+
+</div>
