@@ -75,6 +75,15 @@
   position: relative;
 }
 
+/* Ensure the profile dropdown never gets clipped in responsive layouts */
+.profile-dropdown .dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 0;
+}
+
+
 .notification-btn i {
   font-size: 1.15rem;
 }
@@ -108,7 +117,8 @@
   pointer-events: none;
   transform: translateY(-8px);
   transition: opacity var(--transition), transform var(--transition);
-  z-index: 1100;
+  /* Doit passer au-dessus du dropdown profile en responsive */
+  z-index: 1200;
   overflow: hidden;
 }
 
@@ -117,6 +127,7 @@
   pointer-events: auto;
   transform: translateY(0);
 }
+
 
 .notifications-panel-header {
   display: flex;
