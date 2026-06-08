@@ -163,63 +163,94 @@
 
       </div>
 
-      <!-- REPARTITION -->
+      <!-- Activité recentes -->
 
       <div class="dashboard-card">
 
-        <div class="dashboard-card-header">
+      <div class="dashboard-card-header">
 
-          <div>
+        <div>
 
-            <h3>
-              Répartition adhérents
-            </h3>
+          <h3>
+            Dernières opérations
+          </h3>
 
-            <p>
-              Membres actifs et inactifs
-            </p>
-
-          </div>
-
-        </div>
-
-        <div class="overview-list">
-
-          <div class="overview-item">
-
-            <span>
-              Adhérents actifs
-            </span>
-
-            <strong class="success-text">
-
-              {{
-                dashboard()?.adherentActif
-              }}
-
-            </strong>
-
-          </div>
-
-          <div class="overview-item">
-
-            <span>
-              Adhérents inactifs
-            </span>
-
-            <strong class="danger-text">
-
-              {{
-                dashboard()?.adherentInactif
-              }}
-
-            </strong>
-
-          </div>
+          <p>
+            Les 5 dernières opérations enregistrées
+          </p>
 
         </div>
 
       </div>
+
+  <div class="activity-list">
+
+    @for (
+      operation of recentOperations();
+      track operation.id
+    ) {
+
+      <div class="activity-item">
+
+        <div
+          class="activity-icon"
+          [class.success]="operation.status === '200'"
+          [class.warning]="operation.status === '100'"
+          [class.danger]="operation.status === '300'">
+
+          {{
+            operation.adherent?.name
+              ?.substring(0,2)
+              ?.toUpperCase()
+          }}
+
+        </div>
+
+        <div class="activity-content">
+
+          <strong>
+
+            {{
+              operation.type_operation
+            }}
+
+          </strong>
+
+          <span>
+
+            {{
+              operation.adherent?.name
+            }}
+
+            •
+
+            {{
+              operation.montant
+                | number
+            }}
+
+            FCFA
+
+          </span>
+
+        </div>
+
+        <small>
+
+          {{
+            operation.date_operation
+              | date:'dd/MM/yyyy'
+          }}
+
+        </small>
+
+      </div>
+
+    }
+
+  </div>
+
+</div>
 
     </div>
 

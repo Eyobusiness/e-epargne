@@ -7,6 +7,7 @@ import { DashboardStats } from '../models/dashboard.model';
 
 import { DashboardStatsComponent } from '../components/dashboard-stats/dashboard-stats.component';
 import { DashboardChartComponent } from '../components/dashboard-chart/dashboard-chart.component';
+import { OperationService } from '../../operations/services/operation.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -17,8 +18,10 @@ import { DashboardChartComponent } from '../components/dashboard-chart/dashboard
 })
 export class DashboardComponent implements OnInit {
   private readonly dashboardService = inject(DashboardService);
+  private readonly operationService = inject(OperationService);
 
   readonly dashboard = signal<DashboardStats | null>(null);
+  readonly recentOperations = signal<any[]>([]);
 
   readonly currentPeriod = new Intl.DateTimeFormat('fr-FR', {
     month: 'long',
@@ -29,6 +32,8 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadStats();
+
+    this.loadRecentOperations();
   }
 
   loadStats(): void {
@@ -47,5 +52,18 @@ export class DashboardComponent implements OnInit {
         this.isLoading.set(false);
       },
     });
+  }
+
+  loadRecentOperations(): void {
+    this.operationService
+      .getAll({
+        page: 1,
+        limit: 5,
+      })
+      .subscribe({
+        next: (response) => {
+          this.recentOperations.set(response?.data?.items ?? []);
+        },
+      });
   }
 }
