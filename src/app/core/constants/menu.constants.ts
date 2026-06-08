@@ -57,7 +57,7 @@ export const MENU_ITEMS: NavItem[] = [
   {
     label: 'Depenses',
     icon: 'bi bi-basket3',
-    route: '/depense',
+    route: '/depenses',
     children: [
       {
         label: 'Categories',
@@ -117,15 +117,20 @@ export const MENU_ITEMS: NavItem[] = [
     route: '/configuration',
     children: [
       {
-        label: 'Mode de paiement',
-        icon: 'bi bi-credit-card',
-        route: '/configuration/mode-paiement',
+        label: 'Wokflow',
+        icon: 'bi bi-shuffle',
+        route: '/workflow',
       },
-      // {
-      //   label: '',
-      //   icon: 'bi bi-sliders',
-      //   route: '/parametres/configuration'
-      // }
+      {
+        label: 'Plafonds',
+        icon: 'bi bi-sliders',
+        route: '/plafonds',
+      },
+      {
+        label: 'Collection',
+        icon: 'bi bi-collection',
+        route: '/collection',
+      }
     ],
   },
   {

@@ -1,3 +1,74 @@
 :host {
   display: block;
 }
+.stat-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.stat-content {
+  flex: 1;
+}
+
+.stat-content span {
+  display: block;
+  font-size: 0.85rem;
+  color: #6c757d;
+}
+
+.stat-content h5 {
+  margin: 0;
+  font-weight: 700;
+}
+
+@media (max-width: 576px) {
+  .stat-card {
+    padding: 0.75rem;
+  }
+
+  .stat-content h5 {
+    font-size: 1rem;
+  }
+
+  .stat-icon {
+    width: 45px;
+    height: 45px;
+  }
+}.stat-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.stat-content {
+  flex: 1;
+}
+
+.stat-content span {
+  display: block;
+  font-size: 0.85rem;
+  color: #6c757d;
+}
+
+.stat-content h5 {
+  margin: 0;
+  font-weight: 700;
+}
+
+@media (max-width: 576px) {
+  .stat-card {
+    padding: 0.75rem;
+  }
+
+  .stat-content h5 {
+    font-size: 1rem;
+  }
+
+  .stat-icon {
+    width: 45px;
+    height: 45px;
+  }
+}

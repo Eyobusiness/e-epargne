@@ -1,86 +1,51 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
+
 import { CommonModule } from '@angular/common';
+
+import { DashboardService } from '../services/dashboard.service';
+import { DashboardStats } from '../models/dashboard.model';
+
+import { DashboardStatsComponent } from '../components/dashboard-stats/dashboard-stats.component';
+import { DashboardChartComponent } from '../components/dashboard-chart/dashboard-chart.component';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, DashboardStatsComponent, DashboardChartComponent],
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.css']
+  styleUrls: ['./dashboard.component.css'],
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit {
+  private readonly dashboardService = inject(DashboardService);
+
+  readonly dashboard = signal<DashboardStats | null>(null);
+
   readonly currentPeriod = new Intl.DateTimeFormat('fr-FR', {
     month: 'long',
-    year: 'numeric'
+    year: 'numeric',
   }).format(new Date());
 
-  readonly stats = [
-    {
-      tone: 'primary',
-      badge: 'AD',
-      trend: '+12%',
-      trendType: 'positive',
-      label: 'Total adherents',
-      value: '1 250',
-      description: 'Membres enregistres'
-    },
-    {
-      tone: 'secondary',
-      badge: 'CO',
-      trend: '+18%',
-      trendType: 'positive',
-      label: 'Total cotisations',
-      value: '125 000 XAF',
-      description: 'Revenus collectes'
-    },
-    {
-      tone: 'danger',
-      badge: 'DE',
-      trend: '-4%',
-      trendType: 'negative',
-      label: 'Total depenses',
-      value: '50 000 XAF',
-      description: 'Charges financieres'
-    },
-    {
-      tone: 'warning',
-      badge: 'PF',
-      trend: '+9%',
-      trendType: 'positive',
-      label: 'Solde portefeuille',
-      value: '75 000 XAF',
-      description: 'Solde disponible'
-    }
-  ];
+  readonly isLoading = signal(false);
 
-  readonly activities = [
-    {
-      badge: 'NA',
-      tone: 'primary',
-      title: 'Nouvel adherent ajoute',
-      subtitle: 'Ferdinand Kone',
-      time: '2 min'
-    },
-    {
-      badge: 'CT',
-      tone: 'success',
-      title: 'Nouvelle cotisation',
-      subtitle: '25 000 XAF recus',
-      time: '12 min'
-    },
-    {
-      badge: 'DP',
-      tone: 'danger',
-      title: 'Depense enregistree',
-      subtitle: 'Achat fournitures',
-      time: '30 min'
-    }
-  ];
+  ngOnInit(): void {
+    this.loadStats();
+  }
 
-  readonly overview = [
-    { label: 'Taux de croissance', value: '+14%', tone: 'success-text' },
-    { label: 'Revenus mensuels', value: '450 000 XAF', tone: '' },
-    { label: 'Depenses mensuelles', value: '120 000 XAF', tone: 'danger-text' },
-    { label: 'Operations validees', value: '92%', tone: '' }
-  ];
+  loadStats(): void {
+    this.isLoading.set(true);
+
+    this.dashboardService.getStats().subscribe({
+      next: (response) => {
+        this.dashboard.set(response);
+
+        this.isLoading.set(false);
+      },
+
+      error: (error) => {
+        console.error(error);
+
+        this.isLoading.set(false);
+      },
+    });
+  }
 }

@@ -1,5 +1,7 @@
 <div class="dashboard-page">
+
   <div class="dashboard-header">
+
     <div>
 
       <h1>
@@ -7,124 +9,220 @@
       </h1>
 
       <p>
-        Vue globale des performances et activites financieres
+        Vue globale des performances de la tontine
       </p>
+
     </div>
 
     <div class="dashboard-date">
+
       <span class="dashboard-date-label">
-        Periode
+        Période
       </span>
 
       <span>
         {{ currentPeriod }}
       </span>
-    </div>
-  </div>
 
-  <div class="stats-grid stats-grid--4 dashboard-stats-grid">
-    @for (stat of stats; track stat.label) {
-      <div
-        class="stat-card stat-card--stacked"
-        [ngClass]="'stat-card--' + stat.tone">
-        <div class="stat-card-top">
-          <div
-            class="stat-icon"
-            [ngClass]="'stat-icon--' + stat.tone">
-            {{ stat.badge }}
-          </div>
-
-          <div class="stat-growth" [ngClass]="stat.trendType">
-            {{ stat.trend }}
-          </div>
-        </div>
-
-        <div class="stat-content">
-          <span class="stat-label">
-            {{ stat.label }}
-          </span>
-
-          <h3>
-            {{ stat.value }}
-          </h3>
-
-          <p class="stat-description">
-            {{ stat.description }}
-          </p>
-        </div>
-      </div>
-    }
-  </div>
-
-  <div class="dashboard-content-grid">
-    <div class="dashboard-card recent-activities">
-      <div class="dashboard-card-header">
-        <div>
-          <h3>
-            Activites recentes
-          </h3>
-
-          <p>
-            Dernieres operations enregistrees
-          </p>
-        </div>
-
-        <button class="btn dashboard-action-btn">
-          Voir plus
-        </button>
-      </div>
-
-      <div class="activity-list">
-        @for (activity of activities; track activity.title) {
-          <div class="activity-item">
-            <div class="activity-icon" [class]="activity.tone">
-              {{ activity.badge }}
-            </div>
-
-            <div class="activity-content">
-              <strong>
-                {{ activity.title }}
-              </strong>
-
-              <span>
-                {{ activity.subtitle }}
-              </span>
-            </div>
-
-            <small>
-              {{ activity.time }}
-            </small>
-          </div>
-        }
-      </div>
     </div>
 
-    <div class="dashboard-card quick-overview">
-      <div class="dashboard-card-header">
-        <div>
-          <h3>
-            Apercu rapide
-          </h3>
+  </div>
 
-          <p>
-            Resume des indicateurs
-          </p>
+  <!-- LOADING -->
+
+  @if (!dashboard()) {
+
+    <div class="dashboard-loading">
+
+      Chargement des statistiques...
+
+    </div>
+
+  }
+
+  <!-- CONTENU -->
+
+  @if (dashboard()) {
+
+    <!-- STATISTIQUES -->
+
+    <app-dashboard-stats
+      [stats]="dashboard()">
+    </app-dashboard-stats>
+
+    <!-- GRAPHIQUE -->
+
+    <div class="mt-4">
+
+      <app-dashboard-chart
+        [stats]="dashboard()">
+      </app-dashboard-chart>
+
+    </div>
+
+    <!-- APERCU RAPIDE -->
+
+    <div class="dashboard-content-grid mt-4">
+
+      <div class="dashboard-card">
+
+        <div class="dashboard-card-header">
+
+          <div>
+
+            <h3>
+              Aperçu rapide
+            </h3>
+
+            <p>
+              Indicateurs principaux
+            </p>
+
+          </div>
+
         </div>
-      </div>
 
-      <div class="overview-list">
-        @for (item of overview; track item.label) {
+        <div class="overview-list">
+
           <div class="overview-item">
+
             <span>
-              {{ item.label }}
+              Total dépôts
             </span>
 
-            <strong [class]="item.tone">
-              {{ item.value }}
+            <strong>
+
+              {{
+                dashboard()?.totalDepot
+                  | number
+              }}
+
+              FCFA
+
             </strong>
+
           </div>
-        }
+
+          <div class="overview-item">
+
+            <span>
+              Total retraits
+            </span>
+
+            <strong>
+
+              {{
+                dashboard()?.totalRetrait
+                  | number
+              }}
+
+              FCFA
+
+            </strong>
+
+          </div>
+
+          <div class="overview-item">
+
+            <span>
+              Solde commissions
+            </span>
+
+            <strong>
+
+              {{
+                dashboard()?.soldeCommission
+                  | number
+              }}
+
+              FCFA
+
+            </strong>
+
+          </div>
+
+          <div class="overview-item">
+
+            <span>
+              Taux commission
+            </span>
+
+            <strong>
+
+              {{
+                dashboard()?.tauxCommissionRetrait
+              }}
+
+              %
+
+            </strong>
+
+          </div>
+
+        </div>
+
       </div>
+
+      <!-- REPARTITION -->
+
+      <div class="dashboard-card">
+
+        <div class="dashboard-card-header">
+
+          <div>
+
+            <h3>
+              Répartition adhérents
+            </h3>
+
+            <p>
+              Membres actifs et inactifs
+            </p>
+
+          </div>
+
+        </div>
+
+        <div class="overview-list">
+
+          <div class="overview-item">
+
+            <span>
+              Adhérents actifs
+            </span>
+
+            <strong class="success-text">
+
+              {{
+                dashboard()?.adherentActif
+              }}
+
+            </strong>
+
+          </div>
+
+          <div class="overview-item">
+
+            <span>
+              Adhérents inactifs
+            </span>
+
+            <strong class="danger-text">
+
+              {{
+                dashboard()?.adherentInactif
+              }}
+
+            </strong>
+
+          </div>
+
+        </div>
+
+      </div>
+
     </div>
-  </div>
+
+  }
+
 </div>
