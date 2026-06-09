@@ -1,0 +1,184 @@
+<form
+  [formGroup]="form"
+  (ngSubmit)="save()">
+
+  <div class="row g-3">
+
+    <div class="col-md-12">
+
+      <label for="workflow" class="form-label">
+        Workflow
+      </label>
+
+      <select id="workflow"
+        class="form-select"
+        formControlName="idWorkflow">
+
+        <option value="">
+          Sélectionner
+        </option>
+
+        @for (
+          item of workflows();
+          track item.id
+        ) {
+
+          <option
+            [value]="item.id">
+
+            {{ item.label }}
+
+          </option>
+
+        }
+
+      </select>
+
+    </div>
+
+    <div class="col-md-12">
+
+  <label for="pa" class="form-label">
+    Profils autorisés
+  </label>
+
+  <div class="profile-list">
+
+    @for(profile of profiles(); track profile.id) {
+
+      <div class="profile-item">
+
+        <input  id="pa"
+          type="checkbox"
+          [value]="profile.id">
+
+        <span class="profile-name">
+          {{ profile.name }}
+        </span>
+
+      </div>
+
+    }
+
+  </div>
+
+</div>
+
+    <div class="col-md-6">
+
+      <label for="etat" class="form-label">
+        Etat
+      </label>
+
+      <select id="etat"
+        class="form-select"
+        formControlName="stepId">
+
+        <option value="">
+          Sélectionner
+        </option>
+
+        @for (
+          item of states();
+          track item.id
+        ) {
+
+          <option
+            [value]="item.id">
+
+            {{ item.name }}
+
+          </option>
+
+        }
+
+      </select>
+
+    </div>
+
+    <div class="col-md-6">
+
+      <label for="endpoint" class="form-label">
+        Endpoint
+      </label>
+
+      <input id="endpoint"
+        class="form-control"
+        formControlName="endpoint">
+
+    </div>
+
+    <div class="col-md-6">
+
+      <label for="seforte_step" class="form-label">
+        Before Step
+      </label>
+
+      <input id="seforte_step"
+        class="form-control"
+        formControlName="beforeStep">
+
+    </div>
+
+    <div class="col-md-6">
+
+      <label for="ordre" class="form-label">
+        Ordre
+      </label>
+
+      <input id="ordre"
+        type="number"
+        class="form-control"
+        formControlName="stateOrder">
+
+    </div>
+
+    <div class="col-md-6">
+
+      <label for="notif" class="form-label">
+        Notification
+      </label>
+
+      <input id="notif"
+        class="form-control"
+        formControlName="notification">
+
+    </div>
+
+    <div class="col-md-6">
+
+      <label for="nf" class="form-label">
+        Next Field
+      </label>
+
+      <input id="nf"
+        class="form-control"
+        formControlName="nextField">
+
+    </div>
+
+  </div>
+
+  <div
+    class="d-flex justify-content-end gap-2 mt-4">
+
+    <button
+      type="button"
+      class="btn btn-light"
+      (click)="onCancel()">
+
+      Annuler
+
+    </button>
+
+    <button
+      type="submit"
+      class="btn btn-primary">
+
+      Enregistrer
+
+    </button>
+
+  </div>
+
+</form>

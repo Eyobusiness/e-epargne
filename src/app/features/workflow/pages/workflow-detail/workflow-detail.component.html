@@ -1,0 +1,103 @@
+<div class="workflow-detail-page">
+
+  <div class="workflow-header">
+
+    <h1>
+      {{ workflow()?.label }}
+    </h1>
+
+    <p>
+      {{ workflow()?.endpoint }}
+    </p>
+
+  </div>
+
+  <!-- ETATS -->
+
+  <div class="section-card">
+
+    <div class="section-header">
+
+      <h3>
+        Etats du workflow
+      </h3>
+
+      <button
+        class="btn btn-primary"
+        (click)="openCreateState()">
+
+        <i class="bi bi-plus-lg"></i>
+
+        Ajouter
+
+      </button>
+
+    </div>
+
+    <app-workflow-states
+      [states]="states()"
+      (edit)="openEditState($event)">
+    </app-workflow-states>
+
+  </div>
+
+  <!-- ACTIONS -->
+
+  <div class="section-card">
+
+    <div class="section-header">
+
+      <h3>
+        Actions du workflow
+      </h3>
+
+      <button
+        class="btn btn-primary"
+        (click)="openCreateAction()">
+
+        <i class="bi bi-plus-lg"></i>
+
+        Ajouter
+
+      </button>
+
+    </div>
+
+    <app-workflow-actions
+      [actions]="actions()"
+      (edit)="openEditAction($event)">
+    </app-workflow-actions>
+
+  </div>
+
+</div>
+
+<!-- MODAL ETAT -->
+
+<app-modal
+  [isOpen]="isStateModalOpen()"
+  title="Etat"
+  width="700px"
+  (close)="closeStateModal()">
+
+  <app-workflow-state-form
+    [state]="selectedState()"
+    (cancel)="closeStateModal()">
+  </app-workflow-state-form>
+
+</app-modal>
+
+<!-- MODAL ACTION -->
+
+<app-modal
+  [isOpen]="isActionModalOpen()"
+  title="Action"
+  width="900px"
+  (close)="closeActionModal()">
+
+  <app-workflow-action-form
+    [action]="selectedAction()"
+    (cancel)="closeActionModal()">
+  </app-workflow-action-form>
+
+</app-modal>

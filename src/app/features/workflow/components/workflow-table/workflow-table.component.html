@@ -1,0 +1,115 @@
+<div class="table-wrapper">
+
+  <table class="custom-table">
+
+    <thead>
+
+      <tr>
+
+        <th>#</th>
+
+        <th>Libellé</th>
+
+        <th>Endpoint</th>
+
+        <th>Parent</th>
+
+        <th>Statut</th>
+
+        <th>Actions</th>
+
+      </tr>
+
+    </thead>
+
+    <tbody>
+
+      @for (
+        item of workflows();
+        track trackById($index, item)
+      ) {
+
+        <tr>
+
+          <td>
+            {{ $index + 1 }}
+          </td>
+
+          <td>
+
+            <strong>
+              {{ item.label }}
+            </strong>
+
+          </td>
+
+          <td>
+
+            <code>
+              {{ item.endpoint }}
+            </code>
+
+          </td>
+
+          <td>
+
+            {{ item.parent }}
+
+          </td>
+
+          <td>
+
+            <span
+              class="status-badge"
+              [class.valid]="item.status === '200'">
+
+              {{
+                item.status === '200'
+                  ? 'Actif'
+                  : 'Inactif'
+              }}
+
+            </span>
+
+          </td>
+
+          <td class="actions">
+
+            <button
+              class="btn-action btn-view"
+              title="Configurer"
+              (click)="onDetails(item)">
+
+              <i class="bi bi-gear"></i>
+
+            </button>
+
+            <button
+              class="btn-action btn-edit"
+              title="Modifier"
+              (click)="onEdit(item)">
+
+              <i class="bi bi-pencil-square"></i>
+
+            </button>
+
+            <button
+              class="btn-action btn-delete"
+              title="Supprimer"
+              (click)="onDelete(item)">
+
+              <i class="bi bi-trash3"></i>
+
+            </button>
+
+          </td>
+
+        </tr>
+
+      }
+
+    </tbody>
+
+  </table>
+
+</div>

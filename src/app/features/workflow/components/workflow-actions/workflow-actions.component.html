@@ -1,0 +1,92 @@
+<div class="table-wrapper">
+
+  <table class="custom-table">
+
+    <thead>
+
+      <tr>
+
+        <th>#</th>
+
+        <th>Profil</th>
+
+        <th>Etat</th>
+
+        <th>Ordre</th>
+
+        <th>Endpoint</th>
+
+        <th>Actions</th>
+
+      </tr>
+
+    </thead>
+
+    <tbody>
+
+  @for (
+    item of actions();
+    track trackById($index, item)
+  ) {
+
+    <tr>
+
+      <td>
+        {{ $index + 1 }}
+      </td>
+
+      <td>
+        <span class="profile-badge">
+          {{ item.profile?.name || '--' }}
+        </span>
+      </td>
+
+      <td>
+        <span class="state-badge">
+          {{ item.beforeStep }}
+        </span>
+      </td>
+
+      <td>
+        <span class="order-badge">
+          {{ item.stateOrder }}
+        </span>
+      </td>
+
+      <td>
+        <span class="endpoint-code">
+          {{ item.endpoint }}
+        </span>
+      </td>
+
+      <td class="actions">
+
+        <button
+          title="Modifier"
+          class="btn-action btn-edit"
+          (click)="onEdit(item)">
+
+          <i class="bi bi-pencil-square"></i>
+
+        </button>
+
+        <button
+          title="Supprimer"
+          class="btn-action btn-delete"
+          (click)="onDelete(item)">
+
+          <i class="bi bi-trash"></i>
+
+        </button>
+
+      </td>
+
+    </tr>
+
+  }
+
+</tbody>
+
+  </table>
+
+</div>

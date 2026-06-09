@@ -1,0 +1,76 @@
+<div class="table-wrapper">
+
+  <table class="custom-table">
+
+    <thead>
+
+      <tr>
+
+        <th>#</th>
+
+        <th>Nom</th>
+
+        <th>Before Step</th>
+
+        <th>Description</th>
+
+        <th>Actions</th>
+
+      </tr>
+
+    </thead>
+
+    <tbody>
+
+      @for (
+        item of states();
+        track trackById($index, item)
+      ) {
+
+        <tr>
+
+          <td>
+            {{ $index + 1 }}
+          </td>
+
+          <td>
+            {{ item.name }}
+          </td>
+
+          <td>
+            {{ item.beforeStep }}
+          </td>
+
+          <td>
+            {{ item.description }}
+          </td>
+
+          <td class="actions">
+
+            <button title="Modifier"
+              class="btn-action btn-edit"
+              (click)="onEdit(item)">
+
+              <i class="bi bi-pencil-square"></i>
+
+            </button>
+
+            <button title="Supprimer"
+              class="btn-action btn-delete"
+              (click)="onDelete(item)">
+
+              <i class="bi bi-trash"></i>
+
+            </button>
+
+          </td>
+
+        </tr>
+
+      }
+
+    </tbody>
+
+  </table>
+
+</div>

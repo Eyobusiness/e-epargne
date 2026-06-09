@@ -117,6 +117,14 @@ export const routes: Routes = [
         loadChildren: () =>
           import('./features/parametres/routes/parametres.routes').then((m) => m.PARAMETRES_ROUTES),
       },
+
+      //workflow routes 
+      {
+        path: 'workflow',
+        title: 'Workflows',
+        loadChildren: () =>
+          import('./features/workflow/routes/workflow.routes').then((m) => m.WORKFLOW_ROUTES),
+      },
     ],
   },
 

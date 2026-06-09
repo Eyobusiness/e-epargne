@@ -1,0 +1,123 @@
+<form
+  [formGroup]="form"
+  (ngSubmit)="save()">
+
+  <div class="row g-3">
+
+    <div class="col-md-6">
+
+      <label for="libelle" class="form-label">
+        Libellé
+      </label>
+
+      <input id="libelle"
+        type="text"
+        class="form-control"
+        formControlName="label">
+
+    </div>
+
+    <div class="col-md-6">
+
+      <label for="endpoint" class="form-label">
+        Endpoint
+      </label>
+
+      <input id="endpoint"
+        type="text"
+        class="form-control"
+        formControlName="endpoint">
+
+    </div>
+
+    <div class="col-md-12">
+
+      <label for="description" class="form-label">
+        Description
+      </label>
+
+      <textarea id="description"
+        rows="4"
+        class="form-control"
+        formControlName="description">
+      </textarea>
+
+    </div>
+
+    <div class="col-md-6">
+
+      <label for="parent" class="form-label">
+        Parent
+      </label>
+
+      <input id="parent"
+        type="text"
+        class="form-control"
+        formControlName="parent">
+
+    </div>
+
+    <div class="col-md-6">
+
+      <label for="status" class="form-label">
+        Statut
+      </label>
+
+      <select id="status"
+        class="form-select"
+        formControlName="status">
+
+        <option value="200">
+          Actif
+        </option>
+
+        <option value="100">
+          En attente
+        </option>
+
+        <option value="300">
+          Désactivé
+        </option>
+
+      </select>
+
+    </div>
+
+  </div>
+
+  <div
+    class="d-flex justify-content-end gap-2 mt-4">
+
+    <button
+      type="button"
+      class="btn btn-light"
+      (click)="onCancel()">
+
+      Annuler
+
+    </button>
+
+    <button
+      type="submit"
+      class="btn btn-primary"
+      [disabled]="isLoading()">
+
+      @if (isLoading()) {
+
+        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true">
+          Enregistrement...
+        </span>
+
+      } @else {
+
+        <span>
+          Enregistrer
+        </span>
+
+      }
+
+    </button>
+
+  </div>
+
+</form>

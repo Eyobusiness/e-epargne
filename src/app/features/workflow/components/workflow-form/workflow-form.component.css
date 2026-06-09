@@ -1,0 +1,29 @@
+.form-label {
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.form-control,
+.form-select {
+  min-height: 46px;
+}
+
+textarea.form-control {
+  min-height: 120px;
+  resize: vertical;
+} 
+
+.btn-submit {
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.spinner-border {
+  width: 24px;
+  height: 24px;
+  border-width: 3px;
+}

@@ -1,0 +1,68 @@
+<form
+  [formGroup]="form"
+  (ngSubmit)="save()">
+
+  <div class="row g-3">
+
+    <div class="col-md-6">
+
+      <label for="nom" class="form-label">
+        Nom
+      </label>
+
+      <input id="nom"
+        class="form-control"
+        formControlName="name">
+
+    </div>
+
+    <div class="col-md-6">
+
+      <label for="bs" class="form-label">
+        Before Step
+      </label>
+
+      <input id="bs"
+        class="form-control"
+        formControlName="beforeStep">
+
+    </div>
+
+    <div class="col-md-12">
+
+      <label for="description" class="form-label">
+        Description
+      </label>
+
+      <textarea id="description"
+        rows="4"
+        class="form-control"
+        formControlName="description">
+      </textarea>
+
+    </div>
+
+  </div>
+
+  <div class="d-flex justify-content-end gap-2 mt-4">
+
+    <button
+      type="button"
+      class="btn btn-light"
+      (click)="onCancel()">
+
+      Annuler
+
+    </button>
+
+    <button
+      type="submit"
+      class="btn btn-primary">
+
+      Enregistrer
+
+    </button>
+
+  </div>
+
+</form>

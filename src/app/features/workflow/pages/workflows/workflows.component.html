@@ -1,0 +1,70 @@
+<app-page-header
+  title="Workflows"
+  description="Gestion des workflows"
+  buttonText="Nouveau workflow"
+  icon="bi bi-plus-lg"
+  (action)="openCreateModal()">
+</app-page-header>
+
+<div class="page-content">
+
+  <app-workflow-filter
+    (filterChange)="onFilterChange($event)">
+  </app-workflow-filter>
+
+  @if (isPageLoading()) {
+
+    <div class="loading-state">
+
+      Chargement...
+
+    </div>
+
+  }
+
+  @if (!isPageLoading()) {
+
+    <app-workflow-table
+      [workflows]="paginatedWorkflows()"
+      (details)="openDetails($event)"
+      (edit)="openEditModal($event)"
+      (delete)="openDeleteDialog($event)">
+    </app-workflow-table>
+  }
+
+  @if (totalPages() > 1) {
+
+    <app-pagination
+      [currentPage]="currentPage()"
+      [totalPages]="totalPages()"
+      (pageChange)="changePage($event)">
+    </app-pagination>
+
+  }
+
+</div>
+
+<app-modal
+  [isOpen]="isModalOpen()"
+  title="Workflow"
+  description="Création ou modification"
+  width="900px"
+  (close)="closeModal()">
+
+  <app-workflow-form
+    [workflow]="selected()"
+    [isLoading]="isLoading()"
+    (submitForm)="save($event)"
+    (cancel)="closeModal()">
+  </app-workflow-form>
+
+</app-modal>
+
+<app-confirm-dialog
+  [isOpen]="isDeleteOpen()"
+  [isLoading]="isDeleteLoading()"
+  title="Suppression"
+  message="Voulez-vous supprimer ce workflow ?"
+  (confirm)="delete()"
+  (cancel)="isDeleteOpen.set(false)">
+</app-confirm-dialog>
