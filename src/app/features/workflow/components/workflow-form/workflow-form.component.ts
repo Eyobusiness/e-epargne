@@ -18,7 +18,6 @@ import { Workflow } from '../../models/workflow.model';
 export class WorkflowFormComponent {
   private readonly fb = inject(FormBuilder);
 
-
   readonly workflow = input<Workflow | null>(null);
 
   readonly isLoading = input(false);
@@ -35,8 +34,6 @@ export class WorkflowFormComponent {
     description: [''],
 
     parent: ['TONTINEAPP', Validators.required],
-
-    status: ['200', Validators.required],
   });
 
   constructor() {
@@ -49,7 +46,6 @@ export class WorkflowFormComponent {
           label: '',
           description: '',
           parent: 'TONTINEAPP',
-          status: '200',
         });
         return;
       }
@@ -59,23 +55,37 @@ export class WorkflowFormComponent {
         label: workflow.label,
         description: workflow.description,
         parent: workflow.parent,
-        status: workflow.status,
       });
     });
   }
 
+  // save(): void {
+  //   if (this.form.invalid) {
+  //     this.form.markAllAsTouched();
+  //     return;
+  //   }
+
+  //   this.submitForm.emit({
+  //     ...this.workflow(),
+  //     ...this.form.getRawValue(),
+  //   });
+  // }
 
   save(): void {
-    if (this.form.invalid) {
-      this.form.markAllAsTouched();
-      return;
-    }
 
-    this.submitForm.emit({
-      ...this.workflow(),
-      ...this.form.getRawValue(),
-    });
+  console.log('BOUTON CLIQUE');
+
+  if (this.form.invalid) {
+    console.log('FORMULAIRE INVALIDE');
+    return;
   }
+
+  console.log(this.form.getRawValue());
+
+  this.submitForm.emit(
+    this.form.getRawValue()
+  );
+}
 
   onCancel(): void {
     this.cancel.emit();

@@ -99,7 +99,7 @@ export class WorkflowsComponent implements OnInit {
     return this.filteredWorkflows().slice(start, start + this.itemsPerPage);
   });
 
-  
+
 
   ngOnInit(): void {
     this.loadWorkflows();
@@ -151,28 +151,57 @@ export class WorkflowsComponent implements OnInit {
   }
 
   save(workflow: Workflow): void {
-    this.isLoading.set(true);
 
-    const selected = this.selected();
+  this.isLoading.set(true);
 
-    const request = selected?.id
-      ? this.service.updateWorkflow(selected.id, workflow)
-      : this.service.createWorkflow(workflow);
+  const selected = this.selected();
 
-    request.pipe(finalize(() => this.isLoading.set(false))).subscribe({
+  const payload = {
+    endpoint: workflow.endpoint,
+    label: workflow.label,
+    description: workflow.description,
+    parent: workflow.parent,
+  };
+
+  const request = selected?.id
+    ? this.service.updateWorkflow(
+        selected.id,
+        payload,
+      )
+    : this.service.createWorkflow(
+        payload,
+      );
+
+  request
+    .pipe(
+      finalize(() =>
+        this.isLoading.set(false),
+      ),
+    )
+    .subscribe({
       next: () => {
+
         this.closeModal();
 
         this.loadWorkflows();
 
-        this.toastService.show('Workflow enregistré', 'success');
+        this.toastService.show(
+          'Workflow enregistré',
+          'success',
+        );
       },
 
-      error: () => {
-        this.toastService.show('Erreur enregistrement', 'error');
+      error: (error) => {
+
+        console.log(error);
+
+        this.toastService.show(
+          'Erreur enregistrement',
+          'error',
+        );
       },
     });
-  }
+}
 
   openDeleteDialog(workflow: Workflow): void {
     this.selected.set(workflow);
@@ -219,5 +248,5 @@ openDetails(workflow: Workflow): void {
   ]);
 
 }
-  
+
 }

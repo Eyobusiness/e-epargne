@@ -1,9 +1,8 @@
 import { CommonModule } from '@angular/common';
 
-import { Component, inject, input, output, effect } from '@angular/core';
+import { Component, OnInit, inject, input, output } from '@angular/core';
 
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-
 
 import { WorkflowState } from '../../models/workflow-state.model';
 
@@ -13,8 +12,7 @@ import { WorkflowState } from '../../models/workflow-state.model';
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './workflow-state-form.component.html',
 })
-export class WorkflowStateFormComponent {
-
+export class WorkflowStateFormComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
 
   readonly state = input<WorkflowState | null>(null);
@@ -35,29 +33,20 @@ export class WorkflowStateFormComponent {
     parent: ['TONTINEAPP', Validators.required],
   });
 
-  constructor() {
-    effect(() => {
-      const state = this.state();
+  ngOnInit(): void {
+    const state = this.state();
 
-      if (!state) {
-        this.form.reset({
-          name: '',
-          beforeStep: '',
-          description: '',
-          parent: 'TONTINEAPP',
-        });
-        return;
-      }
+    if (!state) {
+      return;
+    }
 
-      this.form.patchValue({
-        name: state.name,
-        beforeStep: state.beforeStep,
-        description: state.description,
-        parent: state.parent,
-      });
+    this.form.patchValue({
+      name: state.name,
+      beforeStep: state.beforeStep,
+      description: state.description,
+      parent: state.parent,
     });
   }
-
 
   save(): void {
     if (this.form.invalid) {
