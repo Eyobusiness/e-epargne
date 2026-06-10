@@ -18,6 +18,10 @@ export const serverRoutes: ServerRoute[] = [
     renderMode: RenderMode.Server,
   },
   {
+    path: 'workflow/:id',
+    renderMode: RenderMode.Server,
+  },
+  {
     path: 'utilisateur',
     renderMode: RenderMode.Server,
   },
