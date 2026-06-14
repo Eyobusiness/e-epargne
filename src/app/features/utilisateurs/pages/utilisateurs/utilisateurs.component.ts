@@ -7,7 +7,7 @@ import { finalize } from 'rxjs';
 
 import { User } from '../../models/utilisateur.model';
 import { UtilisateurService } from '../../services/utilisateur.service';
-import { ProfilService } from '../../../profil/services/profil.service';
+import { ProfileService } from '../../../profil/services/profil.service';
 
 import { UtilisateurFormComponent } from '../../components/utilisateur-form/utilisateur-form.component';
 import { UtilisateurTableComponent } from '../../components/utilisateur-table/utilisateur-table.component';
@@ -47,7 +47,7 @@ import { ToastService } from '../../../../core/services/toast.service';
 })
 export class UtilisateursComponent implements OnInit {
   private readonly service = inject(UtilisateurService);
-  private readonly profilService = inject(ProfilService);
+  private readonly profilService = inject(ProfileService);
 
   private readonly router = inject(Router);
 

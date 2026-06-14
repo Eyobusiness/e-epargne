@@ -21,11 +21,11 @@ export class WorkflowStatesComponent {
     return item.id ?? index.toString();
   }
 
-  onEdit(item: WorkflowState): void {
-    this.edit.emit(item);
+  onEdit(state: WorkflowState): void {
+    this.edit.emit(state);
   }
 
-  onDelete(item: WorkflowState): void {
-    this.delete.emit(item);
+  onDelete(state: WorkflowState): void {
+    this.delete.emit(state);
   }
 }

@@ -42,6 +42,20 @@ export class OperationService {
     return this.http.put(`${this.apiUrl}/${id}/activate`, payload);
   }
 
+  deactivate(id: string): Observable<any> {
+    return this.http.put(`${this.apiUrl}/${id}/deactivate`, {});
+  }
+
+  reject(
+    id: string,
+    payload: {
+      motif: string;
+      description: string;
+    },
+  ): Observable<any> {
+    return this.http.put(`${this.apiUrl}/${id}/reject`, payload);
+  }
+
   delete(id: string): Observable<any> {
     return this.http.delete(`${this.apiUrl}/${id}`);
   }

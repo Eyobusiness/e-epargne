@@ -61,7 +61,7 @@ export class PortefeuilleDetailComponent implements OnInit {
       .pipe(finalize(() => this.isLoading.set(false)))
       .subscribe({
         next: (response) => {
-        console.log('WALLET', response);
+        // console.log('WALLET', response);
 
         this.portefeuille.set(response);
       },

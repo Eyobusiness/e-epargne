@@ -1,0 +1,107 @@
+<div class="row g-3 mb-4">
+
+  <div class="col-xl-3 col-md-6">
+
+    <div class="stat-card">
+
+      <div class="stat-icon blue">
+
+        <i class="bi bi-people-fill"></i>
+
+      </div>
+
+      <div>
+
+        <span>
+          Total profils
+        </span>
+
+        <h4>
+          {{ totalProfiles() }}
+        </h4>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="col-xl-3 col-md-6">
+
+    <div class="stat-card">
+
+      <div class="stat-icon green">
+
+        <i class="bi bi-grid"></i>
+
+      </div>
+
+      <div>
+
+        <span>
+          Menus attribués
+        </span>
+
+        <h4>
+          {{ totalMenusAssigned() }}
+        </h4>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="col-xl-3 col-md-6">
+
+    <div class="stat-card">
+
+      <div class="stat-icon orange">
+
+        <i class="bi bi-check-circle"></i>
+
+      </div>
+
+      <div>
+
+        <span>
+          Profils configurés
+        </span>
+
+        <h4>
+          {{ totalWithMenus() }}
+        </h4>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="col-xl-3 col-md-6">
+
+    <div class="stat-card">
+
+      <div class="stat-icon red">
+
+        <i class="bi bi-exclamation-circle"></i>
+
+      </div>
+
+      <div>
+
+        <span>
+          Sans menus
+        </span>
+
+        <h4>
+          {{ totalWithoutMenus() }}
+        </h4>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

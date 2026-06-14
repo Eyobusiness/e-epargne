@@ -1,5 +1,3 @@
-<!-- components/profil-table/profil-table.component.html -->
-
 <div class="table-wrapper">
 
   <table class="custom-table">
@@ -8,13 +6,15 @@
 
       <tr>
 
-        <th>Profil</th>
+        <th>#</th>
+
+        <th>Libellé</th>
 
         <th>Code</th>
 
-        <th>Permission</th>
-
         <th>Menus</th>
+
+        <th>Permission</th>
 
         <th>Actions</th>
 
@@ -25,76 +25,61 @@
     <tbody>
 
       @for (
-        item of profils();
+        item of profiles();
         track trackById($index, item)
       ) {
 
         <tr>
 
           <td>
+            {{ $index + 1 }}
+          </td>
 
-            <div class="profil-cell">
+          <td>
 
-              <div class="avatar">
-
-                {{
-                  item.libelle
-                    .charAt(0)
-                }}
-
-              </div>
-
-              <span>
-                {{ item.libelle }}
-              </span>
-
-            </div>
+            <strong>
+              {{ item.libelle }}
+            </strong>
 
           </td>
 
           <td>
 
-            {{
-              item.code
-              || '--'
-            }}
+            <span class="code-badge">
+              {{ item.code || '--' }}
+            </span>
 
           </td>
 
           <td>
 
-            {{
-              item.permission
-              || '--'
-            }}
+            <span class="menu-count">
+
+              {{
+                item.profilMenus?.length || 0
+              }}
+
+            </span>
 
           </td>
 
           <td>
 
-            {{
-              item.profilMenus.length
-              || 0
-            }}
+            <span class="permission-badge">
 
-            menus
+              {{
+                item.permission || '--'
+              }}
+
+            </span>
 
           </td>
 
           <td class="actions">
 
             <button
-              title="Details"
-              class="btn-action btn-view"
-              (click)="onDetail(item)">
-
-              <i class="bi bi-eye"></i>
-
-            </button>
-
-            <button
-              title="Modifier"
               class="btn-action btn-edit"
+              title="Modifier"
               (click)="onEdit(item)">
 
               <i class="bi bi-pencil-square"></i>
@@ -102,11 +87,11 @@
             </button>
 
             <button
-              title="Supprimer"
               class="btn-action btn-delete"
+              title="Supprimer"
               (click)="onDelete(item)">
 
-              <i class="bi bi-trash3"></i>
+              <i class="bi bi-trash"></i>
 
             </button>
 

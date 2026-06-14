@@ -1,31 +1,27 @@
-// components/profil-form/profil-form.component.ts
+import { Component, effect, inject, input, output } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
 
-import { Component, effect, input, output } from '@angular/core';
-
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
-import { Profil } from '../../models/profil.model';
+import { Profile } from '../../models/profil.model';
+import { Menu } from '../../models/menu.model';
+
+import { ProfileMenuSelectorComponent } from '../profile-menu-selector/profile-menu-selector.component';
 
 @Component({
-  selector: 'app-profil-form',
-
+  selector: 'app-profile-form',
   standalone: true,
-
-  imports: [CommonModule, ReactiveFormsModule],
-
+  imports: [CommonModule, ReactiveFormsModule, ProfileMenuSelectorComponent],
   templateUrl: './profil-form.component.html',
-
   styleUrls: ['./profil-form.component.css'],
 })
-export class ProfilFormComponent {
-  private readonly fb = new FormBuilder();
-  private readonly normalizeMenuId = (menuId: unknown): string => String(menuId ?? '');
+export class ProfileFormComponent {
+  private readonly fb = inject(FormBuilder);
 
-  readonly profil = input<Profil | null>(null);
+  readonly profile = input<Profile | null>(null);
 
-  readonly menus = input<any[]>([]);
+  readonly menus = input<Menu[]>([]);
 
   readonly isLoading = input(false);
 
@@ -36,81 +32,80 @@ export class ProfilFormComponent {
   readonly form = this.fb.nonNullable.group({
     libelle: ['', Validators.required],
 
-    permission: [''],
+    code: [''],
 
-    menus: [[] as string[]],
+    permission: ['1,2,3,4', Validators.required],
   });
 
   constructor() {
     effect(() => {
-      const data = this.profil();
+      const profile = this.profile();
 
-      if (!data) {
+      if (!profile) {
         this.form.reset({
           libelle: '',
-          permission: '',
-          menus: [],
+          code: '',
+          permission: '1,2,3,4',
         });
 
         return;
       }
 
       this.form.patchValue({
-        libelle: data.libelle,
+        libelle: profile.libelle ?? '',
 
-        permission: data.permission ?? '',
+        code: profile.code ?? '',
 
-        menus: data.profilMenus?.map((menu) => this.normalizeMenuId(menu.id_menu)) ?? [],
+        permission: profile.permission ?? '1,2,3,4',
       });
     });
   }
 
-  toggleMenu(menuId: string | number): void {
-    const normalizedMenuId = this.normalizeMenuId(menuId);
-    const current = this.form.value.menus ?? [];
-
-    const exists = current.includes(normalizedMenuId);
-
-    const updated = exists
-      ? current.filter((id) => id !== normalizedMenuId)
-      : [...current, normalizedMenuId];
-
-    this.form.patchValue({
-      menus: updated,
-    });
-  }
-
-  isChecked(menuId: string | number): boolean {
-    return this.form.value.menus?.includes(this.normalizeMenuId(menuId)) ?? false;
-  }
-
   save(): void {
-    if (this.form.invalid || this.isLoading()) {
+    if (this.form.invalid) {
       this.form.markAllAsTouched();
 
       return;
     }
 
-    const value = this.form.getRawValue();
+    const selectedMenus = this.menus()
+      .filter((menu) => menu.checked)
+      .map((menu) => ({
+        id: Number(menu.order),
+      }));
 
-    this.submitForm.emit({
-      profileRequest: {
-        libelle: value.libelle,
+    if (selectedMenus.length === 0) {
+      alert('Veuillez sélectionner au moins un menu');
 
-        permission: value.permission,
-      },
-
-      profileMenuRequest: value.menus.map((menuId) => ({
-        menu_id: menuId,
-      })),
-    });
-  }
-
-  close(): void {
-    if (this.isLoading()) {
       return;
     }
 
+    const formValue = this.form.getRawValue();
+
+    const payload = {
+      id: 0,
+
+      profileRequest: {
+        id: 0,
+
+        libelle: formValue.libelle,
+
+        code: formValue.code,
+
+        permission: formValue.permission,
+
+        code_store: 'TONTINEAPP',
+      },
+
+      profileMenuRequest: selectedMenus,
+    };
+
+    console.log('Payload profil :', JSON.stringify(payload, null, 2));
+
+    this.submitForm.emit(payload);
+  }
+
+  onCancel(): void {
     this.cancel.emit();
   }
 }

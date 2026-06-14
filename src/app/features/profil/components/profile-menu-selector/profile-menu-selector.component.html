@@ -1,0 +1,90 @@
+<div class="menu-selector">
+
+  @for (
+    menu of menus();
+    track trackById($index, menu)
+  ) {
+
+    <div class="menu-card">
+
+      <div class="menu-header">
+
+        <div
+          class="menu-left">
+
+          <input title="cochez"
+            type="checkbox"
+            class="form-check-input"
+            [(ngModel)]="menu.checked"
+            (change)="onChange()">
+
+          <strong>
+            {{ menu.libelle }}
+          </strong>
+
+        </div>
+
+        <div
+          class="menu-right">
+
+          <select title="selectionner la permission"
+            class="form-select"
+            [(ngModel)]="menu.selectedPermission"
+            (change)="onChange()">
+
+            @for (
+              item of permissionLevels;
+              track item.value
+            ) {
+
+              <option
+                [value]="item.value">
+
+                {{ item.label }}
+
+              </option>
+
+            }
+
+          </select>
+
+        </div>
+
+      </div>
+
+      @if (
+        menu.sousMenus?.length
+      ) {
+
+        <div
+          class="submenu-container">
+
+          @for (
+            sub of menu.sousMenus;
+            track sub.id
+          ) {
+
+            <label
+              class="submenu-item">
+
+              <input
+                type="checkbox"
+                class="form-check-input">
+
+              <span>
+                {{ sub.name }}
+              </span>
+
+            </label>
+
+          }
+
+        </div>
+
+      }
+
+    </div>
+
+  }
+
+</div>

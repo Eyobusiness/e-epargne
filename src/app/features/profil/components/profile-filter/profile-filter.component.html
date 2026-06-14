@@ -1,0 +1,32 @@
+<form
+  [formGroup]="form"
+  class="card p-3 mb-4">
+
+  <div class="row g-2">
+
+    <div class="col-md-10">
+
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Rechercher un profil..."
+        formControlName="search">
+
+    </div>
+
+    <div class="col-md-2">
+
+      <button
+        type="button"
+        class="btn btn-primary w-100"
+        (click)="apply()">
+
+        Rechercher
+
+      </button>
+
+    </div>
+
+  </div>
+
+</form>

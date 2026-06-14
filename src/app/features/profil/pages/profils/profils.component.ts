@@ -1,203 +1,197 @@
-// pages/profils/profils.component.ts
-
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
-import { Router } from '@angular/router';
+
 import { finalize } from 'rxjs';
 
-import { Profil } from '../../models/profil.model';
+import { Profile } from '../../models/profil.model';
+import { Menu } from '../../models/menu.model';
 
-import { ProfilService } from '../../services/profil.service';
+import { ProfileService } from '../../services/profil.service';
 import { MenuService } from '../../services/menu.service';
 
-import { ProfilTableComponent } from '../../components/profil-table/profil-table.component';
-import { ProfilFormComponent } from '../../components/profil-form/profil-form.component';
+import { ProfileTableComponent } from '../../components/profil-table/profil-table.component';
+import { ProfileFormComponent } from '../../components/profil-form/profil-form.component';
+import { ProfileFilterComponent } from '../../components/profile-filter/profile-filter.component';
+import { ProfileStatsComponent } from '../../components/profile-stats/profile-stats.component';
 
 import { AppModalComponent } from '../../../../shared/ui/app-modal/app-modal.component';
 import { AppPageHeaderComponent } from '../../../../shared/ui/app-page-header/app-page-header.component';
-import { AppEmptyStateComponent } from '../../../../shared/ui/app-empty-state/app-empty-state.component';
 import { AppConfirmDialogComponent } from '../../../../shared/ui/app-confirm-dialog/app-confirm-dialog.component';
+import { AppEmptyStateComponent } from '../../../../shared/ui/app-empty-state/app-empty-state.component';
 
 import { ToastService } from '../../../../core/services/toast.service';
 
 @Component({
-  selector: 'app-profils',
+  selector: 'app-profiles',
   standalone: true,
   imports: [
     CommonModule,
     AppModalComponent,
     AppPageHeaderComponent,
-    AppEmptyStateComponent,
     AppConfirmDialogComponent,
-    ProfilTableComponent,
-    ProfilFormComponent,
+    AppEmptyStateComponent,
+
+    ProfileTableComponent,
+    ProfileFormComponent,
+    ProfileFilterComponent,
+    ProfileStatsComponent,
   ],
   templateUrl: './profils.component.html',
   styleUrls: ['./profils.component.css'],
 })
-export class ProfilsComponent implements OnInit {
-  private readonly profilService = inject(ProfilService);
-  private readonly menuService = inject(MenuService);
-  private readonly toastService = inject(ToastService);
-  private readonly router = inject(Router);
+export class ProfilesComponent implements OnInit {
+  private readonly profileService = inject(ProfileService);
 
-  readonly profils = signal<Profil[]>([]);
-  readonly menus = signal<any[]>([]);
-  readonly selected = signal<Profil | null>(null);
+  private readonly menuService = inject(MenuService);
+
+  private readonly toastService = inject(ToastService);
+
+  readonly profiles = signal<Profile[]>([]);
+
+  readonly menus = signal<Menu[]>([]);
+
+  readonly selected = signal<Profile | null>(null);
+
+  readonly search = signal('');
 
   readonly isLoading = signal(false);
-  readonly isPageLoading = signal(false);
-  readonly isModalOpen = signal(false);
-  readonly isDeleteOpen = signal(false);
-  readonly isDeleteLoading = signal(false);
-  readonly isAdminLoading = signal(false);
 
-  readonly isEmpty = computed(() => !this.isPageLoading() && this.profils().length === 0);
+  readonly isDeleteLoading = signal(false);
+
+  readonly isModalOpen = signal(false);
+
+  readonly isDeleteOpen = signal(false);
+
+  readonly filteredProfiles = computed(() => {
+    const keyword = this.search().toLowerCase();
+
+    return this.profiles().filter((profile) => profile.libelle?.toLowerCase().includes(keyword));
+  });
 
   ngOnInit(): void {
-    this.loadProfils();
+    this.loadProfiles();
+
     this.loadMenus();
   }
 
-  loadProfils(): void {
-    this.isPageLoading.set(true);
+  loadProfiles(): void {
+    this.profileService.getAll().subscribe({
+      next: (response) => {
+        this.profiles.set(response?.data?.items ?? []);
+      },
 
-    this.profilService
-      .getAll()
-      .pipe(finalize(() => this.isPageLoading.set(false)))
-      .subscribe({
-        next: (response) => {
-          this.profils.set(response.data.items ?? []);
-        },
-        error: () => {
-          this.toastService.show('Erreur chargement profils', 'error');
-        },
-      });
+      error: () => {
+        this.profiles.set([]);
+      },
+    });
   }
 
   loadMenus(): void {
     this.menuService.getAll().subscribe({
-      next: (response: any) => {
-        this.menus.set(response.data.items ?? []);
+      next: (response) => {
+        const menus = response?.data?.items ?? [];
+
+        this.menus.set(
+          menus.map((menu: any) => ({
+            ...menu,
+
+            checked: false,
+
+            selectedPermission: menu.permission ?? '1',
+          })),
+        );
       },
+
       error: () => {
         this.menus.set([]);
       },
     });
   }
 
+  filter(value: string): void {
+    this.search.set(value);
+  }
+
   openCreateModal(): void {
     this.selected.set(null);
+
+    this.resetMenus();
+
     this.isModalOpen.set(true);
   }
 
-  openEditModal(item: Profil): void {
-    this.selected.set(item);
+  openEditModal(profile: Profile): void {
+    this.selected.set(profile);
+
+    this.prepareMenus(profile);
+
     this.isModalOpen.set(true);
   }
 
-  closeModal(force = false): void {
-    if (!force && this.isLoading()) {
-      return;
-    }
-
+  closeModal(): void {
     this.isModalOpen.set(false);
+
     this.selected.set(null);
   }
 
   save(payload: any): void {
-    if (this.isLoading()) {
-      return;
-    }
-
-    const selected = this.selected();
-    const request$ = selected?.id
-      ? this.profilService.update(selected.id, payload)
-      : this.profilService.create(payload);
-
     this.isLoading.set(true);
 
-    request$.pipe(finalize(() => this.isLoading.set(false))).subscribe({
+    const selected = this.selected();
+
+    const request = selected?.id
+      ? this.profileService.update(selected.id, payload)
+      : this.profileService.create(payload);
+
+    request.pipe(finalize(() => this.isLoading.set(false))).subscribe({
       next: () => {
-        this.closeModal(true);
-        this.loadProfils();
-        this.toastService.show(selected?.id ? 'Profil modifie' : 'Profil enregistre', 'success');
+        this.closeModal();
+
+        this.loadProfiles();
+
+        this.toastService.show('Profil enregistré', 'success');
       },
+
       error: () => {
-        this.toastService.show('Erreur enregistrement profil', 'error');
+        this.toastService.show('Erreur enregistrement', 'error');
       },
     });
   }
 
-  generateAdmin(): void {
-    if (this.isAdminLoading()) {
-      return;
-    }
+  openDeleteDialog(profile: Profile): void {
+    this.selected.set(profile);
 
-    this.isAdminLoading.set(true);
-
-    this.profilService
-      .getAdminProfil({
-        code_store: 'TONTINE_APP',
-      })
-      .pipe(finalize(() => this.isAdminLoading.set(false)))
-      .subscribe({
-        next: () => {
-          this.toastService.show('Profil admin genere', 'success');
-          this.loadProfils();
-        },
-        error: () => {
-          this.toastService.show('Erreur generation profil admin', 'error');
-        },
-      });
-  }
-
-  openDeleteDialog(item: Profil): void {
-    this.selected.set(item);
     this.isDeleteOpen.set(true);
   }
 
-  closeDeleteDialog(force = false): void {
-    if (!force && this.isDeleteLoading()) {
-      return;
-    }
-
+  closeDeleteDialog(): void {
     this.isDeleteOpen.set(false);
-
-    if (force || !this.isModalOpen()) {
-      this.selected.set(null);
-    }
   }
 
   delete(): void {
-    const selected = this.selected();
+    this.closeDeleteDialog();
 
-    if (!selected?.id || this.isDeleteLoading()) {
-      return;
-    }
-
-    this.isDeleteLoading.set(true);
-
-    this.profilService
-      .delete(selected.id)
-      .pipe(finalize(() => this.isDeleteLoading.set(false)))
-      .subscribe({
-        next: () => {
-          this.closeDeleteDialog(true);
-          this.loadProfils();
-          this.toastService.show('Profil supprime', 'success');
-        },
-        error: () => {
-          this.toastService.show('Erreur suppression profil', 'error');
-        },
-      });
+    this.toastService.show('Suppression non disponible sur API', 'warning');
   }
 
-  viewDetail(item: Profil): void {
-    if (!item.id) {
-      return;
-    }
+  private resetMenus(): void {
+    this.menus.update((menus) =>
+      menus.map((menu) => ({
+        ...menu,
+        checked: false,
+      })),
+    );
+  }
 
-    this.router.navigate(['/profil', item.id]);
+  private prepareMenus(profile: Profile): void {
+    const assignedMenus = profile.profilMenus ?? [];
+
+    this.menus.update((menus) =>
+      menus.map((menu) => ({
+        ...menu,
+
+        checked: assignedMenus.some((p) => p.id_menu === menu.id),
+      })),
+    );
   }
 }

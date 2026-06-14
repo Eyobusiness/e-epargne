@@ -13,10 +13,10 @@ export const serverRoutes: ServerRoute[] = [
     path: 'portefeuille/:id',
     renderMode: RenderMode.Server,
   },
-  {
-    path: 'profil/:id',
-    renderMode: RenderMode.Server,
-  },
+  // {
+  //   path: 'profil/:id',
+  //   renderMode: RenderMode.Server,
+  // },
   {
     path: 'workflow/:id',
     renderMode: RenderMode.Server,

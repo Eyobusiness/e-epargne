@@ -6,7 +6,6 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { WorkflowAction } from '../../models/workflow-action.model';
 
-
 @Component({
   selector: 'app-workflow-action-form',
   standalone: true,
@@ -14,7 +13,6 @@ import { WorkflowAction } from '../../models/workflow-action.model';
   templateUrl: './workflow-action-form.component.html',
 })
 export class WorkflowActionFormComponent {
-
   private readonly fb = inject(FormBuilder);
 
   readonly action = input<WorkflowAction | null>(null);
@@ -27,7 +25,7 @@ export class WorkflowActionFormComponent {
 
   readonly isLoading = input(false);
 
-  readonly submitForm = output<any>();
+  readonly submitForm = output<WorkflowAction>();
 
   readonly cancel = output<void>();
 
@@ -58,39 +56,83 @@ export class WorkflowActionFormComponent {
       if (!action) {
         this.form.reset({
           endpoint: '',
+
           stepId: '',
+
           idWorkflow: '',
+
           beforeStep: '',
+
           stateOrder: '',
+
           notification: '',
+
           nextField: '',
+
           parent: 'TONTINEAPP',
+
           profileIds: [],
         });
+
         return;
       }
 
       this.form.patchValue({
         endpoint: action.endpoint,
+
         stepId: action.stepId,
+
         idWorkflow: action.idWorkflow,
+
         beforeStep: action.beforeStep,
+
         stateOrder: action.stateOrder,
-        notification: action.notification,
-        nextField: action.nextField,
-        parent: action.parent,
+
+        notification: action.notification ?? '',
+
+        nextField: action.nextField ?? '',
+
+        parent: action.parent ?? 'TONTINEAPP',
+
+        profileIds: action.profileIds ?? [],
       });
     });
   }
 
+  toggleProfile(profileId: string, checked: boolean): void {
+    const ids = [...this.form.controls.profileIds.value];
+
+    if (checked) {
+      if (!ids.includes(profileId)) {
+        ids.push(profileId);
+      }
+    } else {
+      const index = ids.indexOf(profileId);
+
+      if (index >= 0) {
+        ids.splice(index, 1);
+      }
+    }
+
+    this.form.patchValue({
+      profileIds: ids,
+    });
+  }
+
+  isChecked(profileId: string): boolean {
+    return this.form.controls.profileIds.value.includes(profileId);
+  }
 
   save(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
+
       return;
     }
 
-    this.submitForm.emit(this.form.getRawValue());
+    this.submitForm.emit({
+      ...this.form.getRawValue(),
+    });
   }
 
   onCancel(): void {

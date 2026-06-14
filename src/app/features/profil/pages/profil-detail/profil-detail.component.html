@@ -1,112 +1,29 @@
-<!-- pages/profil-detail/profil-detail.component.html -->
-
-<app-page-header
-  title="Detail profil"
-  description="Informations du profil">
-</app-page-header>
-
-<div class="page-content">
-
+<!-- <div class="detail-container">
   @if (isLoading()) {
-
-    <div class="loading-state">
-      Chargement...
-    </div>
-
-  }
-
-  @if (!isLoading() && profil()) {
-
+    <div class="text-center p-5">Chargement en cours...</div>
+  } @else if (profil()) {
     <div class="detail-card">
-
       <div class="profile-header">
-
-        <div class="avatar">
-          {{ initials() }}
+        <div class="avatar">{{ initials() }}</div>
+        <div class="info">
+          <h2>{{ profil().libelle }}</h2>
+          <p class="text-muted">Code : {{ profil().code }}</p>
         </div>
-
-        <div class="profile-info">
-
-          <h2>
-            {{ profil()?.libelle }}
-          </h2>
-
-          <span>
-            Permission :
-            {{ profil()?.permission || '--' }}
-          </span>
-
-        </div>
-
       </div>
 
-      <div class="detail-grid">
-
-        <div class="detail-item">
-
-          <label>Code</label>
-
-          <p>
-            {{ profil()?.code || '--' }}
-          </p>
-
-        </div>
-
-        <div class="detail-item">
-
-          <label>Permission</label>
-
-          <p>
-            {{ profil()?.permission || '--' }}
-          </p>
-
-        </div>
-
-      </div>
-
-      <div class="menus-section">
-
-        <h3>
-          Menus accessibles
-        </h3>
-
+      <div class="section">
+        <h3>Menus et Permissions</h3>
         <div class="menus-grid">
-
-          @for (
-            item of profil()?.profilMenus ?? [];
-            track item.id_menu
-          ) {
-
-            <div class="menu-card">
-
-              <div class="menu-icon">
-
-                <i [class]="item.icon || 'bi bi-grid'"></i>
-
-              </div>
-
-              <div class="menu-info">
-
-                <strong>
-                  {{ item.code }}
-                </strong>
-
-                <span>
-                  {{ item.path }}
-                </span>
-
-              </div>
-
+          @for (item of profil().profilMenus; track item.id_menu) {
+            <div class="menu-item">
+              <strong>{{ item.name ?? 'Menu' }}</strong>
+              <span class="badge">{{ item.permission ?? '1' }}</span>
             </div>
-
+          } @empty {
+            <p>Aucun menu associé.</p>
           }
-
         </div>
-
       </div>
-
     </div>
-
   }
-
-</div>
+</div> -->

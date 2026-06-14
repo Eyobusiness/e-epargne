@@ -1,48 +1,95 @@
-<div class="stats-grid stats-grid--3">
+<div class="stats-grid stats-grid--4">
 
-  <div class="stat-card stat-card--green">
-    <div class="stat-icon stat-icon--green">
-      <i class="bi bi-cash-stack"></i>
+  <!-- TOTAL -->
+
+  <div class="stat-card stat-total">
+
+    <div class="stat-header">
+
+      <div class="stat-icon">
+        <i class="bi bi-wallet2"></i>
+      </div>
+
     </div>
 
-    <div class="stat-content">
-      <span>Montant total</span>
+    <span class="stat-label">
+      Montant Total
+    </span>
 
-      <h5>
-        {{ totalMontant() | number }}
-        FCFA
-      </h5>
-    </div>
+    <h3 class="stat-value">
+      {{ totalMontant() | number }}
+      FCFA
+    </h3>
+
   </div>
 
-  <div class="stat-card stat-card--orange">
-    <div class="stat-icon stat-icon--orange">
-      <i class="bi bi-hourglass-split"></i>
+  <!-- ATTENTE -->
+
+  <div class="stat-card stat-pending">
+
+    <div class="stat-header">
+
+      <div class="stat-icon">
+        <i class="bi bi-hourglass-split"></i>
+      </div>
+
     </div>
 
-    <div class="stat-content">
-      <span>Montant en attente</span>
+    <span class="stat-label">
+      En attente
+    </span>
 
-      <h5>
-        {{ montantAttente() | number }}
-        FCFA
-      </h5>
-    </div>
+    <h3 class="stat-value">
+      {{ montantAttente() | number }}
+      FCFA
+    </h3>
+
   </div>
 
-  <div class="stat-card stat-card--emerald">
-    <div class="stat-icon stat-icon--emerald">
-      <i class="bi bi-check-circle"></i>
+  <!-- PAYE -->
+
+  <div class="stat-card stat-paid">
+
+    <div class="stat-header">
+
+      <div class="stat-icon">
+        <i class="bi bi-check-circle-fill"></i>
+      </div>
+
     </div>
 
-    <div class="stat-content">
-      <span>Montant payé</span>
+    <span class="stat-label">
+      Paiements validés
+    </span>
 
-      <h5>
-        {{ montantPaye() | number }}
-        FCFA
-      </h5>
+    <h3 class="stat-value">
+      {{ montantPaye() | number }}
+      FCFA
+    </h3>
+
+  </div>
+
+  <!-- ANNULE -->
+
+  <div class="stat-card stat-cancel">
+
+    <div class="stat-header">
+
+      <div class="stat-icon">
+        <i class="bi bi-x-circle-fill"></i>
+      </div>
+
     </div>
+
+    <span class="stat-label">
+      Paiements annulés
+    </span>
+
+    <h3 class="stat-value">
+      {{ montantAnnule() | number }}
+      FCFA
+    </h3>
+
   </div>
 
 </div>

@@ -2,6 +2,21 @@
 
   <div class="workflow-header">
 
+    <div class="workflow-header-actions">
+
+      <button
+        class="btn btn-light"
+        type="button"
+        (click)="goBack()">
+
+        <i class="bi bi-arrow-left"></i>
+
+        Retour
+
+      </button>
+
+    </div>
+
     <h1>
       {{ workflow()?.label }}
     </h1>
@@ -36,7 +51,8 @@
 
     <app-workflow-states
       [states]="states()"
-      (edit)="openEditState($event)">
+      (edit)="openEditState($event)"
+      (delete)="deleteState($event)">
     </app-workflow-states>
 
   </div>
@@ -65,7 +81,8 @@
 
     <app-workflow-actions
       [actions]="actions()"
-      (edit)="openEditAction($event)">
+      (edit)="openEditAction($event)"
+      (delete)="deleteAction($event)">
     </app-workflow-actions>
 
   </div>
@@ -82,6 +99,7 @@
 
   <app-workflow-state-form
     [state]="selectedState()"
+    (submitForm)="saveState($event)"
     (cancel)="closeStateModal()">
   </app-workflow-state-form>
 
@@ -97,6 +115,10 @@
 
   <app-workflow-action-form
     [action]="selectedAction()"
+    [workflows]="workflows()"
+    [states]="states()"
+    [profiles]="profiles()"
+    (submitForm)="saveAction($event)"
     (cancel)="closeActionModal()">
   </app-workflow-action-form>
 

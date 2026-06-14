@@ -1,3 +1,37 @@
-:host {
-  display: block;
+.card-section{
+  background:#fff;
+  border-radius:18px;
+  padding:24px;
+  border:1px solid #e5e7eb;
+}
+
+.card-section h5{
+  margin-bottom:20px;
+  font-weight:700;
+  color:#1e293b;
+}
+
+.form-label{
+  font-weight:600;
+  color:#475569;
+}
+
+.form-control{
+  border-radius:10px;
+}
+
+.btn-primary{
+  min-width:140px;
+}
+
+.btn-light{
+  min-width:120px;
+}
+
+@media(max-width:768px){
+
+  .card-section{
+    padding:18px;
+  }
+
 }

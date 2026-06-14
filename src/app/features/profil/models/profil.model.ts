@@ -1,24 +1,13 @@
-import { ProfilMenu } from './menu.model';
+import { ProfileMenu } from './profil-menu.model';
 
-export interface Profil {
-  id: string;
-  libelle: string;
-  code: string;
-  permission: string;
-  profilMenus: ProfilMenu[];
-}
+export interface Profile {
+  id?: string;
 
-export interface ProfilResponse {
-  statusCode: number;
-  statusMessage: string;
-  data: {
-    items: Profil[];
-  };
-  meta: {
-    total: number;
-    previous: number | null;
-    next: number | null;
-    current: number;
-    limit: number;
-  };
+  libelle?: string;
+
+  code?: string;
+
+  permission?: string;
+
+  profilMenus?: ProfileMenu[];
 }

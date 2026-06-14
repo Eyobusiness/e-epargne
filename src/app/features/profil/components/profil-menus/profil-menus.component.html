@@ -1,37 +1,17 @@
-
-<div class="menus-section">
-
-  <h3>
-    Menus accessibles
-  </h3>
-
+<div class="menus-container">
   <div class="menus-grid">
-
-    @for (
-      item of menus();
-      track item.id
-    ) {
-
-      <label
-        class="menu-item">
-
-        <input
-          type="checkbox"
-          [checked]="
-            isChecked(item.id)
-          "
-          (change)="
-            toggleMenu(item.id)
-          ">
-
-        <span>
-          {{ item.libelle }}
-        </span>
-
+    @for (item of menus(); track item.id) {
+      <label class="menu-card" [class.active]="isChecked(item.id)">
+        <input 
+          type="checkbox" 
+          [checked]="isChecked(item.id)" 
+          (change)="toggleMenu(item)">
+        
+        <div class="menu-content">
+          <i class="bi bi-grid-3x3-gap"></i>
+          <span>{{ item.libelle }}</span>
+        </div>
       </label>
-
     }
-
   </div>
-
 </div>

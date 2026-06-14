@@ -1,41 +1,31 @@
 import { CommonModule } from '@angular/common';
 import { Component, input, output } from '@angular/core';
-
-import { Profil } from '../../models/profil.model';
+import { Profile } from '../../models/profil.model';
 
 @Component({
-  selector: 'app-profil-table',
-
+  selector: 'app-profile-table',
   standalone: true,
-
   imports: [CommonModule],
-
   templateUrl: './profil-table.component.html',
-
   styleUrls: ['./profil-table.component.css'],
 })
-export class ProfilTableComponent {
-  readonly profils = input<Profil[]>([]);
+export class ProfileTableComponent {
 
-  readonly edit = output<Profil>();
+  readonly profiles = input<Profile[]>([]);
 
-  readonly delete = output<Profil>();
+  readonly edit = output<Profile>();
 
-  readonly detail = output<Profil>();
+  readonly delete = output<Profile>();
 
-  onEdit(item: Profil): void {
+  onEdit(item: Profile): void {
     this.edit.emit(item);
   }
 
-  onDetail(item: Profil): void {
-    this.detail.emit(item);
-  }
-
-  onDelete(item: Profil): void {
+  onDelete(item: Profile): void {
     this.delete.emit(item);
   }
 
-  trackById(index: number, item: Profil): string {
+  trackById(index: number, item: Profile): string {
     return item.id ?? index.toString();
   }
 }

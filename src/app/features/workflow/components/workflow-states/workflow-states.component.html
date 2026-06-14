@@ -1,76 +1,91 @@
 <div class="table-wrapper">
 
-  <table class="custom-table">
+  @if (states().length > 0) {
 
-    <thead>
+    <table class="custom-table">
 
-      <tr>
-
-        <th>#</th>
-
-        <th>Nom</th>
-
-        <th>Before Step</th>
-
-        <th>Description</th>
-
-        <th>Actions</th>
-
-      </tr>
-
-    </thead>
-
-    <tbody>
-
-      @for (
-        item of states();
-        track trackById($index, item)
-      ) {
+      <thead>
 
         <tr>
-
-          <td>
-            {{ $index + 1 }}
-          </td>
-
-          <td>
-            {{ item.name }}
-          </td>
-
-          <td>
-            {{ item.beforeStep }}
-          </td>
-
-          <td>
-            {{ item.description }}
-          </td>
-
-          <td class="actions">
-
-            <button title="Modifier"
-              class="btn-action btn-edit"
-              (click)="onEdit(item)">
-
-              <i class="bi bi-pencil-square"></i>
-
-            </button>
-
-            <button title="Supprimer"
-              class="btn-action btn-delete"
-              (click)="onDelete(item)">
-
-              <i class="bi bi-trash"></i>
-
-            </button>
-
-          </td>
-
+          <th>#</th>
+          <th>Nom</th>
+          <th>Before Step</th>
+          <th>Description</th>
+          <th>Parent</th>
+          <th class="text-center">Actions</th>
         </tr>
 
-      }
+      </thead>
 
-    </tbody>
+      <tbody>
 
-  </table>
+        @for (
+          state of states();
+          track trackById($index, state)
+        ) {
+
+          <tr>
+
+            <td>{{ $index + 1 }}</td>
+
+            <td>
+              <span class="state-name">
+                {{ state.name }}
+              </span>
+            </td>
+
+            <td>{{ state.beforeStep }}</td>
+
+            <td>
+              {{ state.description || '-' }}
+            </td>
+
+            <td>
+              {{ state.parent || '-' }}
+            </td>
+
+            <td class="actions">
+
+              <button
+                type="button"
+                class="btn-action btn-edit"
+                title="Modifier"
+                (click)="onEdit(state)">
+
+                <i class="bi bi-pencil-square"></i>
+
+              </button>
+
+              <button
+                type="button"
+                class="btn-action btn-delete"
+                title="Supprimer"
+                (click)="onDelete(state)">
+
+                <i class="bi bi-trash"></i>
+
+              </button>
+
+            </td>
+
+          </tr>
+
+        }
+
+      </tbody>
+
+    </table>
+
+  } @else {
+
+    <div class="empty-state">
+
+      <i class="bi bi-diagram-3"></i>
+
+      <p>Aucun état enregistré</p>
+
+    </div>
+
+  }
 
 </div>

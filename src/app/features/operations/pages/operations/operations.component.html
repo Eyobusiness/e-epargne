@@ -31,7 +31,9 @@
       <app-operation-table
         [operations]="operations()"
         (pay)="openEditModal($event)"
+        
         (delete)="openDeleteDialog($event)">
+        <!-- (reject)="openRejectDialog($event)" -->
       </app-operation-table>
 
       @if (hasMultiplePages()) {
@@ -84,3 +86,16 @@
   (confirm)="delete()"
   (cancel)="closeDeleteDialog()">
 </app-confirm-dialog>
+
+<!-- <app-modal
+  [isOpen]="isRejectOpen()"
+  title="Rejeter l'opération"
+  (closed)="closeRejectDialog()">
+
+  <app-operation-reject-form
+    [isLoading]="isRejectLoading()"
+    (submitForm)="reject($event)"
+    (cancel)="closeRejectDialog()">
+  </app-operation-reject-form>
+
+</app-modal> -->

@@ -62,6 +62,16 @@
         </option>
 
       </select>
+      @if (
+          form.controls.moyen_operation.invalid &&
+          form.controls.moyen_operation.touched
+        ) {
+
+          <small class="text-danger">
+            Le moyen de paiement est obligatoire
+          </small>
+
+        }
 
     </div>
 

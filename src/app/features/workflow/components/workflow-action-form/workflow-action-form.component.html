@@ -4,6 +4,8 @@
 
   <div class="row g-3">
 
+    <!-- WORKFLOW -->
+
     <div class="col-md-12">
 
       <label for="workflow" class="form-label">
@@ -23,8 +25,7 @@
           track item.id
         ) {
 
-          <option
-            [value]="item.id">
+          <option [value]="item.id">
 
             {{ item.label }}
 
@@ -36,41 +37,62 @@
 
     </div>
 
+    <!-- PROFILS -->
+
     <div class="col-md-12">
 
-  <label for="pa" class="form-label">
-    Profils autorisés
-  </label>
+      <label for="pa" class="form-label">
 
-  <div class="profile-list">
+        Profils autorisés
 
-    @for(profile of profiles(); track profile.id) {
+      </label>
 
-      <div class="profile-item">
+      <div class="profile-list">
 
-        <input  id="pa"
-          type="checkbox"
-          [value]="profile.id">
+        @for (
+          profile of profiles();
+          track profile.id
+        ) {
 
-        <span class="profile-name">
-          {{ profile.name }}
-        </span>
+          <div class="profile-item">
+
+            <input id="pa"
+              type="checkbox"
+
+              [checked]="
+                isChecked(profile.id)
+              "
+
+              (change)="
+                toggleProfile(
+                  profile.id,
+                  $any($event.target).checked
+                )
+              ">
+
+            <span>
+
+              {{ profile.libelle }}
+
+            </span>
+
+          </div>
+
+        }
 
       </div>
 
-    }
+    </div>
 
-  </div>
-
-</div>
+    <!-- ETAT -->
 
     <div class="col-md-6">
 
-      <label for="etat" class="form-label">
+      <label for=""etat class="form-label">
         Etat
       </label>
 
-      <select id="etat"
+      <select id="etat" title="Sélectionner un état"
         class="form-select"
         formControlName="stepId">
 
@@ -83,8 +105,7 @@
           track item.id
         ) {
 
-          <option
-            [value]="item.id">
+          <option [value]="item.id">
 
             {{ item.name }}
 
@@ -95,6 +116,8 @@
       </select>
 
     </div>
+
+    <!-- ENDPOINT -->
 
     <div class="col-md-6">
 
@@ -108,17 +131,21 @@
 
     </div>
 
+    <!-- BEFORE STEP -->
+
     <div class="col-md-6">
 
-      <label for="seforte_step" class="form-label">
+      <label for="bs" class="form-label">
         Before Step
       </label>
 
-      <input id="seforte_step"
+      <input id="bs"
         class="form-control"
         formControlName="beforeStep">
 
     </div>
+
+    <!-- ORDRE -->
 
     <div class="col-md-6">
 
@@ -133,6 +160,8 @@
 
     </div>
 
+    <!-- NOTIFICATION -->
+
     <div class="col-md-6">
 
       <label for="notif" class="form-label">
@@ -144,6 +173,8 @@
         formControlName="notification">
 
     </div>
+
+    <!-- NEXT FIELD -->
 
     <div class="col-md-6">
 
@@ -173,9 +204,14 @@
 
     <button
       type="submit"
-      class="btn btn-primary">
+      class="btn btn-primary"
+      [disabled]="isLoading()">
 
-      Enregistrer
+      {{
+        isLoading()
+          ? 'Enregistrement...'
+          : 'Enregistrer'
+      }}
 
     </button>
 

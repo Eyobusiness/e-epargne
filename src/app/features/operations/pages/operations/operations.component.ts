@@ -20,6 +20,8 @@ import { AppPaginationComponent } from '../../../../shared/ui/app-pagination/app
 import { AppPageHeaderComponent } from '../../../../shared/ui/app-page-header/app-page-header.component';
 import { AppConfirmDialogComponent } from '../../../../shared/ui/app-confirm-dialog/app-confirm-dialog.component';
 import { AppEmptyStateComponent } from '../../../../shared/ui/app-empty-state/app-empty-state.component';
+// import { OperationRejectFormComponent } from '../../components/operation-reject/operation-reject-form.component';
+
 
 
 import { ToastService } from '../../../../core/services/toast.service';
@@ -38,6 +40,7 @@ import { ToastService } from '../../../../core/services/toast.service';
     OperationTableComponent,
     OperationFilterComponent,
     OperationStatsComponent,
+    // OperationRejectFormComponent,
   ],
   templateUrl: './operations.component.html',
   styleUrls: ['./operations.component.css'],
@@ -62,6 +65,10 @@ export class OperationsComponent implements OnInit {
   readonly currentPage = signal(1);
   readonly itemsPerPage = 10;
   readonly totalItems = signal(0);
+
+  // readonly isRejectOpen = signal(false);
+
+  // readonly isRejectLoading = signal(false);
 
   readonly filters = signal<OperationFilter>({
     adherentId: '',
@@ -200,7 +207,6 @@ export class OperationsComponent implements OnInit {
 
     this.isDeleteOpen.set(false);
   }
-
   delete(): void {
     const selected = this.selected();
 
@@ -211,20 +217,64 @@ export class OperationsComponent implements OnInit {
     this.isDeleteLoading.set(true);
 
     this.service
-      .update(selected.id, {
-        status: '300',
-      } as Operation)
+      .deactivate(selected.id)
       .pipe(finalize(() => this.isDeleteLoading.set(false)))
       .subscribe({
         next: () => {
           this.closeDeleteDialog(true);
+
           this.loadOperations();
 
           this.toastService.show('Paiement annulé', 'success');
         },
-        error: () => {
+
+        error: (error) => {
+          console.error(error);
+
           this.toastService.show('Erreur annulation', 'error');
         },
       });
   }
+  // openRejectDialog(item: Operation): void {
+  //   this.selected.set(item);
+  //   this.isRejectOpen.set(true);
+  // }
+
+  // closeRejectDialog(force = false): void {
+  //   if (!force && this.isRejectLoading()) {
+  //     return;
+  //   }
+
+  //   this.isRejectOpen.set(false);
+  // }
+  
+  
+  // reject(payload: { motif: string; description: string }): void {
+  //   const selected = this.selected();
+
+  //   if (!selected?.id) {
+  //     return;
+  //   }
+
+  //   this.isRejectLoading.set(true);
+
+  //   this.service
+  //     .reject(selected.id, payload)
+  //     .pipe(finalize(() => this.isRejectLoading.set(false)))
+  //     .subscribe({
+  //       next: () => {
+  //         this.closeRejectDialog(true);
+
+  //         this.loadOperations();
+
+  //         this.toastService.show('Opération rejetée', 'success');
+  //       },
+
+  //       error: () => {
+  //         this.toastService.show('Erreur lors du rejet', 'error');
+  //       },
+  //     });
+  // }
+
+
 }

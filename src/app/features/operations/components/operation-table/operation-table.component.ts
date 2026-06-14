@@ -21,6 +21,12 @@ export class OperationTableComponent {
     this.pay.emit(item);
   }
 
+  readonly reject = output<Operation>();
+
+onReject(item: Operation): void {
+  this.reject.emit(item);
+}
+
   onDelete(item: Operation): void {
     this.delete.emit(item);
   }

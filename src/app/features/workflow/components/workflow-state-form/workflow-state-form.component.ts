@@ -1,18 +1,32 @@
 import { CommonModule } from '@angular/common';
+import {
+  Component,
+  effect,
+  inject,
+  input,
+  output,
+} from '@angular/core';
 
-import { Component, OnInit, inject, input, output } from '@angular/core';
-
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 
 import { WorkflowState } from '../../models/workflow-state.model';
 
 @Component({
   selector: 'app-workflow-state-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+  ],
   templateUrl: './workflow-state-form.component.html',
+  styleUrls: ['./workflow-state-form.component.css'],
 })
-export class WorkflowStateFormComponent implements OnInit {
+export class WorkflowStateFormComponent {
+
   private readonly fb = inject(FormBuilder);
 
   readonly state = input<WorkflowState | null>(null);
@@ -33,34 +47,57 @@ export class WorkflowStateFormComponent implements OnInit {
     parent: ['TONTINEAPP', Validators.required],
   });
 
-  ngOnInit(): void {
-    const state = this.state();
+  constructor() {
+    effect(() => {
 
-    if (!state) {
-      return;
-    }
+      const state = this.state();
 
-    this.form.patchValue({
-      name: state.name,
-      beforeStep: state.beforeStep,
-      description: state.description,
-      parent: state.parent,
+      if (!state) {
+
+        this.form.reset({
+          name: '',
+          beforeStep: '',
+          description: '',
+          parent: 'TONTINEAPP',
+        });
+
+        return;
+      }
+
+      this.form.patchValue({
+        name: state.name,
+        beforeStep: state.beforeStep,
+        description: state.description ?? '',
+        parent: state.parent ?? 'TONTINEAPP',
+      });
+
     });
   }
 
   save(): void {
+
     if (this.form.invalid) {
+
       this.form.markAllAsTouched();
+
       return;
     }
 
-    this.submitForm.emit({
+    const payload: WorkflowState = {
       ...this.state(),
       ...this.form.getRawValue(),
-    });
+    };
+
+    console.log('STATE ENVOYE', payload);
+
+    this.submitForm.emit(payload);
   }
 
   onCancel(): void {
     this.cancel.emit();
+  }
+
+  get f() {
+    return this.form.controls;
   }
 }

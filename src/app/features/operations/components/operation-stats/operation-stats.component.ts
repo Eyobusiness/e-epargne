@@ -28,4 +28,10 @@ export class OperationStatsComponent {
       .filter((item) => item.status === '200')
       .reduce((acc, item) => acc + (item.montant || 0), 0),
   );
+
+  readonly montantAnnule = computed(() =>
+    this.operations()
+      .filter((item) => item.status === '300')
+      .reduce((acc, item) => acc + (item.montant || 0), 0),
+  );
 }

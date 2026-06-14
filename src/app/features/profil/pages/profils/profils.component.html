@@ -1,5 +1,3 @@
-<!-- pages/profils/profils.component.html -->
-
 <app-page-header
   title="Profils"
   description="Gestion des profils et permissions"
@@ -8,83 +6,52 @@
   (action)="openCreateModal()">
 </app-page-header>
 
-<div class="page-content">
+<app-profile-stats
+  [profiles]="profiles()">
+</app-profile-stats>
 
-  <div class="actions-bar">
+<app-profile-filter
+  (filter)="filter($event)">
+</app-profile-filter>
 
-    <button
-      class="btn-admin"
-      [disabled]="isAdminLoading() || isLoading()"
-      (click)="generateAdmin()">
+@if(filteredProfiles().length){
 
-      @if (isAdminLoading()) {
-        <span class="loading-spinner"></span>
-      } @else {
-        <i class="bi bi-shield-check"></i>
-      }
+  <app-profile-table
+    [profiles]="filteredProfiles()"
+    (edit)="openEditModal($event)"
+    (delete)="openDeleteDialog($event)">
+  </app-profile-table>
 
-      {{ isAdminLoading() ? 'Generation...' : 'Generer profil admin' }}
+} @else {
 
-    </button>
+  <app-empty-state
+    title="Aucun profil trouvé">
+  </app-empty-state>
 
-  </div>
-
-  @if (isPageLoading()) {
-
-    <div class="loading-state">
-      Chargement...
-    </div>
-
-  }
-
-  @if (!isPageLoading()) {
-
-    @if (!isEmpty()) {
-
-      <app-profil-table
-        [profils]="profils()"
-        (edit)="openEditModal($event)"
-        (delete)="openDeleteDialog($event)"
-        (detail)="viewDetail($event)">
-      </app-profil-table>
-
-    }
-
-    @if (isEmpty()) {
-
-      <app-empty-state
-        title="Aucun profil"
-        description="Aucun profil disponible actuellement">
-      </app-empty-state>
-
-    }
-
-  }
-
-</div>
+}
 
 <app-modal
   [isOpen]="isModalOpen()"
-  title="Profil"
-  description="Gestion des permissions et menus"
-  width="750px"
+  [title]="selected()
+      ? 'Modifier profil'
+      : 'Nouveau profil'"
   (close)="closeModal()">
 
-  <app-profil-form
-    [profil]="selected()"
+  <app-profile-form
+    [profile]="selected()"
     [menus]="menus()"
     [isLoading]="isLoading()"
     (submitForm)="save($event)"
     (cancel)="closeModal()">
-  </app-profil-form>
+  </app-profile-form>
 
 </app-modal>
 
 <app-confirm-dialog
   [isOpen]="isDeleteOpen()"
+  title="Suppression"
+  message="Supprimer ce profil ?"
   [isLoading]="isDeleteLoading()"
-  title="Supprimer profil"
-  message="Voulez-vous supprimer ce profil ?"
   (confirm)="delete()"
   (cancel)="closeDeleteDialog()">
 </app-confirm-dialog>

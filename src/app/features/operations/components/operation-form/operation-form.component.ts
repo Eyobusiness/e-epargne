@@ -41,25 +41,28 @@ export class OperationFormComponent {
 
   readonly cancel = output<void>();
 
-  readonly form = this.fb.nonNullable.group({
-    description: [''],
+ readonly form = this.fb.nonNullable.group({
+  description: [''],
 
-    moyen_operation: ['CASH', Validators.required],
+  moyen_operation: ['', Validators.required],
 
-    montant: [0, [Validators.required, Validators.min(1)]],
+  montant: [0, [
+    Validators.required,
+    Validators.min(1)
+  ]],
 
-    adherent_id: [''],
+  adherent_id: [''],
 
-    cotisation_adherent_id: [''],
+  cotisation_adherent_id: [''],
 
-    date_operation: ['', Validators.required],
+  date_operation: ['', Validators.required],
 
-    status: ['200'],
+  status: ['200'],
 
-    type_operation: ['DEPOT', Validators.required],
+  type_operation: ['DEPOT', Validators.required],
 
-    motif: [''],
-  });
+  motif: [''],
+});
 
   readonly isEditMode = computed(() => !!this.operation());
 
