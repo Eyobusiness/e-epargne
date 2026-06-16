@@ -15,8 +15,12 @@ export const AUTH_ROUTES: Routes = [
     path: 'forgot-password',
     component: ForgotPasswordComponent,
   },
+  
+];
+
+export const CHANGE_PASSWORD_ROUTE = [
   {
     path: 'change-password',
     component: ChangePasswordComponent,
   },
-];
+]

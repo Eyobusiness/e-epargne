@@ -13,4 +13,7 @@ export interface SessionUser {
   phone?: string;
   profil_id?: string | null;
   profil?: SessionUserProfil | null;
+  created_at?: string;
+  updated_at?: string;
+  last_login?: string;
 }

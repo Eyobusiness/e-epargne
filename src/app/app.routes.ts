@@ -125,7 +125,20 @@ export const routes: Routes = [
         loadChildren: () =>
           import('./features/workflow/routes/workflow.routes').then((m) => m.WORKFLOW_ROUTES),
       },
+
+      //change password routes 
+      {
+        path: 'auth',
+        title: 'Changer le mot de passe',
+        loadChildren: () =>
+          import('./features/auth/routes/auth.routes').then((m) => m.CHANGE_PASSWORD_ROUTE),
+      },
+
+
+
+
     ],
+
   },
 
   /* =====================================================

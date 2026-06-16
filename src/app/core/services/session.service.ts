@@ -30,6 +30,10 @@ export class SessionService {
       this.currentUser()?.name?.trim() ||
       this.currentUser()?.username?.trim() ||
       this.currentUser()?.email?.trim() ||
+      this.currentUser()?.phone?.trim() ||
+      this.currentUser()?.created_at?.trim() ||
+      this.currentUser()?.updated_at?.trim() ||
+      this.currentUser()?.last_login?.trim() || 
       'Utilisateur',
   );
 
