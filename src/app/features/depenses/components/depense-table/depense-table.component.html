@@ -44,14 +44,18 @@
           </td>
           <td>
             @if (hasDocument(item)) {
-              <span class="doc-badge">Oui</span>
+              <span class="doc-badge">
+                Oui
+              </span>
             } @else {
-              <span class="doc-badge muted">Non</span>
+              <span class="doc-badge muted">
+                Non
+              </span>
             }
           </td>
           <td>
-            <span class="status" [class.active]="isActive(item.status)">
-              {{ isActive(item.status) ? 'Actif' : 'Inactif' }}
+            <span class="status badge-succes" [class.active]="isActive(item.status)">
+              {{ isActive(item.status) ? 'Payé' : 'Inactif' }}
             </span>
           </td>
           <td class="actions">

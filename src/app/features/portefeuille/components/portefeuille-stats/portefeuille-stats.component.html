@@ -11,7 +11,7 @@
       <span>Solde actuel</span>
 
       <h5>
-        {{ solde() | number }}
+        {{ solde() | formatMontant }}
         FCFA
       </h5>
 
@@ -30,7 +30,7 @@
       <span>Total entrées</span>
 
       <h5>
-        {{ totalEntrees() | number }}
+        {{ totalEntrees() | formatMontant }}
         FCFA
       </h5>
 
@@ -49,7 +49,7 @@
       <span>Total sorties</span>
 
       <h5>
-        {{ totalSorties() | number }}
+        {{ totalSorties() | formatMontant }}
         FCFA
       </h5>
 
@@ -68,7 +68,7 @@
       <span>Cotisations en attente</span>
 
       <h5>
-        {{ totalCotisations() | number }}
+        {{ totalCotisations() | formatMontant }}
         FCFA
       </h5>
 

@@ -2,11 +2,12 @@ import { CommonModule } from '@angular/common';
 import { Component, computed, input } from '@angular/core';
 
 import { Operation } from '../../models/operation.model';
+import { FormatMontantPipe } from '../../../../shared/pipes/pipe.component';
 
 @Component({
   selector: 'app-operation-stats',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormatMontantPipe],
   templateUrl: './operation-stats.component.html',
   styleUrls: ['./operation-stats.component.css'],
 })

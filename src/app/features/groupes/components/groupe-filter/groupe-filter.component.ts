@@ -22,7 +22,7 @@ export class GroupeFilterComponent {
 
   readonly search = signal('');
 
-  readonly status = signal('actif');
+  readonly status = signal('200');
 
   applyFilters(): void {
     this.filterChange.emit({
@@ -34,7 +34,7 @@ export class GroupeFilterComponent {
   resetFilters(): void {
     this.search.set('');
 
-    this.status.set('actif');
+    this.status.set('200');
 
     this.applyFilters();
   }

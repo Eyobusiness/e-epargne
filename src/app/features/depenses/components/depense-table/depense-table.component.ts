@@ -19,6 +19,9 @@ export class DepenseTableComponent {
   readonly delete = output<Depense>();
 
   readonly view = output<Depense>();
+  readonly documentsMap = input<Record<string, boolean>>({});
+
+
 
   onEdit(item: Depense): void {
     this.edit.emit(item);
@@ -48,7 +51,8 @@ export class DepenseTableComponent {
     return isDepenseActive(status);
   }
 
-  hasDocument(item: Depense): boolean {
-    return !!item.document?.lien;
-  }
+ hasDocument(item: Depense): boolean {
+  return !!this.documentsMap()[item.id ?? ''];
+}
+
 }

@@ -29,28 +29,101 @@
     </div>
   </div>
 
-  @if (depense().document?.lien) {
-    <div class="document-section">
-      <h4>Document</h4>
-      <div class="doc-meta">
-        <span><strong>Type:</strong> {{ depense().document?.type || '--' }}</span>
-        <span><strong>Numero:</strong> {{ depense().document?.numero || '--' }}</span>
-        <span><strong>Extension:</strong> {{ depense().document?.extension || '--' }}</span>
-      </div>
+@if(documents().length){
 
-      @if (isImage()) {
-        <img class="doc-preview" [src]="documentUrl()" alt="Document depense">
-      } @else if (isPdf()) {
-        <iframe class="doc-preview pdf" [src]="documentUrl()" title="Document PDF"></iframe>
-      } @else {
-        <a class="btn-link" [href]="documentUrl()" target="_blank" rel="noopener">
-          Ouvrir le document
-        </a>
+  <div class="documents-section">
+
+    <h4 class="section-title">
+      Documents justificatifs
+    </h4>
+
+    <div class="documents-list">
+
+      @for(doc of documents(); track doc.id){
+
+        <div class="document-card">
+
+          <div class="document-left">
+
+            <div class="document-icon">
+
+              @if(doc.extension?.toLowerCase() === 'pdf'){
+
+                <i class="bi bi-file-earmark-pdf-fill"></i>
+
+              } @else {
+
+                <i class="bi bi-file-earmark-image-fill"></i>
+
+              }
+
+            </div>
+
+            <div class="document-content">
+
+              <span class="document-name">
+                {{ doc.lien }}
+              </span>
+
+              <div class="document-meta">
+
+                <span>
+                  Type : {{ doc.type || '--' }}
+                </span>
+
+                @if(doc.numero){
+
+                  <span>
+                    N° : {{ doc.numero }}
+                  </span>
+
+                }
+
+                @if(doc.extension){
+
+                  <span>
+                    {{ doc.extension.toUpperCase() }}
+                  </span>
+
+                }
+
+              </div>
+
+            </div>
+
+          </div>
+
+          <a
+            class="btn-view-document"
+            [href]="getFileUrl(doc)"
+            target="_blank"
+            rel="noopener">
+
+            <i class="bi bi-eye"></i>
+
+            Voir
+
+          </a>
+
+        </div>
+
       }
+
     </div>
-  } @else {
-    <p class="no-document">Aucun document joint</p>
-  }
+
+  </div>
+
+} @else {
+
+  <div class="empty-document">
+
+    <i class="bi bi-folder2-open"></i>
+
+    <p>Aucun document joint</p>
+
+  </div>
+
+}
 
   <div class="detail-actions">
     <button type="button" class="btn btn-cancel" (click)="onClose()">Fermer</button>

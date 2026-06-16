@@ -3,11 +3,12 @@ import { Component, computed, input } from '@angular/core';
 
 import { Portefeuille } from '../../models/portefeuille.model';
 import { Adherent } from '../../../adherents/models/adherent.model';
+import { FormatMontantPipe } from '../../../../shared/pipes/pipe.component';
 
 @Component({
   selector: 'app-portefeuille-resume',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormatMontantPipe],
   templateUrl: './portefeuille-resume.component.html',
   styleUrls: ['./portefeuille-resume.component.css'],
 })

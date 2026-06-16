@@ -17,10 +17,16 @@ export interface DocumentIdentite {
 
 export interface MemberDocumentPayload {
   extension: string;
+
   numero?: string;
+
   type: string;
+
   validite?: string;
+
   lien: string;
+
   parent?: string;
+
   parent_id?: string;
 }

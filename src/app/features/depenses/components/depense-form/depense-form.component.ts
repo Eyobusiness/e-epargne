@@ -36,6 +36,7 @@ export class DepenseFormComponent {
   readonly cancel = output<void>();
 
   readonly selectedFileName = signal('');
+  readonly filePreview = signal('');
 
   readonly selectedFile = signal<File | null>(null);
 
@@ -78,8 +79,7 @@ export class DepenseFormComponent {
       }
 
       this.form.patchValue({
-        categorie_depense_id:
-          depense.categorie_depense_id ?? depense.categorie?.id ?? '',
+        categorie_depense_id: depense.categorie_depense_id ?? depense.categorie?.id ?? '',
         description: depense.description ?? '',
         amount: depense.amount,
         date_depense: toDateInputValue(depense.date_depense),
@@ -97,11 +97,24 @@ export class DepenseFormComponent {
   }
 
   onFileChange(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    const file = input.files?.[0] ?? null;
+    const file = (event.target as HTMLInputElement).files?.[0] ?? null;
 
     this.selectedFile.set(file);
+
     this.selectedFileName.set(file?.name ?? '');
+
+    if (!file) {
+      this.filePreview.set('');
+      return;
+    }
+
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      this.filePreview.set(reader.result as string);
+    };
+
+    reader.readAsDataURL(file);
   }
 
   async save(): Promise<void> {
@@ -122,9 +135,7 @@ export class DepenseFormComponent {
       document = {
         type: raw.document_type,
         numero: raw.document_numero || undefined,
-        validite: raw.document_validite
-          ? toIsoDateDepense(raw.document_validite)
-          : undefined,
+        validite: raw.document_validite ? toIsoDateDepense(raw.document_validite) : undefined,
         extension: getFileExtension(file.name),
         lien,
         parent_id: this.depense()?.id,

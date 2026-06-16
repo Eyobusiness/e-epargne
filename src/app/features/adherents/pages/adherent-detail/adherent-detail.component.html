@@ -1,67 +1,102 @@
 @if (isLoading()) {
-  <div class="loading-state">Chargement...</div>
+  <div class="loading-state">
+    <div class="spinner-border text-primary"></div>
+  </div>
 }
 
 @if (adherent(); as item) {
-  <div class="detail-page">
-    <div class="detail-top">
-      <a routerLink="/adherents" class="btn-back">
-        <i class="bi bi-arrow-left"></i> Retour a la liste
+
+<div class="detail-page">
+
+  <div class="detail-top">
+      <a routerLink="/adherents" class="btn btn-secondary">
+        <i class="bi bi-arrow-left"></i>
+        Retour a la liste
       </a>
     </div>
 
-    <div class="profile-card">
-      <div class="profile-avatar">{{ item.name.charAt(0) }}</div>
-      <div class="profile-info">
-        <h2>{{ item.name }}</h2>
-        <span class="status-badge" [class.active]="isActive(item.status)">
-          {{ statusLabel(item.status) }}
-        </span>
-      </div>
+  <!-- PROFIL -->
+
+  <div class="profile-card">
+
+    <div class="profile-avatar">
+      {{ item.name.charAt(0) }}
     </div>
 
-    <div class="info-grid">
-      <div class="info-card">
-        <span class="label">Telephone</span>
-        <strong>{{ item.phone }}</strong>
-      </div>
-      <div class="info-card">
-        <span class="label">Email</span>
-        <strong>{{ item.email }}</strong>
-      </div>
-      <div class="info-card">
-        <span class="label">Adresse</span>
-        <strong>{{ item.address }}</strong>
-      </div>
-      <div class="info-card">
-        <span class="label">Matricule</span>
-        <strong>{{ item.matricule || '--' }}</strong>
-      </div>
-      <div class="info-card">
-        <span class="label">Date creation</span>
-        <strong>
-          {{
-            item.created_at
-              ? (item.created_at | date:'dd/MM/yyyy')
-              : '--'
-          }}
-        </strong>
-      </div>
-    </div>
+    <h2>{{ item.name }}</h2>
+    <h4 class="badge bg-primary text-white">{{ item.matricule }}</h4> <br>
 
-    <div class="documents-section">
-      <div class="documents-header">
-        <h3>Documents</h3>
-      </div>
+    <span
+      class="status-badge"
+      [class.active]="isActive(item.status)">
+      {{ statusLabel(item.status) }}
+    </span>
 
-      @if (hasDocuments()) {
-        <app-document-table [documents]="documents()"></app-document-table>
-      } @else {
-        <app-empty-state
-          title="Aucun document"
-          description="Aucun document disponible pour cet adherent">
-        </app-empty-state>
-      }
-    </div>
   </div>
+
+  <!-- INFOS -->
+
+  <div class="section-title">
+    Informations générales
+  </div>
+
+  <div class="info-grid">
+
+    <div class="info-card">
+      <span class="label">Téléphone</span>
+      <strong>{{ item.phone || '--' }}</strong>
+    </div>
+
+    <div class="info-card">
+      <span class="label">Email</span>
+      <strong>{{ item.email || '--' }}</strong>
+    </div>
+
+    <div class="info-card">
+      <span class="label">Adresse</span>
+      <strong>{{ item.address || '--' }}</strong>
+    </div>
+
+    <div class="info-card">
+      <span class="label">Matricule</span>
+      <strong>{{ item.matricule || '--' }}</strong>
+    </div>
+
+    <div class="info-card">
+      <span class="label">Statut</span>
+      <strong>{{ statusLabel(item.status) }}</strong>
+    </div>
+
+    <div class="info-card">
+      <span class="label">Date création</span>
+      <strong>
+        {{
+          item.created_at
+            ? (item.created_at | date:'dd/MM/yyyy')
+            : '--'
+        }}
+      </strong>
+    </div>
+
+  </div>
+
+  <!-- DOCUMENTS -->
+
+  <div class="documents-section"> 
+    <div class="documents-header"> 
+      <h3>Documents</h3> </div> 
+      @if (hasDocuments()) 
+      { <app-document-table 
+        [documents]="documents()">
+      </app-document-table> } 
+      @else { 
+        <app-empty-state title="Aucun document" description="Aucun document disponible pour cet adherent">
+           </app-empty-state> } 
+        </div>
+
+</div>
+
 }
+
+
+

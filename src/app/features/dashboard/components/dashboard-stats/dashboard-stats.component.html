@@ -1,176 +1,98 @@
 <div class="row g-3">
 
-  <!-- DEPOTS -->
+  @if (isLoading()) {
 
-  <div class="col-xl-3 col-lg-4 col-md-6">
-
-    <div class="stat-card stat-blue">
-
-      <div class="icon">
-        <i class="bi bi-wallet2"></i>
+    @for (item of [1,2,3,4,5,6,7]; track item) {
+      <div class="col-xl-3 col-lg-4 col-md-6">
+        <div class="stat-card stat-skeleton">
+          <div class="skeleton-icon"></div>
+          <div class="content">
+            <div class="skeleton-text skeleton-label"></div>
+            <div class="skeleton-text skeleton-value"></div>
+          </div>
+        </div>
       </div>
+    }
 
-      <div class="content">
+  } @else {
 
-        <span>Total dépôts</span>
-
-        <h4>
-          {{ totalDepot() | number }}
-          FCFA
-        </h4>
-
+    <!-- DEPOTS -->
+    <div class="col-xl-3 col-lg-4 col-md-6">
+      <div class="stat-card stat-blue">
+        <div class="icon"><i class="bi bi-wallet2"></i></div>
+        <div class="content">
+          <span>Total dépôts</span>
+          <h4>{{ totalDepot() | formatMontant }} FCFA</h4>
+        </div>
       </div>
-
     </div>
 
-  </div>
-
-  <!-- RETRAITS -->
-
-  <div class="col-xl-3 col-lg-4 col-md-6">
-
-    <div class="stat-card stat-red">
-
-      <div class="icon">
-        <i class="bi bi-cash-stack"></i>
+    <!-- RETRAITS -->
+    <div class="col-xl-3 col-lg-4 col-md-6">
+      <div class="stat-card stat-red">
+        <div class="icon"><i class="bi bi-cash-stack"></i></div>
+        <div class="content">
+          <span>Total retraits</span>
+          <h4>{{ totalRetrait() | formatMontant }} FCFA</h4>
+        </div>
       </div>
-
-      <div class="content">
-
-        <span>Total retraits</span>
-
-        <h4>
-          {{ totalRetrait() | number }}
-          FCFA
-        </h4>
-
-      </div>
-
     </div>
 
-  </div>
-
-  <!-- ACTIFS -->
-
-  <div class="col-xl-3 col-lg-4 col-md-6">
-
-    <div class="stat-card stat-green">
-
-      <div class="icon">
-        <i class="bi bi-people-fill"></i>
+    <!-- ACTIFS -->
+    <div class="col-xl-3 col-lg-4 col-md-6">
+      <div class="stat-card stat-green">
+        <div class="icon"><i class="bi bi-people-fill"></i></div>
+        <div class="content">
+          <span>Adhérents actifs</span>
+          <h4>{{ adherentActif() }}</h4>
+        </div>
       </div>
-
-      <div class="content">
-
-        <span>Adhérents actifs</span>
-
-        <h4>
-          {{ adherentActif() }}
-        </h4>
-
-      </div>
-
     </div>
 
-  </div>
-
-  <!-- INACTIFS -->
-
-  <div class="col-xl-3 col-lg-4 col-md-6">
-
-    <div class="stat-card stat-orange">
-
-      <div class="icon">
-        <i class="bi bi-person-x-fill"></i>
+    <!-- INACTIFS -->
+    <div class="col-xl-3 col-lg-4 col-md-6">
+      <div class="stat-card stat-orange">
+        <div class="icon"><i class="bi bi-person-x-fill"></i></div>
+        <div class="content">
+          <span>Adhérents inactifs</span>
+          <h4>{{ adherentInactif() }}</h4>
+        </div>
       </div>
-
-      <div class="content">
-
-        <span>Adhérents inactifs</span>
-
-        <h4>
-          {{ adherentInactif() }}
-        </h4>
-
-      </div>
-
     </div>
 
-  </div>
-
-  <!-- COMMISSION RETRAIT -->
-
-  <div class="col-xl-4 col-md-6">
-
-    <div class="stat-card stat-purple">
-
-      <div class="icon">
-        <i class="bi bi-percent"></i>
+    <!-- COMMISSION RETRAIT -->
+    <div class="col-xl-4 col-md-6">
+      <div class="stat-card stat-purple">
+        <div class="icon"><i class="bi bi-percent"></i></div>
+        <div class="content">
+          <span>Commission retrait</span>
+          <h4>{{ totalCommissionRetrait() | formatMontant }} FCFA</h4>
+        </div>
       </div>
-
-      <div class="content">
-
-        <span>Commission retrait</span>
-
-        <h4>
-          {{ totalCommissionRetrait() | number }}
-          FCFA
-        </h4>
-
-      </div>
-
     </div>
 
-  </div>
-
-  <!-- SOLDE COMMISSION -->
-
-  <div class="col-xl-4 col-md-6">
-
-    <div class="stat-card stat-dark">
-
-      <div class="icon">
-        <i class="bi bi-bank"></i>
+    <!-- SOLDE COMMISSION -->
+    <div class="col-xl-4 col-md-6">
+      <div class="stat-card stat-dark">
+        <div class="icon"><i class="bi bi-bank"></i></div>
+        <div class="content">
+          <span>Solde commission</span>
+          <h4>{{ soldeCommission() | formatMontant }} FCFA</h4>
+        </div>
       </div>
-
-      <div class="content">
-
-        <span>Solde commission</span>
-
-        <h4>
-          {{ soldeCommission() | number }}
-          FCFA
-        </h4>
-
-      </div>
-
     </div>
 
-  </div>
-
-  <!-- TAUX -->
-
-  <div class="col-xl-4 col-md-12">
-
-    <div class="stat-card stat-cyan">
-
-      <div class="icon">
-        <i class="bi bi-graph-up-arrow"></i>
+    <!-- TAUX -->
+    <div class="col-xl-4 col-md-12">
+      <div class="stat-card stat-cyan">
+        <div class="icon"><i class="bi bi-graph-up-arrow"></i></div>
+        <div class="content">
+          <span>Taux commission</span>
+          <h4>{{ tauxCommissionRetrait() }} %</h4>
+        </div>
       </div>
-
-      <div class="content">
-
-        <span>Taux commission</span>
-
-        <h4>
-          {{ tauxCommissionRetrait() }}
-          %
-        </h4>
-
-      </div>
-
     </div>
 
-  </div>
+  }
 
 </div>

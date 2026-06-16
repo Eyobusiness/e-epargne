@@ -29,3 +29,24 @@
 @media (max-width:1200px){.dashboard-content-grid{grid-template-columns:1fr}}
 @media (max-width:768px){.dashboard-header{flex-direction:column;align-items:flex-start}.dashboard-header h1{font-size:1.8rem}}
 @media (max-width:576px){.dashboard-card{padding:20px}}
+
+.dashboard-loading {
+  min-height: 250px;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  gap: 1rem;
+}
+
+.loading-text {
+  margin: 0;
+
+  font-size: 0.95rem;
+  color: #6b7280;
+
+  font-weight: 500;
+}

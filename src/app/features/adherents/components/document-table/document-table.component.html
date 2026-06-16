@@ -1,32 +1,105 @@
 <div class="documents-grid">
+
   @for (item of documents(); track trackById($index, item)) {
+
     <div class="document-card">
+
+      <!-- PREVIEW -->
+
       <div class="preview">
+
         @if (isImage(item.extension)) {
-          <img [src]="getFileUrl(item)" [alt]="item.type">
-        } @else {
-          <div class="file-placeholder">
-            <i class="bi bi-file-earmark-pdf"></i>
+
+          <img title="{{ item.type }}"
+            [src]="getFileUrl(item)"
+            [alt]="item.type">
+
+        } @else if (item.extension?.toLowerCase() === 'pdf') {
+
+          <div class="pdf-preview">
+
+            <i class="bi bi-file-earmark-pdf-fill"></i>
+
+            <span>Document PDF</span>
+
           </div>
+
+        } @else {
+
+          <div class="file-placeholder">
+
+            <i class="bi bi-file-earmark"></i>
+
+            <span>Document</span>
+
+          </div>
+
         }
+
       </div>
+
+      <!-- INFOS -->
 
       <div class="document-content">
+
         <div class="document-header">
+
           <h4>{{ item.type }}</h4>
-          <span class="extension">{{ item.extension || '--' }}</span>
+
+          <span class="extension">
+            {{ item.extension?.toUpperCase() }}
+          </span>
+
         </div>
+
         <div class="document-meta">
-          <span>Numero : {{ item.numero || '--' }}</span>
-          <span>Validite : {{ item.validite || '--' }}</span>
+
+          @if(item.numero){
+
+            <span>
+              <strong>N° :</strong>
+              {{ item.numero }}
+            </span>
+
+          }
+
+          @if(item.validite){
+
+            <span>
+              <strong>Validité :</strong>
+              {{ item.validite | date:'dd/MM/yyyy' }}
+            </span>
+
+          }
+
+          <span>
+            <strong>Ajouté le :</strong>
+            {{ item.created_at | date:'dd/MM/yyyy' }}
+          </span>
+
         </div>
+
       </div>
 
+      <!-- ACTION -->
+
       <div class="document-actions">
-        <a class="btn-action btn-view" [href]="getFileUrl(item)" target="_blank" rel="noopener">
+
+        <a
+          class="btn-action btn-view"
+          [href]="getFileUrl(item)"
+          target="_blank"
+          rel="noopener">
+
           <i class="bi bi-eye"></i>
+          Voir
+
         </a>
+
       </div>
+
     </div>
+
   }
+
 </div>

@@ -3,11 +3,12 @@ import { Component, computed, input } from '@angular/core';
 
 import { Cotisation } from '../../models/cotisation.model';
 import { isSubscriptionActive } from '../../utils/subscription-api.utils';
+import { FormatMontantPipe } from '../../../../shared/pipes/pipe.component';  
 
 @Component({
   selector: 'app-cotisation-stats',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormatMontantPipe],
   templateUrl: './cotisation-stats.component.html',
   styleUrls: ['./cotisation-stats.component.css'],
 })

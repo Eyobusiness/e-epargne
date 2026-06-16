@@ -21,12 +21,15 @@
 
   @if (!isPageLoading()) {
     @if (hasFilteredResults()) {
-      <app-depense-table
-        [depenses]="paginatedDepenses()"
-        (view)="openDetailModal($event)"
-        (edit)="openEditModal($event)"
-        (delete)="openDeleteDialog($event)">
-      </app-depense-table>
+      
+    <app-depense-table
+      [depenses]="paginatedDepenses()"
+      [documentsMap]="documentsMap()"
+      (edit)="openEditModal($event)"
+      (view)="openDetailModal($event)"
+      (delete)="openDeleteDialog($event)">
+    </app-depense-table>
+
 
       @if (hasMultiplePages()) {
         <app-pagination

@@ -39,20 +39,32 @@ export interface MemberDetailResponse {
 
 export interface CreateMemberPayload {
   name: string;
+
   phone: string;
+
   address: string;
+
   email: string;
+
   password: string;
+
   matricule: string;
+
   documents?: MemberDocumentPayload[];
 }
 
 export interface UpdateMemberPayload {
   name: string;
+
   phone: string;
+
   address: string;
+
   email: string;
+
   matricule: string;
+
   password?: string;
+
   documents?: MemberDocumentPayload[];
 }

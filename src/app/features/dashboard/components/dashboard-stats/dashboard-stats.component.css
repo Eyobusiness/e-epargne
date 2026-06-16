@@ -1,99 +1,133 @@
-.stat-card{
-  background:#fff;
-  border-radius:18px;
-  padding:20px;
-  display:flex;
-  align-items:center;
-  gap:15px;
-  height:100%;
-  box-shadow:0 5px 18px rgba(0,0,0,.06);
-  transition:.3s;
+/* dashboard-stats.component.css */
+/* Charte : #1A345C · #7CA1C4 · #E94E1B */
+
+:host {
+  --navy:         #1A345C;
+  --navy-light:   #e8edf5;
+  --navy-mid:     #c5d3e8;
+  --sky:          #7CA1C4;
+  --sky-light:    #eaf1f8;
+  --orange:       #E94E1B;
+  --orange-light: #fdeee9;
+  --green:        #1B6B3A;
+  --green-light:  #e8f5ee;
+  --red:          #C0392B;
+  --red-light:    #fdf0ee;
+  --purple:       #6D3B8E;
+  --purple-light: #f3edf8;
+  --dark:         #2C3E50;
+  --dark-light:   #eaecee;
+  --cyan:         #0E7490;
+  --cyan-light:   #e0f5f9;
+  --text-muted:   #6b7280;
+  --border:       #e5e7eb;
+  --shadow-card:  0 1px 3px rgba(26,52,92,0.07), 0 4px 12px rgba(26,52,92,0.05);
+  --radius-card:  16px;
+  --radius-icon:  12px;
 }
 
-.stat-card:hover{
-  transform:translateY(-4px);
+/* ─── Stat Card base ─── */
+.stat-card {
+  background: #fff;
+  border-radius: var(--radius-card);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-card);
+  padding: 20px 22px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  height: 100%;
 }
 
-.icon{
-  width:60px;
-  height:60px;
-  border-radius:16px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:24px;
-  flex-shrink:0;
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 3px;
+  height: 100%;
+  border-radius: 16px 0 0 16px;
 }
 
-.content{
-  flex:1;
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(26,52,92,0.11);
 }
 
-.content span{
-  display:block;
-  font-size:13px;
-  color:#6b7280;
-  margin-bottom:6px;
+.stat-card:hover .icon {
+  transform: scale(1.08);
 }
 
-.content h4{
-  margin:0;
-  font-size:22px;
-  font-weight:700;
-  color:#1f2937;
+/* ─── Icône ─── */
+.stat-card .icon {
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  border-radius: var(--radius-icon);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  transition: transform 0.15s;
+  flex-shrink: 0;
 }
 
-/* Couleurs */
-
-.stat-blue .icon{
-  background:#e0f2fe;
-  color:#0284c7;
+/* ─── Contenu ─── */
+.stat-card .content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
 }
 
-.stat-red .icon{
-  background:#fee2e2;
-  color:#dc2626;
+.stat-card .content span {
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.stat-green .icon{
-  background:#dcfce7;
-  color:#16a34a;
+.stat-card .content h4 {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--navy);
+  line-height: 1.2;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.stat-orange .icon{
-  background:#ffedd5;
-  color:#ea580c;
-}
+/* ─── Variantes ─── */
 
-.stat-purple .icon{
-  background:#f3e8ff;
-  color:#9333ea;
-}
+/* Bleu — dépôts */
+.stat-blue::before       { background: var(--sky); }
+.stat-blue .icon         { background: var(--sky-light); color: var(--sky); }
 
-.stat-dark .icon{
-  background:#e5e7eb;
-  color:#111827;
-}
+/* Rouge — retraits */
+.stat-red::before        { background: var(--red); }
+.stat-red .icon          { background: var(--red-light); color: var(--red); }
 
-.stat-cyan .icon{
-  background:#cffafe;
-  color:#0891b2;
-}
+/* Vert — actifs */
+.stat-green::before      { background: var(--green); }
+.stat-green .icon        { background: var(--green-light); color: var(--green); }
 
-@media(max-width:768px){
+/* Orange — inactifs */
+.stat-orange::before     { background: var(--orange); }
+.stat-orange .icon       { background: var(--orange-light); color: var(--orange); }
 
-  .stat-card{
-    padding:16px;
-  }
+/* Violet — commission retrait */
+.stat-purple::before     { background: var(--purple); }
+.stat-purple .icon       { background: var(--purple-light); color: var(--purple); }
 
-  .icon{
-    width:50px;
-    height:50px;
-    font-size:20px;
-  }
+/* Dark — solde commission */
+.stat-dark::before       { background: var(--dark); }
+.stat-dark .icon         { background: var(--dark-light); color: var(--dark); }
 
-  .content h4{
-    font-size:18px;
-  }
-
-}
+/* Cyan — taux */
+.stat-cyan::before       { background: var(--cyan); }
+.stat-cyan .icon         { background: var(--cyan-light); color: var(--cyan); }

@@ -1,61 +1,138 @@
 <div class="filter-container">
 
-  <div class="filter-grid">
+  <div class="row g-3">
 
-    <div class="form-group">
-      <label>Recherche</label>
-      <div class="search-box">
-        <i class="bi bi-search"></i>
-        <input
-          type="text"
-          placeholder="Rechercher..."
-          [ngModel]="search()"
-          (ngModelChange)="search.set($event)">
-      </div>
-    </div>
+    <!-- Recherche -->
+<div class="col-12 col-md-6 col-lg-3">
 
-    <div class="form-group">
-      <label for="categorie_depense_filter">Categorie</label>
+  <label class="form-label">
+    Recherche
+  </label>
+
+  <div class="position-relative">
+
+    <i
+      class="bi bi-search position-absolute"
+      style="
+        left: 14px;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 5;
+        color: #6c757d;
+      ">
+    </i>
+
+    <input
+      type="text"
+      class="form-control ps-5"
+      placeholder="Rechercher..."
+      [ngModel]="search()"
+      (ngModelChange)="search.set($event)">
+
+  </div>
+
+</div>
+
+    <!-- Catégorie -->
+
+    <div class="col-12 col-md-6 col-lg-3">
+
+      <label
+        for="categorie_depense_filter"
+        class="form-label">
+
+        Catégorie
+
+      </label>
+
       <select
         id="categorie_depense_filter"
+        class="form-select"
         [ngModel]="categorieId()"
         (ngModelChange)="categorieId.set($event)">
-        <option [ngValue]="null">Toutes les categories</option>
+
+        <option [ngValue]="null">
+          Toutes les catégories
+        </option>
+
         @for (item of categories(); track item.id) {
-          <option [value]="item.id">{{ item.name }}</option>
+
+          <option [value]="item.id">
+            {{ item.name }}
+          </option>
+
         }
+
       </select>
+
     </div>
 
-    <div class="form-group">
-      <label for="date_debut">Date debut</label>
+    <!-- Date début -->
+
+    <div class="col-12 col-md-6 col-lg-3">
+
+      <label
+        for="date_debut"
+        class="form-label">
+
+        Date début
+
+      </label>
+
       <input
-        title="date debut"
         id="date_debut"
         type="date"
+        class="form-control"
         [ngModel]="startDate()"
         (ngModelChange)="startDate.set($event)">
+
     </div>
 
-    <div class="form-group">
-      <label for="date_fin">Date fin</label>
+    <!-- Date fin -->
+
+    <div class="col-12 col-md-6 col-lg-3">
+
+      <label
+        for="date_fin"
+        class="form-label">
+
+        Date fin
+
+      </label>
+
       <input
-        title="date fin"
         id="date_fin"
         type="date"
+        class="form-control"
         [ngModel]="endDate()"
         (ngModelChange)="endDate.set($event)">
+
     </div>
 
   </div>
 
-  <div class="filter-actions">
-    <button type="button" class="btn btn-reset" (click)="resetFilters()">
-      Reinitialiser
+  <div class="d-flex justify-content-end gap-2 mt-4 flex-wrap">
+
+    <button
+      type="button"
+      class="btn btn-outline-secondary"
+      (click)="resetFilters()">
+
+      Réinitialiser
+
     </button>
-    <button type="button" class="btn btn-primary" (click)="applyFilters()">
+
+    <button
+      type="button"
+      class="btn btn-primary"
+      (click)="applyFilters()">
+
+      <i class="bi bi-funnel me-1"></i>
+
       Filtrer
+
     </button>
+
   </div>
 
 </div>

@@ -3,11 +3,12 @@ import { Component, computed, input } from '@angular/core';
 
 import { Portefeuille } from '../../models/portefeuille.model';
 import { Operation } from '../../../operations/models/operation.model';
+import { FormatMontantPipe } from '../../../../shared/pipes/pipe.component';  
 
 @Component({
   selector: 'app-portefeuille-stats',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormatMontantPipe],
   templateUrl: './portefeuille-stats.component.html',
   styleUrls: ['./portefeuille-stats.component.css'],
 })

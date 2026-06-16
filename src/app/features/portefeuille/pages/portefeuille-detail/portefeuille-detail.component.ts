@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { finalize } from 'rxjs';
 
@@ -41,6 +41,35 @@ export class PortefeuilleDetailComponent implements OnInit {
 
   readonly isLoading = signal(false);
 
+  readonly limitpage = 10;
+
+  readonly currentPage = signal(1);
+
+  readonly totalItems = signal(0);
+
+  readonly totalPages = computed(() =>
+    Math.max(
+      1,
+      Math.ceil(this.totalItems() / this.limitpage),
+    ),
+  );
+
+  readonly pendingWithdrawals = computed(() =>
+    this.operations().filter(
+      operation =>
+        operation.type_operation === 'RETRAIT'
+        && operation.status === '100',
+    ),
+  );
+
+  readonly pendingWithdrawalsCount = computed(
+    () => this.pendingWithdrawals().length,
+  );
+
+  readonly showWithdrawModal = signal(false);
+
+  readonly showDirectWithdrawModal = signal(false);
+
   ngOnInit(): void {
     const adherentId = this.route.snapshot.paramMap.get('id');
 
@@ -53,6 +82,22 @@ export class PortefeuilleDetailComponent implements OnInit {
     this.loadOperations(adherentId);
   }
 
+  openPendingWithdrawals(): void {
+    this.showWithdrawModal.set(true);
+  }
+
+  closePendingWithdrawals(): void {
+    this.showWithdrawModal.set(false);
+  }
+
+  openDirectWithdrawModal(): void {
+    this.showDirectWithdrawModal.set(true);
+  }
+
+  closeDirectWithdrawModal(): void {
+    this.showDirectWithdrawModal.set(false);
+  }
+
   loadPortefeuille(adherentId: string): void {
     this.isLoading.set(true);
 
@@ -60,11 +105,9 @@ export class PortefeuilleDetailComponent implements OnInit {
       .getByAdherent(adherentId)
       .pipe(finalize(() => this.isLoading.set(false)))
       .subscribe({
-        next: (response) => {
-        // console.log('WALLET', response);
-
-        this.portefeuille.set(response);
-      },
+        next: response => {
+          this.portefeuille.set(response);
+        },
 
         error: () => {
           this.portefeuille.set(null);
@@ -80,17 +123,60 @@ export class PortefeuilleDetailComponent implements OnInit {
         endDate: '2026-12-31',
         status: '',
         type: '',
-        page: 1,
-        limit: 100,
+        page: this.currentPage(),
+        limit: this.limitpage,
       })
       .subscribe({
-        next: (response) => {
-          this.operations.set(response?.data?.items ?? []);
+        next: response => {
+          this.operations.set(
+            response?.data?.items ?? [],
+          );
+
+          this.totalItems.set(
+            response?.meta?.total ?? 0,
+          );
         },
 
         error: () => {
           this.operations.set([]);
         },
       });
+  }
+
+  previousPage(): void {
+    if (this.currentPage() <= 1) {
+      return;
+    }
+
+    this.currentPage.update(
+      page => page - 1,
+    );
+
+    const adherentId =
+      this.route.snapshot.paramMap.get('id');
+
+    if (adherentId) {
+      this.loadOperations(adherentId);
+    }
+  }
+
+  nextPage(): void {
+    if (
+      this.currentPage()
+      >= this.totalPages()
+    ) {
+      return;
+    }
+
+    this.currentPage.update(
+      page => page + 1,
+    );
+
+    const adherentId =
+      this.route.snapshot.paramMap.get('id');
+
+    if (adherentId) {
+      this.loadOperations(adherentId);
+    }
   }
 }

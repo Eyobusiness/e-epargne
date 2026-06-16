@@ -25,6 +25,7 @@ import { AppConfirmDialogComponent } from '../../../../shared/ui/app-confirm-dia
 import { AppEmptyStateComponent } from '../../../../shared/ui/app-empty-state/app-empty-state.component';
 import { ToastService } from '../../../../core/services/toast.service';
 import { extractApiErrorMessage } from '../../utils/depense-api.utils';
+import { DocumentService } from '../../services/document-dpenses.service';
 
 @Component({
   selector: 'app-depenses',
@@ -51,6 +52,19 @@ export class DepensesComponent implements OnInit {
   private readonly categorieService = inject(CategorieDepenseService);
   private readonly toastService = inject(ToastService);
 
+  private readonly documentService = inject(DocumentService);
+
+  loadDocument(depenseId: string): void {
+    this.documentService.getByParentId(depenseId).subscribe({
+      next: (documents) => {
+        console.log('DOCUMENTS', documents);
+      },
+    });
+  }
+
+  readonly documentsMap = signal<Record<string, boolean>>({});
+ 
+
   readonly depenses = signal<Depense[]>([]);
   readonly categories = signal<CategorieDepense[]>([]);
   readonly selectedDepense = signal<Depense | null>(null);
@@ -76,8 +90,7 @@ export class DepensesComponent implements OnInit {
 
     return this.depenses().filter((item) => {
       const matchesSearch =
-        !filter.search ||
-        item.description?.toLowerCase().includes(filter.search.toLowerCase());
+        !filter.search || item.description?.toLowerCase().includes(filter.search.toLowerCase());
 
       const matchesCategorie =
         !filter.categorieId || item.categorie_depense_id === filter.categorieId;
@@ -137,6 +150,9 @@ export class DepensesComponent implements OnInit {
       .subscribe({
         next: (response) => {
           this.depenses.set(response.data?.items ?? []);
+
+          this.loadDocumentsMap();
+
           this.syncCurrentPage();
         },
         error: () => {
@@ -145,6 +161,46 @@ export class DepensesComponent implements OnInit {
         },
       });
   }
+  // loadDocuments(depenseId: string): void {
+  //   this.documentService.getByParentId(depenseId).subscribe({
+  //     next: (documents) => {
+  //       this.documents.set(documents);
+  //     },
+
+  //     error: () => {
+  //       this.documents.set([]);
+  //     },
+  //   });
+  // }
+
+loadDocumentsMap(): void {
+
+  this.depenses().forEach((depense) => {
+
+    if (!depense.id) {
+      return;
+    }
+
+    this.documentService
+      .getByParentId(depense.id)
+      .subscribe({
+
+        next: (documents) => {
+
+          this.documentsMap.update(current => ({
+            ...current,
+            [depense.id!]: documents.length > 0,
+          }));
+
+        },
+
+      });
+
+  });
+
+}
+
+
 
   onFilterChange(filters: DepenseFilter): void {
     this.filters.set(filters);
@@ -170,23 +226,31 @@ export class DepensesComponent implements OnInit {
   }
 
   openDetailModal(depense: Depense): void {
+    if (depense.id) {
+      this.loadDocument(depense.id);
+    }
+
     if (!depense.id) {
       this.detailDepense.set(depense);
       this.isDetailOpen.set(true);
+
       return;
     }
 
     this.depenseService.getById(depense.id).subscribe({
       next: (response) => {
         this.detailDepense.set(response.data ?? depense);
+
         this.isDetailOpen.set(true);
       },
+
       error: () => {
         this.detailDepense.set(depense);
         this.isDetailOpen.set(true);
       },
     });
   }
+
 
   closeModal(force = false): void {
     if (!force && this.isLoading()) {
@@ -242,10 +306,7 @@ export class DepensesComponent implements OnInit {
           this.toastService.show('Depense ajoutee', 'success');
         },
         error: (err) => {
-          this.toastService.show(
-            extractApiErrorMessage(err) || 'Erreur creation depense',
-            'error',
-          );
+          this.toastService.show(extractApiErrorMessage(err) || 'Erreur creation depense', 'error');
         },
       });
   }
@@ -296,4 +357,8 @@ export class DepensesComponent implements OnInit {
       this.currentPage.set(this.totalPages());
     }
   }
+
+
+
+  
 }

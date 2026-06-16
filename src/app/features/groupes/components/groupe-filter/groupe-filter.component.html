@@ -1,73 +1,45 @@
 <!-- components/groupe-filter/groupe-filter.component.html -->
 
 <div class="filter-container">
+  <div class="row align-items-end g-1">
 
-  <div class="filter-grid">
-
-    <div class="form-group">
-
-      <label>
-        Recherche
-      </label>
-
+    <div class="col-12 col-md-6 col-lg-5">
+      <label class="filter-label">Recherche</label>
       <div class="search-box">
-
         <i class="bi bi-search"></i>
-
         <input
           type="text"
           placeholder="Nom groupe..."
           [ngModel]="search()"
           (ngModelChange)="search.set($event)">
-
       </div>
-
     </div>
 
-    <div class="form-group">
-
-      <label>
-        Statut
-      </label>
-
-      <select title="Selectionner un statut"
+    <div class="col-12 col-md-2 col-lg-2">
+      <label class="filter-label">Statut</label>
+      <select
+        title="Selectionner un statut"
         [ngModel]="status()"
         (ngModelChange)="status.set($event)">
-
-        <option value="actif">
-          Actif
-        </option>
-
-        <option value="inactif">
-          Inactif
-        </option>
-
+        <option value="200">Actif</option>
+        <option value="inactif">Inactif</option>
       </select>
+    </div>
 
+    <div class="col-12 col-md-4 col-lg-5 filter-actions">
+      <button
+        type="button"
+        class="btn btn-reset"
+        (click)="resetFilters()">
+        Réinitialiser
+      </button>
+      <button
+        type="button"
+        class="btn btn-primary"
+        (click)="applyFilters()">
+        Filtrer
+      </button>
     </div>
 
   </div>
-
-  <div class="filter-actions">
-
-    <button
-      type="button"
-      class="btn btn-reset"
-      (click)="resetFilters()">
-
-      Reinitialiser
-
-    </button>
-
-    <button
-      type="button"
-      class="btn btn-primary"
-      (click)="applyFilters()">
-
-      Filtrer
-
-    </button>
-
-  </div>
-
 </div>

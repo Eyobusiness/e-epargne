@@ -97,3 +97,38 @@
   }
 
 }
+
+/* ─── Bouton retour ─── */
+.detail-top {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.detail-top .btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 38px;
+  padding: 0 16px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--navy, #1A345C);
+  background: var(--navy-light, #e8edf5);
+  border: 1px solid var(--navy-mid, #c5d3e8);
+  text-decoration: none;
+  transition: background 0.12s, transform 0.1s;
+}
+
+.detail-top .btn-secondary:hover {
+  background: var(--navy-mid, #c5d3e8);
+}
+
+.detail-top .btn-secondary:active {
+  transform: scale(0.97);
+}
+
+.detail-top .btn-secondary i {
+  font-size: 15px;
+}

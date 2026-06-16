@@ -32,3 +32,7 @@ export class DocumentTableComponent {
     return ['png', 'jpg', 'jpeg', 'webp'].includes(extension.toLowerCase());
   }
 }
+
+
+
+

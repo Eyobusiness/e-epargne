@@ -1,129 +1,363 @@
-<form class="adherent-form" [formGroup]="form" (ngSubmit)="save()">
+<form
+  class="adherent-form"
+  [formGroup]="form"
+  (ngSubmit)="save()">
+
+  <!-- INFORMATIONS -->
 
   <div class="form-grid">
+
     <div class="form-group">
-      <label>Nom complet</label>
+
+      <label>
+        Nom complet
+      </label>
+
       <input
         type="text"
         formControlName="name"
-        placeholder="Nom adherent"
-        [class.invalid]="hasError('name')">
-      @if (hasError('name')) {
-        <small class="error-text">Le nom est obligatoire</small>
+        placeholder="Nom et prénom">
+
+      @if(hasError('name')){
+        <small class="error-text">
+          Le nom est obligatoire
+        </small>
       }
+
     </div>
 
     <div class="form-group">
-      <label>Telephone</label>
+
+      <label>
+        Téléphone *
+      </label>
+
       <input
         type="text"
         formControlName="phone"
-        placeholder="0700000000"
-        [class.invalid]="hasError('phone')">
-      @if (hasError('phone')) {
-        <small class="error-text">Le telephone est obligatoire</small>
+        placeholder="0700000000">
+
+      @if(hasError('phone')){
+        <small class="error-text">
+          Le téléphone est obligatoire
+        </small>
       }
+
     </div>
 
     <div class="form-group">
-      <label>Adresse</label>
+
+      <label>
+        Adresse *
+      </label>
+
       <input
         type="text"
         formControlName="address"
-        placeholder="Adresse adherent"
-        [class.invalid]="hasError('address')">
-      @if (hasError('address')) {
-        <small class="error-text">L'adresse est obligatoire</small>
+        placeholder="Adresse">
+
+      @if(hasError('address')){
+        <small class="error-text">
+          L'adresse est obligatoire
+        </small>
       }
+
     </div>
 
     <div class="form-group">
-      <label>Email</label>
+
+      <label>
+        Email *
+      </label>
+
       <input
         type="email"
         formControlName="email"
-        placeholder="email@email.com"
-        [class.invalid]="hasError('email')">
-      @if (hasError('email')) {
-        <small class="error-text">Email invalide</small>
+        placeholder="email@email.com">
+
+      @if(hasError('email')){
+        <small class="error-text">
+          Email invalide
+        </small>
       }
+
     </div>
 
     <div class="form-group">
-      <label>Matricule</label>
-      <input
-        type="text"
-        formControlName="matricule"
-        placeholder="CSS-73-2025"
-        [class.invalid]="hasError('matricule')">
-      @if (hasError('matricule')) {
-        <small class="error-text">Le matricule est obligatoire</small>
-      }
-    </div>
 
-    <div class="form-group">
-      <label>Mot de passe</label>
-      <input
+      <label for="password">
+        Mot de passe
+      </label>
+
+      <input id="password"
         type="password"
         formControlName="password"
-        [placeholder]="isEditMode() ? 'Laisser vide pour ne pas changer' : 'Mot de passe'">
-      @if (!isEditMode() && hasError('password')) {
-        <small class="error-text">Le mot de passe est obligatoire</small>
-      }
+        [placeholder]="
+          isEditMode()
+            ? 'Laisser vide pour ne pas modifier'
+            : 'Mot de passe'
+        ">
+
     </div>
+
   </div>
+
+  <!-- MATRICULE -->
+
+  <div class="matricule-section">
+
+    <label class="auto-matricule">
+
+      <input
+        type="checkbox"
+        formControlName="autoMatricule">
+
+      Générer automatiquement le matricule
+
+    </label>
+
+    @if(form.controls.autoMatricule.value){
+
+      <div class="generated-matricule">
+
+        <span>
+          Matricule généré :
+        </span>
+
+        <strong>
+          {{ generatedMatricule() }}
+        </strong>
+
+      </div>
+
+    } @else {
+
+      <div class="form-group mt-3">
+
+        <label>
+          Matricule
+        </label>
+
+        <input
+          type="text"
+          formControlName="matricule"
+          placeholder="AD-26-00001">
+
+      </div>
+
+    }
+
+  </div>
+
+  <!-- DOCUMENTS -->
 
   <div class="documents-section">
-    <h4 class="section-title">Documents d'identite</h4>
-    <p class="section-hint">
-      @if (isEditMode()) {
-        Ajoutez de nouveaux fichiers uniquement si vous souhaitez les remplacer.
-      } @else {
-        Joignez au minimum la CNI recto et verso.
-      }
-    </p>
 
-    <div class="form-grid">
-      <div class="form-group">
-        <label for="recto_cni">CNI Recto</label>
-        <input
-          id="recto_cni"
-          type="file"
-          accept=".pdf,.png,.jpg,.jpeg,.webp"
-          (change)="onRectoChange($event)">
-        @if (rectoFileName()) {
-          <small class="file-name">{{ rectoFileName() }}</small>
-        }
-      </div>
+    <div class="section-header">
 
-      <div class="form-group">
-        <label for="verso_cni">CNI Verso</label>
-        <input
-          id="verso_cni"
-          type="file"
-          accept=".pdf,.png,.jpg,.jpeg,.webp"
-          (change)="onVersoChange($event)">
-        @if (versoFileName()) {
-          <small class="file-name">{{ versoFileName() }}</small>
-        }
-      </div>
+      <h4>
+        Documents d'identité
+      </h4>
+
+      <p>
+        Images et PDF acceptés
+      </p>
+
     </div>
 
-    @if (hasDocumentError()) {
-      <small class="error-text">CNI recto et verso obligatoires a la creation</small>
+    <!-- DRAG DROP -->
+
+    <div
+      class="drop-zone"
+      (dragover)="onDragOver($event)"
+      (drop)="onDrop($event)">
+
+      <input
+        #fileInput
+        hidden
+        multiple
+        type="file"
+        accept=".pdf,.png,.jpg,.jpeg,.webp"
+        (change)="onFileSelected($event)">
+
+      <button
+        type="button"
+        class="upload-btn"
+        (click)="fileInput.click()">
+
+        <i class="bi bi-cloud-upload"></i>
+
+        Sélectionner ou glisser les fichiers
+
+      </button>
+
+    </div>
+
+    <!-- LISTE DOCUMENTS -->
+
+    @if(documents().length){
+
+      <div class="documents-list">
+
+        @for(
+          document of documents();
+          track $index
+        ){
+
+          <div class="document-card">
+
+            <div class="document-card-header">
+
+              <span>
+                Document {{ $index + 1 }}
+              </span>
+
+              <button title="Supprimer"
+                type="button"
+                class="delete-document-btn"
+                (click)="removeDocument($index)">
+
+                <i class="bi bi-trash"></i>
+
+              </button>
+
+            </div>
+
+            <div class="document-grid">
+
+              <div class="form-group">
+
+                <label for="type">
+                  Type
+                </label>
+
+                <select id="type"
+                  [value]="document.type"
+                  (change)="updateDocumentType(
+                    $index,
+                    $any($event.target).value
+                  )">
+
+                  @for(
+                    type of documentTypes;
+                    track type
+                  ){
+
+                    <option
+                      [value]="type">
+
+                      {{ type }}
+
+                    </option>
+
+                  }
+
+                </select>
+
+              </div>
+
+              <div class="form-group">
+
+                <label for="numero">
+                  Numéro
+                </label>
+
+                <input id="numero"
+                  type="text"
+                  [value]="document.numero"
+                  (input)="updateDocumentNumero(
+                    $index,
+                    $any($event.target).value
+                  )">
+
+              </div>
+
+              <div class="form-group">
+
+                <label for="validite">
+                  Validité
+                </label>
+
+                <input id="validite"
+                  type="date"
+                  [value]="document.validite"
+                  (change)="updateDocumentValidite(
+                    $index,
+                    $any($event.target).value
+                  )">
+
+              </div>
+
+            </div>
+
+            <!-- PREVIEW -->
+
+            <div class="preview-container">
+
+              @if(document.extension === 'pdf'){
+
+                <div class="pdf-preview">
+
+                  <i class="bi bi-file-earmark-pdf"></i>
+
+                  <span>
+                    PDF
+                  </span>
+
+                </div>
+
+              } @else {
+
+                <img
+                  [src]="document.preview"
+                  alt="Document">
+
+              }
+
+            </div>
+
+          </div>
+
+        }
+
+      </div>
+
     }
+
   </div>
 
+  <!-- ACTIONS -->
+
   <div class="form-actions">
-    <button type="button" class="btn btn-cancel" [disabled]="isLoading()" (click)="close()">
+
+    <button
+      type="button"
+      class="btn btn-light"
+      [disabled]="isLoading()"
+      (click)="close()">
+
       Annuler
+
     </button>
-    <button type="submit" class="btn btn-primary" [disabled]="isLoading()">
-      @if (isLoading()) {
-        <span class="spinner"></span>
+
+    <button
+      type="submit"
+      class="btn btn-primary"
+      [disabled]="isLoading()">
+
+      @if(isLoading()){
+
+        <span class="spinner-border spinner-border-sm"></span>
+
       }
-      {{ isEditMode() ? 'Modifier' : 'Enregistrer' }}
+
+      {{ isEditMode()
+          ? 'Modifier'
+          : 'Enregistrer'
+      }}
+
     </button>
+
   </div>
 
 </form>

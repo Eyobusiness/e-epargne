@@ -4,11 +4,12 @@ import { CommonModule } from '@angular/common';
 import { Component, computed, input } from '@angular/core';
 
 import { Groupe } from '../../models/groupe.model';
+import { FormatMontantPipe } from '../../../../shared/pipes/pipe.component';
 
 @Component({
   selector: 'app-groupe-stats',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormatMontantPipe],
   templateUrl: './groupe-stats.component.html',
   styleUrls: ['./groupe-stats.component.css'],
 })

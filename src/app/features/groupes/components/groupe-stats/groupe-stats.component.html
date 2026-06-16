@@ -35,10 +35,7 @@
       </span>
 
       <h5>
-        {{
-          totalMontantMin()
-            | number
-        }}
+        {{ totalMontantMin() | formatMontant }}
         FCFA
       </h5>
 
@@ -61,7 +58,7 @@
       <h5>
         {{
           totalMontantMax()
-            | number
+            | formatMontant
         }}
         FCFA
       </h5>

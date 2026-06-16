@@ -85,22 +85,106 @@
         </div>
 
         <div class="form-group full-width">
-          <label for="depense_document_file">Fichier</label>
-          <input
-            id="depense_document_file"
-            type="file"
-            accept=".pdf,.png,.jpg,.jpeg,.webp"
-            (change)="onFileChange($event)">
-          @if (selectedFileName()) {
-            <small class="file-name">{{ selectedFileName() }}</small>
-          }
-          @if (existingDocument() && !selectedFileName()) {
-            <small class="file-name">Document existant conserve si aucun nouveau fichier</small>
-          }
-          @if (hasDocumentError()) {
-            <small class="error-text">Un document est obligatoire pour une nouvelle depense</small>
-          }
-        </div>
+
+  <label class="upload-label">
+    Document justificatif
+  </label>
+
+  <div
+    class="upload-zone"
+    (dragover)="$event.preventDefault()">
+
+    <input
+      #fileInput
+      hidden
+      id="depense_document_file"
+      type="file"
+      accept=".pdf,.png,.jpg,.jpeg,.webp"
+      (change)="onFileChange($event)">
+
+    <button
+      type="button"
+      class="upload-btn"
+      (click)="fileInput.click()">
+
+      <i class="bi bi-cloud-upload"></i>
+
+      Sélectionner un fichier
+
+    </button>
+
+    <span class="upload-help">
+      ou glisser-déposer ici
+    </span>
+
+  </div>
+
+        @if (selectedFileName()) {
+
+          <div class="selected-file">
+
+            <i class="bi bi-file-earmark-check-fill"></i>
+
+            {{ selectedFileName() }}
+
+          </div>
+
+        }
+
+        @if (filePreview()) {
+
+          <div class="preview-card">
+
+            @if (
+              selectedFile()?.type?.includes('image')
+            ) {
+
+              <img
+                [src]="filePreview()"
+                alt="Prévisualisation">
+
+            } @else {
+
+              <div class="pdf-preview">
+
+                <i class="bi bi-file-earmark-pdf-fill"></i>
+
+                <span>
+                  PDF prêt à être envoyé
+                </span>
+
+              </div>
+
+            }
+
+          </div>
+
+        }
+
+        @if (existingDocument() && !selectedFileName()) {
+
+          <small class="file-name">
+
+            <i class="bi bi-file-earmark-text"></i>
+
+            Document existant conservé
+
+          </small>
+
+        }
+
+        @if (hasDocumentError()) {
+
+          <small class="error-text">
+
+            Un document est obligatoire
+            pour une nouvelle dépense
+
+          </small>
+
+        }
+
+      </div>
       </div>
     </div>
 

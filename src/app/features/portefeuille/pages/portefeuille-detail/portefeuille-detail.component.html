@@ -1,9 +1,35 @@
-<!-- pages/portefeuille-detail/portefeuille-detail.component.html -->
-
 <app-page-header
   title="Portefeuille"
   description="Consultation du portefeuille adherent">
 </app-page-header>
+
+<div class="wallet-header-actions">
+
+  <button
+    class="btn btn-danger"
+    (click)="openDirectWithdrawModal()">
+
+    <i class="bi bi-cash-stack"></i>
+
+    Retrait direct
+
+  </button>
+
+  <button
+    class="btn btn-warning"
+    (click)="openPendingWithdrawals()">
+
+    <i class="bi bi-hourglass-split"></i>
+
+    Demandes retrait
+
+    <span class="badge-count">
+      {{ pendingWithdrawalsCount() }}
+    </span>
+
+  </button>
+
+</div>
 
 <div class="page-content">
 
@@ -18,14 +44,18 @@
   @if (!isLoading()) {
 
     <app-portefeuille-stats
-  [portefeuille]="portefeuille()"
-  [operations]="operations()">
-</app-portefeuille-stats>
+      [portefeuille]="portefeuille()"
+      [operations]="operations()">
+    </app-portefeuille-stats>
 
     <app-portefeuille-resume
-  [portefeuille]="portefeuille()"
-  [adherent]="operations().length ? operations()[0].adherent ?? null : null">
-</app-portefeuille-resume>
+      [portefeuille]="portefeuille()"
+      [adherent]="
+        operations().length
+          ? operations()[0].adherent ?? null
+          : null
+      ">
+    </app-portefeuille-resume>
 
     <app-portefeuille-operations
       [operations]="operations()">
@@ -33,4 +63,149 @@
 
   }
 
+  <div class="pagination-container">
+
+    <button
+      class="btn btn-outline-primary"
+      [disabled]="currentPage() === 1"
+      (click)="previousPage()">
+
+      <i class="bi bi-chevron-left"></i>
+
+      Précédent
+
+    </button>
+
+    <span class="page-info">
+
+      Page {{ currentPage() }}
+      sur {{ totalPages() }}
+
+    </span>
+
+    <button
+      class="btn btn-outline-primary"
+      [disabled]="currentPage() >= totalPages()"
+      (click)="nextPage()">
+
+      Suivant
+
+      <i class="bi bi-chevron-right"></i>
+
+    </button>
+
+  </div>
+
 </div>
+
+@if(showWithdrawModal()) {
+
+<div class="modal-overlay">
+
+  <div class="withdraw-modal">
+
+    <div class="modal-header">
+
+      <h3>
+        Demandes de retrait
+      </h3>
+
+      <button title="Fermer"
+        class="close-btn"
+        (click)="closePendingWithdrawals()">
+
+        <i class="bi bi-x-lg"></i>
+
+      </button>
+
+    </div>
+
+    <div class="modal-body">
+
+      @if(pendingWithdrawals().length){
+
+        @for(
+          operation of pendingWithdrawals();
+          track operation.id
+        ){
+
+          <div class="withdraw-item">
+
+            <div>
+
+              <h5>
+                {{ operation.montant | number }}
+                FCFA
+              </h5>
+
+              <p>
+                {{ operation.motif || 'Aucun motif' }}
+              </p>
+
+            </div>
+
+            <span class="badge bg-warning">
+
+              En attente
+
+            </span>
+
+          </div>
+
+        }
+
+      } @else {
+
+        <div class="empty-state">
+
+          Aucune demande de retrait
+
+        </div>
+
+      }
+
+    </div>
+
+  </div>
+
+</div>
+
+}
+
+@if(showDirectWithdrawModal()) {
+
+<div class="modal-overlay">
+
+  <div class="withdraw-modal">
+
+    <div class="modal-header">
+
+      <h3>
+        Retrait direct
+      </h3>
+
+      <button title="Fermer"
+        class="close-btn"
+        (click)="closeDirectWithdrawModal()">
+
+        <i class="bi bi-x-lg"></i>
+
+      </button>
+
+    </div>
+
+    <div class="modal-body">
+
+      <div class="alert alert-info">
+
+        Formulaire de retrait direct à implémenter.
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+}

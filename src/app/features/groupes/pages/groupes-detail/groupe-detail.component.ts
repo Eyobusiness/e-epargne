@@ -30,6 +30,7 @@ import { AppConfirmDialogComponent } from '../../../../shared/ui/app-confirm-dia
 import { AppEmptyStateComponent } from '../../../../shared/ui/app-empty-state/app-empty-state.component';
 
 import { ToastService } from '../../../../core/services/toast.service';
+import { FormatMontantPipe } from '../../../../shared/pipes/pipe.component';
 
 @Component({
   selector: 'app-groupe-detail',
@@ -42,6 +43,7 @@ import { ToastService } from '../../../../core/services/toast.service';
     AppModalComponent,
     AppConfirmDialogComponent,
     AppEmptyStateComponent,
+    FormatMontantPipe,
   ],
   templateUrl: './groupe-detail.component.html',
   styleUrls: ['./groupe-detail.component.css'],

@@ -4,11 +4,12 @@ import { CommonModule } from '@angular/common';
 import { Component, computed, input } from '@angular/core';
 
 import { CotisationAdherent } from '../../models/cotisation-adherent.model';
+import { FormatMontantPipe } from '../../../../shared/pipes/pipe.component';
 
 @Component({
   selector: 'app-cotisation-adherent-stats',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormatMontantPipe],
   templateUrl: './cotisation-adherent-stats.component.html',
   styleUrls: ['./cotisation-adherent-stats.component.css'],
 })

@@ -1,21 +1,21 @@
 <div class="chart-card">
 
   <div class="chart-header">
-
-    <h3>
-      Évolution des opérations
-    </h3>
-
-    <span>
-      Dépôts / Retraits mensuels
-    </span>
-
+    <h3>Évolution des opérations</h3>
+    <span>Dépôts / Retraits mensuels</span>
   </div>
 
   <div class="chart-container">
 
-    <canvas #chartCanvas>
-    </canvas>
+    <!-- Spinner affiché pendant le chargement -->
+    @if (isLoading()) {
+      <div class="chart-loading">
+        <div class="spinner"></div>
+        <span>Chargement du graphique...</span>
+      </div>
+    }
+
+    <canvas #chartCanvas></canvas>
 
   </div>
 
