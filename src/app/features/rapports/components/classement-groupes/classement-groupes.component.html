@@ -1,0 +1,199 @@
+<div class="classement-container">
+
+  <!-- @if(podium().length){
+
+    <div class="top-ranking">
+
+  @for(item of podium(); track item.groupeId){
+
+    <div
+      class="ranking-card"
+      [class.rank-1]="item.rang === 1"
+      [class.rank-2]="item.rang === 2"
+      [class.rank-3]="item.rang === 3"
+      [class.rank-4]="item.rang === 4">
+
+      <div class="ranking-icon">
+
+        @if(item.rang === 1){
+          <i class="bi bi-trophy-fill"></i>
+        }
+
+        @if(item.rang === 2){
+          <i class="bi bi-award-fill"></i>
+        }
+
+        @if(item.rang === 3){
+          <i class="bi bi-patch-check-fill"></i>
+        }
+
+        @if(item.rang === 4){
+          <i class="bi bi-star-fill"></i>
+        }
+
+      </div>
+
+      <div class="ranking-content">
+
+        <span class="ranking-position">
+
+          #{{ item.rang }}
+
+        </span>
+
+        <h4>
+
+          {{ item.groupe }}
+
+        </h4>
+
+        <p>
+
+          {{ item.nombreMembres }} membre(s)
+
+        </p>
+
+        <div class="ranking-rate">
+
+          {{ item.tauxRealisation | number:'1.0-0' }}%
+
+        </div>
+
+      </div>
+
+    </div>
+
+  }
+
+</div>
+
+  } -->
+
+  <div class="table-card">
+
+    <div class="table-header">
+
+  <h3>
+    Performance des groupes
+  </h3>
+
+
+
+  <div class="export-actions">
+<span class="count">
+    {{ items().length }}
+    groupe(s)
+  </span>
+    <button
+      title="Exporter en Excel"
+      class="btn-excel"
+      (click)="onExportExcel()">
+
+      <i class="bi bi-file-earmark-excel"></i>
+      Excel
+
+    </button>
+
+    <button
+      title="Exporter en PDF"
+      class="btn-pdf"
+      (click)="onExportPdf()">
+
+      <i class="bi bi-file-earmark-pdf"></i>
+      PDF
+
+    </button>
+
+  </div>
+
+</div>
+
+    <div class="table-responsive">
+
+      <table class="table align-middle">
+
+        <thead>
+
+          <tr>
+
+            <th>Rang</th>
+
+            <th>Groupe</th>
+
+            <th>Membres</th>
+
+            <th>Montant cotisé</th>
+
+            <th>Taux</th>
+
+          </tr>
+
+        </thead>
+
+        <tbody>
+
+          @for(item of items(); track item.groupeId){
+
+            <tr>
+
+              <td>
+
+                @if(item.rang === 1){
+                  🥇
+                }
+                @else if(item.rang === 2){
+                  🥈
+                }
+                @else if(item.rang === 3){
+                  🥉
+                }
+                @else if(item.rang === 4){
+                  🏅
+                }
+                @else{
+                  #{{ item.rang }}
+                }
+
+              </td>
+
+              <td>
+
+                {{ item.groupe }}
+
+              </td>
+
+              <td>
+
+                {{ item.nombreMembres }}
+
+              </td>
+
+              <td>
+
+                {{ item.totalCotise | formatMontant }}
+
+              </td>
+
+              <td>
+
+                <span class="badge-rate">
+
+                  {{ item.tauxRealisation | number:'1.0-0' }} %
+
+                </span>
+
+              </td>
+
+            </tr>
+
+          }
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+</div>

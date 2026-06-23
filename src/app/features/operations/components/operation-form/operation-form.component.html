@@ -14,7 +14,7 @@
       <select
         id="adherent"
         formControlName="adherent_id"
-        (change)="onAdherentChange($any($event.target).value)">
+        (change)="onAdherentChange($any($event.target).value)" readonly>
 
         <option value="">
           Sélectionner
@@ -35,6 +35,7 @@
 
     </div>
 
+
     <div class="form-group">
 
       <label for="moyen_operation">
@@ -43,23 +44,17 @@
 
       <select
         id="moyen_operation"
-        formControlName="moyen_operation">
+        formControlName="moyen_operation" required>
+              
+        <option value="CASH"selected>Espèces</option>
 
-        <option value="ORANGE_MONEY">
-          Orange Money
-        </option>
+        <option value="ORANGE MONEY">Orange Money</option>
 
-        <option value="MTN_MONEY">
-          MTN Money
-        </option>
+        <option value="MTN MONEY">MTN Money</option>
 
-        <option value="WAVE">
-          Wave
-        </option>
+        <option value="WAVE">Wave</option>
 
-        <option value="CASH">
-          Espèces
-        </option>
+        
 
       </select>
       @if (
@@ -83,7 +78,7 @@
 
       <select
         id="type_operation"
-        formControlName="type_operation">
+        formControlName="type_operation" readonly>
 
         <option value="DEPOT">
           Dépôt
@@ -106,7 +101,7 @@
       <input
         id="montant"
         type="number"
-        formControlName="montant">
+        formControlName="montant" readonly>
 
     </div>
 

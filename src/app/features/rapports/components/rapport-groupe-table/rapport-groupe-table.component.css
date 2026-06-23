@@ -1,0 +1,246 @@
+.table-card {
+  background: #fff;
+  border-radius: 18px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 20px rgba(15, 23, 42, .08);
+  overflow: hidden;
+}
+
+/* HEADER */
+
+.table-header {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+
+  padding: 1.25rem 1.5rem;
+
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.table-header h3 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.count {
+  margin-left: auto;
+
+  padding: .4rem .85rem;
+
+  border-radius: 999px;
+
+  background: #eff6ff;
+  color: #2563eb;
+
+  font-size: .8rem;
+  font-weight: 600;
+}
+
+/* EXPORTS */
+
+.btn-excel,
+.btn-pdf {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+
+  padding: .7rem 1rem;
+
+  border: none;
+  border-radius: 10px;
+
+  font-size: .85rem;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: .3s ease;
+}
+
+.btn-excel {
+  background: rgba(22, 163, 74, .12);
+  color: #16a34a;
+}
+
+.btn-excel:hover {
+  background: #16a34a;
+  color: #fff;
+}
+
+.btn-pdf {
+  background: rgba(220, 38, 38, .12);
+  color: #dc2626;
+}
+
+.btn-pdf:hover {
+  background: #dc2626;
+  color: #fff;
+}
+
+/* TABLE */
+
+.table-responsive {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table thead {
+  background: #f8fafc;
+}
+
+.table thead th {
+  padding: 1rem;
+
+  font-size: .8rem;
+  font-weight: 700;
+
+  text-transform: uppercase;
+
+  color: #64748b;
+
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.table tbody td {
+  padding: 1rem;
+
+  font-size: .9rem;
+  color: #334155;
+
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.table tbody tr {
+  transition: .2s ease;
+}
+
+.table tbody tr:hover {
+  background: #f8fafc;
+}
+
+.table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* GROUPE */
+
+.group-name {
+  font-weight: 600;
+  color: #0f172a;
+}
+
+/* MONTANTS */
+
+.text-success {
+  color: #16a34a;
+  font-weight: 700;
+}
+
+.text-danger {
+  color: #dc2626;
+  font-weight: 700;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-end {
+  text-align: right;
+}
+
+/* PROGRESS */
+
+.progress-wrapper {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+}
+
+.progress {
+  width: 120px;
+  height: 8px;
+
+  background: #e2e8f0;
+
+  border-radius: 999px;
+
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+
+  border-radius: 999px;
+
+  background: linear-gradient(
+    90deg,
+    #2563eb,
+    #3b82f6
+  );
+}
+
+.progress-wrapper span {
+  min-width: 45px;
+
+  color: #2563eb;
+
+  font-size: .85rem;
+  font-weight: 700;
+}
+
+/* EMPTY */
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  gap: .75rem;
+
+  padding: 2.5rem;
+
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+.empty-state i {
+  font-size: 2rem;
+  color: #cbd5e1;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 768px) {
+
+  .table-header {
+    flex-wrap: wrap;
+  }
+
+  .count {
+    margin-left: 0;
+  }
+
+  .btn-excel,
+  .btn-pdf {
+    padding: .65rem .85rem;
+  }
+
+  .table thead th,
+  .table tbody td {
+    padding: .75rem;
+    font-size: .85rem;
+  }
+
+  .progress {
+    width: 80px;
+  }
+}

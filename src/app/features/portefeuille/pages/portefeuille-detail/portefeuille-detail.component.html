@@ -1,9 +1,10 @@
 <app-page-header
-  title="Portefeuille"
-  description="Consultation du portefeuille adherent">
+  [title]="adherentName()"
+  description="Propriétaire du portefeuille">
 </app-page-header>
 
 <div class="wallet-header-actions">
+
 
   <button
     class="btn btn-danger"
@@ -35,7 +36,7 @@
 
   @if (isLoading()) {
 
-    <div class="loading-state">
+    <div class="loading-state spinner">
       Chargement...
     </div>
 
@@ -48,14 +49,14 @@
       [operations]="operations()">
     </app-portefeuille-stats>
 
-    <app-portefeuille-resume
+    <!-- <app-portefeuille-resume
       [portefeuille]="portefeuille()"
       [adherent]="
         operations().length
           ? operations()[0].adherent ?? null
           : null
       ">
-    </app-portefeuille-resume>
+    </app-portefeuille-resume> -->
 
     <app-portefeuille-operations
       [operations]="operations()">
@@ -98,6 +99,7 @@
 
 </div>
 
+
 @if(showWithdrawModal()) {
 
 <div class="modal-overlay">
@@ -129,26 +131,63 @@
           track operation.id
         ){
 
-          <div class="withdraw-item">
+         <div class="withdraw-item">
 
-            <div>
+              <div class="withdraw-content">
 
-              <h5>
-                {{ operation.montant | number }}
-                FCFA
-              </h5>
+                <h5>
+                  {{ operation.montant | formatMontant }}
+                  FCFA
+                </h5>
 
-              <p>
-                {{ operation.motif || 'Aucun motif' }}
-              </p>
+                <p>
+                  {{ operation.motif || 'Aucun motif' }}
+                </p>
 
-            </div>
+                <small>
 
-            <span class="badge bg-warning">
+                  {{ operation.moyen_operation }}
 
-              En attente
+                </small>
 
-            </span>
+              </div>
+
+              <span class="badge bg-warning">
+
+                En attente
+
+              </span>
+
+              <div class="withdraw-actions">
+
+                <button
+                  class="btn btn-danger"
+                  (click)="rejectWithdrawal(operation)">
+
+                  <i class="bi bi-x-circle"></i>
+
+                  Rejeter
+
+                </button>
+
+                <button
+                  class="btn btn-success"
+                  [disabled]="isActivating()"
+                  (click)="activateWithdrawal(operation)">
+
+                  @if(isActivating()) {
+
+                    <span class="spinner-border spinner-border-sm"></span>
+
+                  }
+
+                  <i class="bi bi-check-circle"></i>
+
+                  Valider
+
+                </button>
+
+              </div>
 
           </div>
 
@@ -184,6 +223,8 @@
         Retrait direct
       </h3>
 
+      
+
       <button title="Fermer"
         class="close-btn"
         (click)="closeDirectWithdrawModal()">
@@ -196,13 +237,13 @@
 
     <div class="modal-body">
 
-      <div class="alert alert-info">
-
-        Formulaire de retrait direct à implémenter.
+        <app-retrait-direct-form
+          [solde]="portefeuille()?.montant ?? 0"
+          (save)="createDirectWithdraw($event)"
+          (cancel)="closeDirectWithdrawModal()">
+        </app-retrait-direct-form>
 
       </div>
-
-    </div>
 
   </div>
 

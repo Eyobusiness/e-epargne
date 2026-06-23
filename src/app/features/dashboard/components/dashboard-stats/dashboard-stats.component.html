@@ -21,11 +21,61 @@
       <div class="stat-card stat-blue">
         <div class="icon"><i class="bi bi-wallet2"></i></div>
         <div class="content">
-          <span>Total dépôts</span>
+          <span>Total dépôts à Effectué</span>
           <h4>{{ totalDepot() | formatMontant }} FCFA</h4>
         </div>
       </div>
     </div>
+
+
+    <!--TATAL PAYE -->
+    <div class="col-xl-3 col-lg-4 col-md-6">
+
+  <div class="stat-card stat-green">
+
+    <div class="icon">
+      <i class="bi bi-check-circle-fill"></i>
+    </div>
+
+    <div class="content">
+
+      <span>Dépôts payés</span>
+
+      <h4>
+        {{ totalDapotPaye() | formatMontant }}
+        FCFA
+      </h4>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- TOTAL EN ATTENTE -->
+
+<div class="col-xl-3 col-lg-4 col-md-6">
+
+  <div class="stat-card stat-warning">
+
+    <div class="icon">
+      <i class="bi bi-hourglass-split"></i>
+    </div>
+
+    <div class="content">
+
+      <span>Dépôts en attente</span>
+
+      <h4>
+        {{ totalDepotEnAttente() | formatMontant }}
+        FCFA
+      </h4>
+
+    </div>
+
+  </div>
+
+</div>
 
     <!-- RETRAITS -->
     <div class="col-xl-3 col-lg-4 col-md-6">
@@ -34,6 +84,28 @@
         <div class="content">
           <span>Total retraits</span>
           <h4>{{ totalRetrait() | formatMontant }} FCFA</h4>
+        </div>
+      </div>
+    </div>
+
+    <!-- ANNULE -->
+    <div class="col-xl-3 col-lg-4 col-md-6">
+      <div class="stat-card stat-red">
+        <div class="icon"><i class="bi bi-cash-coin"></i></div>
+        <div class="content">
+          <span>Solde</span>
+          <h4>{{ Solde() | formatMontant }} FCFA</h4>
+        </div>
+      </div>
+    </div>
+
+    <!-- SOLDE -->
+    <div class="col-xl-3 col-lg-4 col-md-6">
+      <div class="stat-card stat-red">
+        <div class="icon"><i class="bi bi-x-circle-fill"></i></div>
+        <div class="content">
+          <span>Total Dépôts Annulé</span>
+          <h4>{{ totalDepotAnnule() | formatMontant }} FCFA</h4>
         </div>
       </div>
     </div>

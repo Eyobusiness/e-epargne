@@ -133,7 +133,12 @@
 
             <td>
 
-              <span class="type-badge">
+              <span
+                class="type-badge"
+                [class.deposit]="item.type_operation === 'DEPOT'"
+                [class.withdraw]="item.type_operation === 'RETRAIT'">
+
+                <span class="type-dot"></span>
 
                 {{ item.type_operation }}
 

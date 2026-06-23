@@ -1,0 +1,203 @@
+<div class="row g-3">
+
+  @if(isLoading()) {
+
+    @for(item of [1,2,3,4,5,6,7]; track item) {
+
+      <div class="col-xl-3 col-md-6">
+
+        <div class="stat-card skeleton-card"></div>
+
+      </div>
+
+    }
+
+  } @else {
+
+    <div class="col-xl-3 col-md-6">
+
+      <div class="stat-card stat-blue">
+
+        <div class="icon">
+          <i class="bi bi-wallet2"></i>
+        </div>
+
+        <div class="content">
+
+          <span>Dépôts prévus</span>
+
+          <h4>
+            {{ rapport()?.totalDepotPrevu | formatMontant }}
+            FCFA
+          </h4>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="col-xl-3 col-md-6">
+
+      <div class="stat-card stat-green">
+
+        <div class="icon">
+          <i class="bi bi-check-circle-fill"></i>
+        </div>
+
+        <div class="content">
+
+          <span>Dépôts payés</span>
+
+          <h4>
+            {{ rapport()?.totalDepotPaye | formatMontant }}
+            FCFA
+          </h4>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="col-xl-3 col-md-6">
+
+      <div class="stat-card stat-warning">
+
+        <div class="icon">
+          <i class="bi bi-hourglass-split"></i>
+        </div>
+
+        <div class="content">
+
+          <span>Dépôts en attente</span>
+
+          <h4>
+            {{ rapport()?.totalDepotEnAttente | formatMontant }}
+            FCFA
+          </h4>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="col-xl-3 col-md-6">
+
+      <div class="stat-card stat-danger">
+
+        <div class="icon">
+          <i class="bi bi-x-circle-fill"></i>
+        </div>
+
+        <div class="content">
+
+          <span>Dépôts annulés</span>
+
+          <h4>
+            {{ rapport()?.totalDepotAnnule | formatMontant }}
+            FCFA
+          </h4>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="col-xl-3 col-md-6">
+
+      <div class="stat-card stat-red">
+
+        <div class="icon">
+          <i class="bi bi-cash-stack"></i>
+        </div>
+
+        <div class="content">
+
+          <span>Total retraits</span>
+
+          <h4>
+            {{ rapport()?.totalRetrait | formatMontant }}
+            FCFA
+          </h4>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="col-xl-3 col-md-6">
+
+      <div class="stat-card stat-orange">
+
+        <div class="icon">
+          <i class="bi bi-receipt"></i>
+        </div>
+
+        <div class="content">
+
+          <span>Total dépenses</span>
+
+          <h4>
+            {{ rapport()?.totalDepense | formatMontant }}
+            FCFA
+          </h4>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="col-xl-3 col-md-6">
+
+      <div class="stat-card stat-purple">
+
+        <div class="icon">
+          <i class="bi bi-percent"></i>
+        </div>
+
+        <div class="content">
+
+          <span>Commission</span>
+
+          <h4>
+            {{ rapport()?.totalCommission | formatMontant }}
+            FCFA
+          </h4>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="col-xl-3 col-md-6">
+
+      <div class="stat-card stat-dark">
+
+        <div class="icon">
+          <i class="bi bi-bank"></i>
+        </div>
+
+        <div class="content">
+
+          <span>Solde disponible</span>
+
+          <h4>
+            {{ rapport()?.soldeDisponible | formatMontant }}
+            FCFA
+          </h4>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  }
+
+</div>

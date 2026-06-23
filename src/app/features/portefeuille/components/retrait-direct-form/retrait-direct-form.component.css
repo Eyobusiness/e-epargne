@@ -1,0 +1,218 @@
+.withdraw-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* SOLDE */
+
+.wallet-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 1rem 1.25rem;
+
+  background: linear-gradient(
+    135deg,
+    #eff6ff,
+    #dbeafe
+  );
+
+  border: 1px solid #bfdbfe;
+  border-radius: 16px;
+}
+
+.wallet-info span {
+  color: #475569;
+  font-size: .9rem;
+  font-weight: 500;
+}
+
+.wallet-info strong {
+  color: #2563eb;
+  font-size: 1.35rem;
+  font-weight: 700;
+}
+
+/* CHAMPS */
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+}
+
+.form-group label {
+  color: #334155;
+  font-size: .9rem;
+  font-weight: 600;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+
+  padding: .85rem 1rem;
+
+  border: 1px solid #dbe2ea;
+  border-radius: 12px;
+
+  background: #fff;
+
+  font-size: .95rem;
+  color: #0f172a;
+
+  transition: all .25s ease;
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+
+  border-color: #2563eb;
+
+  box-shadow:
+    0 0 0 4px rgba(37, 99, 235, .08);
+}
+
+/* ERREUR */
+
+.form-group input.ng-invalid.ng-touched,
+.form-group select.ng-invalid.ng-touched,
+.form-group textarea.ng-invalid.ng-touched {
+  border-color: #ef4444;
+}
+
+/* ACTIONS */
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: .75rem;
+
+  margin-top: .5rem;
+
+  padding-top: 1rem;
+
+  border-top: 1px solid #e2e8f0;
+}
+
+/* BTN ANNULER */
+
+.btn-cancel {
+  border: none;
+
+  padding: .85rem 1.2rem;
+
+  border-radius: 12px;
+
+  background: #f1f5f9;
+  color: #475569;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: .2s ease;
+}
+
+.btn-cancel:hover {
+  background: #e2e8f0;
+}
+
+/* BTN VALIDER */
+
+.btn-save {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+
+  min-width: 180px;
+
+  border: none;
+
+ 
+
+  border-radius: 12px;
+
+  background: linear-gradient(
+    135deg,
+    #2563eb,
+    #1d4ed8
+  );
+
+  color: #fff;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: all .25s ease;
+}
+
+.btn-save:hover {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 10px 25px rgba(37, 99, 235, .25);
+}
+
+.btn-save:disabled {
+  opacity: .7;
+  cursor: not-allowed;
+}
+
+/* SPINNER */
+
+.spinner {
+  position: relative;
+}
+
+.spinner.loading::before {
+  content: '';
+
+  width: 16px;
+  height: 16px;
+
+  border: 2px solid rgba(255,255,255,.3);
+  border-top-color: #fff;
+
+  border-radius: 50%;
+
+  animation: spin .8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 768px) {
+
+  .wallet-info {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: .5rem;
+  }
+
+  .actions {
+    flex-direction: column-reverse;
+  }
+
+  .btn-cancel,
+  .btn-save {
+    width: 100%;
+  }
+}

@@ -66,10 +66,10 @@ onReject(item: Operation): void {
 
   getMoyenLabel(moyen: string): string {
     switch (moyen) {
-      case 'ORANGE_MONEY':
+      case 'ORANGE MONEY':
         return 'Orange Money';
 
-      case 'MTN_MONEY':
+      case 'MTN  MONEY':
         return 'MTN Money';
 
       case 'WAVE':

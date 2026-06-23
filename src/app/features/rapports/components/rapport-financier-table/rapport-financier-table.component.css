@@ -1,0 +1,313 @@
+.table-card {
+  background: #fff;
+  border-radius: 18px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 20px rgba(15, 23, 42, 0.08);
+  overflow: hidden;
+}
+
+/* HEADER */
+
+.table-header {
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.table-header h3 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+/* TOOLBAR */
+
+.table-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+
+  padding: 1rem 1.5rem;
+
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.search-box {
+  position: relative;
+  width: 100%;
+  max-width: 350px;
+}
+
+.search-box i {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+
+  transform: translateY(-50%);
+
+  color: #94a3b8;
+}
+
+.search-box input {
+  width: 100%;
+
+  padding: 0.75rem 1rem 0.75rem 2.6rem;
+
+  border: 1px solid #dbe2ea;
+  border-radius: 12px;
+
+  outline: none;
+
+  font-size: 0.9rem;
+
+  transition: 0.3s;
+}
+
+.search-box input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+}
+
+.count {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #64748b;
+  white-space: nowrap;
+}
+
+/* TABLE */
+
+.table-responsive {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table thead {
+  background: #f8fafc;
+}
+
+.table thead th {
+  padding: 1rem;
+
+  text-align: left;
+
+  font-size: 0.8rem;
+  font-weight: 700;
+
+  color: #64748b;
+  text-transform: uppercase;
+
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.table tbody td {
+  padding: 1rem;
+
+  font-size: 0.9rem;
+  color: #334155;
+
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.table tbody tr {
+  transition: 0.2s ease;
+}
+
+.table tbody tr:hover {
+  background: #f8fafc;
+}
+
+.table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* BADGES */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0.35rem 0.85rem;
+
+  border-radius: 999px;
+
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.badge.success {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.badge.warning {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+.badge.danger {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+/* EMPTY */
+
+.empty-state {
+  text-align: center;
+  padding: 2rem !important;
+
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+/* PAGINATION */
+
+.pagination-container {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+
+  padding: 1rem 1.5rem;
+
+  border-top: 1px solid #e2e8f0;
+}
+
+.page-info {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #64748b;
+}
+
+.page-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 8px;
+
+  padding: 0.75rem 1rem;
+
+  border: none;
+  border-radius: 10px;
+
+  background: #2563eb;
+  color: #fff;
+
+  font-size: 0.85rem;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: 0.3s;
+}
+
+.page-btn:hover:not(:disabled) {
+  background: #1d4ed8;
+}
+
+.page-btn:disabled {
+  background: #cbd5e1;
+  cursor: not-allowed;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 768px) {
+
+  .table-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .search-box {
+    max-width: 100%;
+  }
+
+  .count {
+    text-align: center;
+  }
+
+  .pagination-container {
+    justify-content: end;
+  }
+
+  .table thead th,
+  .table tbody td {
+    padding: 0.75rem;
+    font-size: 0.85rem;
+  }
+}
+.table-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.header-title {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.header-title h3 {
+  margin: 0;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.filter-date {
+  height: 40px;
+  border: 1px solid #dbe3ef;
+  border-radius: 10px;
+  padding: 0 12px;
+}
+
+.btn-filter,
+.btn-reset,
+.btn-excel,
+.btn-pdf {
+  height: 40px;
+  border: none;
+  border-radius: 10px;
+  padding: 0 14px;
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  font-weight: 600;
+}
+
+.btn-filter {
+  background: #2563eb;
+  color: white;
+}
+
+.btn-reset {
+  background: #64748b;
+  color: white;
+}
+
+.btn-excel {
+  background: #16a34a;
+  color: white;
+}
+
+.btn-pdf {
+  background: #dc2626;
+  color: white;
+}

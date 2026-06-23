@@ -1,0 +1,99 @@
+<form
+  [formGroup]="form"
+  (ngSubmit)="submit()"
+  class="withdraw-form">
+
+  <div class="wallet-info">
+
+    <span>Solde disponible</span>
+
+    <strong>
+
+      {{ solde() | number }}
+
+      FCFA
+
+    </strong>
+
+  </div>
+
+  <div class="form-group">
+
+    <label for="montant">
+      Montant à retirer
+    </label>
+
+    <input id="montant"
+      type="number"
+      formControlName="montant">
+
+  </div>
+
+  <div class="form-group">
+
+    <label for="moyen_p">
+      Moyen de retrait
+    </label>
+
+    <select id="moyen_p"
+      formControlName="moyen_operation">
+
+      <option value="CASH">
+        Espèces
+      </option>
+
+      <option value="WAVE">
+        Wave
+      </option>
+
+      <option value="ORANGE MONEY">
+        Orange Money
+      </option>
+
+      <option value="MTN MONEY">
+        MTN Money
+      </option>
+
+      <option value="MOOV MONEY">
+        Moov Money
+      </option>
+
+    </select>
+
+  </div>
+
+  <div class="form-group">
+
+    <label for="motif">
+      Motif
+    </label>
+
+    <textarea id="motif"
+      rows="3"
+      formControlName="motif">
+    </textarea>
+
+  </div>
+
+  <div class="actions">
+
+    <button
+      type="button"
+      class="btn-cancel"
+      (click)="cancel.emit()">
+
+      Annuler
+
+    </button>
+
+    <button
+      type="submit"
+      class=" btn btn-save spinner">
+
+      Valider
+
+    </button>
+
+  </div>
+
+</form>

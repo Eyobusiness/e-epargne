@@ -1,0 +1,84 @@
+<div class="rapport-page">
+
+  <app-page-header
+    title="Rapport Adhérents"
+    description="Analyse des adhérents, groupes et classement">
+  </app-page-header>
+
+  <app-rapport-cotisation-stats
+  [stats]="stats()">
+</app-rapport-cotisation-stats>
+
+    <app-rapport-export
+      (exportPdf)="exportPdf()"
+      (exportExcel)="exportExcel()">
+    </app-rapport-export>
+
+  <app-rapport-filter
+    [filter]="filter()"
+    (apply)="onFilter($event)"
+    (reset)="resetFilters()">
+  </app-rapport-filter>
+
+  <div class="tabs-card">
+
+    <button
+      class="tab-btn"
+      [class.active]="activeTab() === 'adherents'"
+      (click)="setTab('adherents')">
+
+      Adhérents
+
+    </button>
+
+    <button
+      class="tab-btn"
+      [class.active]="activeTab() === 'groupes'"
+      (click)="setTab('groupes')">
+
+      Groupes
+
+    </button>
+
+    <button
+      class="tab-btn"
+      [class.active]="activeTab() === 'classement'"
+      (click)="setTab('classement')">
+
+      Classement
+
+    </button>
+
+  </div>
+
+  @if(activeTab() === 'adherents') {
+
+    <app-rapport-adherent-table
+      [items]="adherents()"
+      (exportExcel)="exportExcel()"
+      (exportPdf)="exportPdf()">
+    </app-rapport-adherent-table>
+
+  }
+
+  @if(activeTab() === 'groupes') {
+
+    <app-rapport-groupe-table
+      [items]="groupes()"
+      (exportExcel)="exportExcel()"
+      (exportPdf)="exportPdf()">
+    </app-rapport-groupe-table>
+
+  }
+
+  @if(activeTab() === 'classement') {
+
+    <app-classement-groupes
+      [items]="classement()"
+      (exportExcel)="exportExcel()"
+      (exportPdf)="exportPdf()">
+    </app-classement-groupes>
+
+  }
+
+</div>

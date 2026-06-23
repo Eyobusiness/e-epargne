@@ -106,7 +106,7 @@
 
               {{
                 dashboard()?.totalDepot
-                  | number
+                  | formatMontant
               }}
 
               FCFA
@@ -125,7 +125,7 @@
 
               {{
                 dashboard()?.totalRetrait
-                  | number
+                  | formatMontant
               }}
 
               FCFA
@@ -144,7 +144,7 @@
 
               {{
                 dashboard()?.soldeCommission
-                  | number
+                  | formatMontant
               }}
 
               FCFA
@@ -238,7 +238,7 @@
 
             {{
               operation.montant
-                | number
+                | formatMontant
             }}
 
             FCFA
@@ -251,7 +251,7 @@
 
           {{
             operation.date_operation
-              | date:'dd/MM/yyyy'
+              | changerDate:false
           }}
 
         </small>

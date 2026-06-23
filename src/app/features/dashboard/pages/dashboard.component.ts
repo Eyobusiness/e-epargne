@@ -1,69 +1,138 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+    import { Component, OnInit, inject, signal } from '@angular/core';
 
-import { CommonModule } from '@angular/common';
+    import { CommonModule } from '@angular/common';
 
-import { DashboardService } from '../services/dashboard.service';
-import { DashboardStats } from '../models/dashboard.model';
+    import { DashboardService } from '../services/dashboard.service';
+    import { DashboardStats } from '../models/dashboard.model';
 
-import { DashboardStatsComponent } from '../components/dashboard-stats/dashboard-stats.component';
-import { DashboardChartComponent } from '../components/dashboard-chart/dashboard-chart.component';
-import { OperationService } from '../../operations/services/operation.service';
+    import { DashboardStatsComponent } from '../components/dashboard-stats/dashboard-stats.component';
+    import { DashboardChartComponent } from '../components/dashboard-chart/dashboard-chart.component';
+    import { OperationService } from '../../operations/services/operation.service';
+    import { Operation } from'../../operations/models/operation.model';
+    import { FormatMontantPipe } from '../../../shared/pipes/pipe.component';
+    import { ChangerDatePipe } from '../../../shared/pipes/changer-date.pipe';
 
-@Component({
-  selector: 'app-dashboard',
-  standalone: true,
-  imports: [CommonModule, DashboardStatsComponent, DashboardChartComponent],
-  templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.css'],
-})
-export class DashboardComponent implements OnInit {
-  private readonly dashboardService = inject(DashboardService);
-  private readonly operationService = inject(OperationService);
 
-  readonly dashboard = signal<DashboardStats | null>(null);
-  readonly recentOperations = signal<any[]>([]);
 
-  readonly currentPeriod = new Intl.DateTimeFormat('fr-FR', {
-    month: 'long',
-    year: 'numeric',
-  }).format(new Date());
+    @Component({
+      selector: 'app-dashboard',
+      standalone: true,
+      imports: [CommonModule, DashboardStatsComponent, DashboardChartComponent, FormatMontantPipe, ChangerDatePipe],
+      templateUrl: './dashboard.component.html',
+      styleUrls: ['./dashboard.component.css'],
+    })
+    export class DashboardComponent implements OnInit {
+      private readonly dashboardService = inject(DashboardService);
+      private readonly operationService = inject(OperationService);
 
-  readonly isLoading = signal(false);
+      readonly dashboard = signal<DashboardStats | null>(null);
+      readonly recentOperations = signal<any[]>([]);
 
-  ngOnInit(): void {
-    this.loadStats();
+      readonly currentPeriod = new Intl.DateTimeFormat('fr-FR', {
+        month: 'long',
+        year: 'numeric',
+      }).format(new Date());
 
-    this.loadRecentOperations();
-  }
+      readonly isLoading = signal(false);
 
-  loadStats(): void {
-    this.isLoading.set(true);
+      ngOnInit(): void {
+        this.loadStats();
 
-    this.dashboardService.getStats().subscribe({
-      next: (response) => {
-        this.dashboard.set(response);
+        this.loadRecentOperations();
+      }
 
-        this.isLoading.set(false);
-      },
+      // loadStats(): void {
+      //   this.isLoading.set(true);
 
-      error: (error) => {
-        console.error(error);
+      //   this.dashboardService.getStats().subscribe({
+      //     next: (response) => {
+      //       this.dashboard.set(response);
 
-        this.isLoading.set(false);
-      },
-    });
-  }
+      //       this.isLoading.set(false);
+      //     },
 
-  loadRecentOperations(): void {
-    this.operationService
-      .getAll({
-        page: 1,
-        limit: 5,
-      })
-      .subscribe({
-        next: (response) => {
-          this.recentOperations.set(response?.data?.items ?? []);
-        },
-      });
-  }
-}
+      //     error: (error) => {
+      //       console.error(error);
+
+      //       this.isLoading.set(false);
+      //     },
+      //   });
+      // }
+
+      loadStats(): void {
+        this.isLoading.set(true);
+
+        this.dashboardService.getStats().subscribe({
+          next: (stats) => {
+            this.operationService
+              .getAll({
+                page: 1,
+                limit: 10000000,
+              })
+              .subscribe({
+                next: (response) => {
+                  const operations: Operation[] = response?.data?.items ?? [];
+
+                  const totalDepotPaye = operations
+                    .filter((o) => o.type_operation === 'DEPOT' && o.status === '200')
+                    .reduce((sum, o) => sum + o.montant, 0);
+
+                  const totalDepotEnAttente = operations
+                    .filter((o) => o.type_operation === 'DEPOT' && o.status === '100')
+                    .reduce((sum, o) => sum + o.montant, 0);
+
+                  const totalDepotAnnule = operations
+                    .filter((o) => o.type_operation === 'DEPOT' && o.status === '300')
+                    .reduce((sum, o) => sum + o.montant, 0);
+
+                  const totalRetrait = operations
+                    .filter((o) => o.type_operation === 'RETRAIT' && o.status === '200')
+                    .reduce((sum, o) => sum + o.montant, 0);
+
+                  const Solde = totalDepotPaye - totalRetrait;
+
+                  this.dashboard.set({
+                    ...stats,
+
+                    totalDepotPaye,
+                    totalDepotEnAttente,
+                    totalDepotAnnule,
+
+                    totalRetrait,
+                    Solde,
+                  });
+
+                  this.isLoading.set(false);
+                },
+
+                error: (error) => {
+                  console.error(error);
+
+                  this.dashboard.set(stats);
+
+                  this.isLoading.set(false);
+                },
+              });
+          },
+
+          error: (error) => {
+            console.error(error);
+
+            this.isLoading.set(false);
+          },
+        });
+      }
+
+      loadRecentOperations(): void {
+        this.operationService
+          .getAll({
+            page: 1,
+            limit: 5,
+          })
+          .subscribe({
+            next: (response) => {
+              this.recentOperations.set(response?.data?.items ?? []);
+            },
+          });
+      }
+    }

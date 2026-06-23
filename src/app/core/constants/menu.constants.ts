@@ -80,12 +80,12 @@ export const MENU_ITEMS: NavItem[] = [
       {
         label: 'Rapports financiers',
         icon: 'bi bi-pie-chart',
-        route: '/rapports/finances',
+        route: '/rapport-financiers',
       },
       {
-        label: 'Rapports cotisations',
+        label: 'Rapports Adhérents',
         icon: 'bi bi-file-earmark-bar-graph',
-        route: '/rapports/cotisations',
+        route: '/rapport-cotisations',
       },
     ],
   },

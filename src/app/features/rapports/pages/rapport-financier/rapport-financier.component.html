@@ -1,0 +1,33 @@
+<div class="rapport-page">
+
+
+  <app-page-header
+  title=" Rapport financier"
+   description="Analyse globale des mouvements financiers">
+  </app-page-header>
+
+
+
+  <app-rapport-financier-stats
+  [rapport]="rapport()">
+  </app-rapport-financier-stats>
+
+   <app-rapport-financier-table
+      [lignes]="rapport()?.lignes ?? []"
+      (applyFilter)="onFilter($event)"
+      (resetFilter)="resetFilters()"
+      (exportExcel)="exportExcel()"
+      (exportPdf)="exportPdf()">
+    </app-rapport-financier-table>
+
+  @if(isLoading()) {
+
+    <div class="loading-state spinner">
+
+      Chargement...
+
+    </div>
+
+  }
+
+</div>

@@ -118,7 +118,7 @@ export const routes: Routes = [
           import('./features/parametres/routes/parametres.routes').then((m) => m.PARAMETRES_ROUTES),
       },
 
-      //workflow routes 
+      //workflow routes
       {
         path: 'workflow',
         title: 'Workflows',
@@ -126,7 +126,7 @@ export const routes: Routes = [
           import('./features/workflow/routes/workflow.routes').then((m) => m.WORKFLOW_ROUTES),
       },
 
-      //change password routes 
+      //change password routes
       {
         path: 'auth',
         title: 'Changer le mot de passe',
@@ -134,11 +134,13 @@ export const routes: Routes = [
           import('./features/auth/routes/auth.routes').then((m) => m.CHANGE_PASSWORD_ROUTE),
       },
 
-
-
+      {
+        path: '',
+        loadChildren: () =>
+          import('./features/rapports/routes/rapports.routes').then((m) => m.RAPPORTS_ROUTES),
+      },
 
     ],
-
   },
 
   /* =====================================================

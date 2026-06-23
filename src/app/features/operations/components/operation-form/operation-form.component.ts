@@ -40,6 +40,7 @@ export class OperationFormComponent {
   readonly submitForm = output<Operation>();
 
   readonly cancel = output<void>();
+  
 
  readonly form = this.fb.nonNullable.group({
   description: [''],

@@ -1,0 +1,154 @@
+<div class="table-card">
+
+  <div class="table-header">
+
+    <h3>
+      Performance des groupes
+    </h3>
+
+
+    <span class="count">
+
+      {{ items().length }}
+
+      groupe(s)
+
+    </span>
+
+    <button title="Exporter en Excel"
+  class="btn-excel"
+  (click)="onExportExcel()">
+
+  <i class="bi bi-file-earmark-excel"></i>
+  Excel
+
+</button>
+
+<button title="Exporter en PDF"
+  class="btn-pdf"
+  (click)="onExportPdf()">
+
+  <i class="bi bi-file-earmark-pdf"></i>
+  PDF
+
+</button>
+
+  </div>
+
+  <div class="table-responsive">
+
+    <table class="table align-middle">
+
+      <thead>
+
+        <tr>
+
+          <th>Groupe</th>
+
+          <th class="text-center">Membres</th>
+
+          <th class="text-end">Prévu</th>
+
+          <th class="text-end">Payé</th>
+
+          <th class="text-end">Reste</th>
+
+          <th class="text-center">Taux</th>
+
+        </tr>
+
+      </thead>
+
+      <tbody>
+
+        @for(item of items(); track item.groupeId){
+
+          <tr>
+
+            <td>
+
+              <div class="group-name">
+
+                {{ item.groupe }}
+
+              </div>
+
+            </td>
+
+            <td class="text-center">
+
+              {{ item.nombreAdherents }}
+
+            </td>
+
+            <td class="text-end">
+
+              {{ item.totalPrevu | formatMontant }}
+
+            </td>
+
+            <td class="text-end text-success">
+
+              {{ item.totalCotise | formatMontant }}
+
+            </td>
+
+            <td class="text-end text-danger">
+
+              {{ item.resteACotiser | formatMontant }}
+
+            </td>
+
+            <td>
+
+              <div class="progress-wrapper">
+
+                <div class="progress">
+
+                  <div
+                    class="progress-bar"
+                    [style.width.%]="item.tauxRealisation">
+                  </div>
+
+                </div>
+
+                <span>
+
+                  {{ item.tauxRealisation | number:'1.0-0' }} %
+
+                </span>
+
+              </div>
+
+            </td>
+
+          </tr>
+
+        }
+
+        @if(!items().length){
+
+          <tr>
+
+            <td colspan="6">
+
+              <div class="empty-state">
+                <i class="bi bi-"></i>
+
+                Aucun groupe trouvé
+
+              </div>
+
+            </td>
+
+          </tr>
+
+        }
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+</div>

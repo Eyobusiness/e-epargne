@@ -15,7 +15,9 @@ export interface Operation {
 
   date_operation: string;
 
-  status: string;
+  status?: string;
+
+  montant_commission?: number; // futur
 
   type_operation: string;
 

@@ -1,0 +1,175 @@
+.stat-card {
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  height: 100%;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 4px 20px rgba(15, 23, 42, 0.08);
+  transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.12);
+}
+
+.stat-card .icon {
+  width: 72px;
+  height: 72px;
+  min-width: 72px;
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stat-card .icon i {
+  font-size: 2rem;
+}
+
+.content {
+  flex: 1;
+}
+
+.content span {
+  display: block;
+  font-size: .85rem;
+  color: #64748b;
+  margin-bottom: .35rem;
+  font-weight: 500;
+}
+
+.content h4 {
+  margin: 0;
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+/* BLEU */
+
+.stat-blue .icon {
+  background: rgba(59, 130, 246, .15);
+}
+
+.stat-blue .icon i {
+  color: #2563eb;
+}
+
+/* VERT */
+
+.stat-green .icon {
+  background: rgba(34, 197, 94, .15);
+}
+
+.stat-green .icon i {
+  color: #16a34a;
+}
+
+/* ORANGE */
+
+.stat-warning .icon {
+  background: rgba(245, 158, 11, .15);
+}
+
+.stat-warning .icon i {
+  color: #d97706;
+}
+
+/* ROUGE */
+
+.stat-danger .icon {
+  background: rgba(239, 68, 68, .15);
+}
+
+.stat-danger .icon i {
+  color: #dc2626;
+}
+
+/* ROUGE FONCÉ */
+
+.stat-red .icon {
+  background: rgba(220, 38, 38, .15);
+}
+
+.stat-red .icon i {
+  color: #b91c1c;
+}
+
+/* ORANGE FONCÉ */
+
+.stat-orange .icon {
+  background: rgba(249, 115, 22, .15);
+}
+
+.stat-orange .icon i {
+  color: #ea580c;
+}
+
+/* VIOLET */
+
+.stat-purple .icon {
+  background: rgba(168, 85, 247, .15);
+}
+
+.stat-purple .icon i {
+  color: #9333ea;
+}
+
+/* NOIR / SOLDE */
+
+.stat-dark .icon {
+  background: rgba(15, 23, 42, .10);
+}
+
+.stat-dark .icon i {
+  color: #0f172a;
+}
+
+/* SKELETON */
+
+.skeleton-card {
+  height: 120px;
+  border-radius: 18px;
+  background: linear-gradient(
+    90deg,
+    #f1f5f9 25%,
+    #e2e8f0 50%,
+    #f1f5f9 75%
+  );
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+  0% {
+    background-position: 200% 0;
+  }
+
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .stat-card {
+    padding: 1rem;
+  }
+
+  .stat-card .icon {
+    width: 60px;
+    height: 60px;
+    min-width: 60px;
+  }
+
+  .stat-card .icon i {
+    font-size: 1.6rem;
+  }
+
+  .content h4 {
+    font-size: 1.1rem;
+  }
+}

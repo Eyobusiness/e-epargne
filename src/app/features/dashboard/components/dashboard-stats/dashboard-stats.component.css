@@ -1,133 +1,265 @@
-/* dashboard-stats.component.css */
-/* Charte : #1A345C · #7CA1C4 · #E94E1B */
-
-:host {
-  --navy:         #1A345C;
-  --navy-light:   #e8edf5;
-  --navy-mid:     #c5d3e8;
-  --sky:          #7CA1C4;
-  --sky-light:    #eaf1f8;
-  --orange:       #E94E1B;
-  --orange-light: #fdeee9;
-  --green:        #1B6B3A;
-  --green-light:  #e8f5ee;
-  --red:          #C0392B;
-  --red-light:    #fdf0ee;
-  --purple:       #6D3B8E;
-  --purple-light: #f3edf8;
-  --dark:         #2C3E50;
-  --dark-light:   #eaecee;
-  --cyan:         #0E7490;
-  --cyan-light:   #e0f5f9;
-  --text-muted:   #6b7280;
-  --border:       #e5e7eb;
-  --shadow-card:  0 1px 3px rgba(26,52,92,0.07), 0 4px 12px rgba(26,52,92,0.05);
-  --radius-card:  16px;
-  --radius-icon:  12px;
+.row {
+  margin-top: 0.5rem;
 }
 
-/* ─── Stat Card base ─── */
+/* CARD */
+
 .stat-card {
-  background: #fff;
-  border-radius: var(--radius-card);
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow-card);
-  padding: 20px 22px;
+  position: relative;
   display: flex;
   align-items: center;
-  gap: 16px;
-  position: relative;
-  overflow: hidden;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-  height: 100%;
-}
+  gap: 18px;
 
-.stat-card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0;
-  width: 3px;
-  height: 100%;
-  border-radius: 16px 0 0 16px;
+  height: 120px;
+
+  background: #ffffff;
+  border-radius: 18px;
+
+  padding: 1.25rem;
+
+  overflow: hidden;
+
+  box-shadow:
+    0 4px 20px rgba(0,0,0,0.06);
+
+  transition: all .25s ease;
 }
 
 .stat-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(26,52,92,0.11);
+  transform: translateY(-4px);
+
+  box-shadow:
+    0 10px 30px rgba(0,0,0,0.12);
 }
 
-.stat-card:hover .icon {
-  transform: scale(1.08);
+/* BARRE COULEUR */
+
+.stat-card::before {
+  content: '';
+
+  position: absolute;
+
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 5px;
 }
 
-/* ─── Icône ─── */
-.stat-card .icon {
-  width: 48px;
-  height: 48px;
-  min-width: 48px;
-  border-radius: var(--radius-icon);
+/* ICON */
+
+.icon {
+  width: 64px;
+  height: 64px;
+
+  min-width: 64px;
+
+  border-radius: 16px;
+
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 22px;
-  transition: transform 0.15s;
-  flex-shrink: 0;
+
+  font-size: 1.8rem;
 }
 
-/* ─── Contenu ─── */
-.stat-card .content {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  min-width: 0;
+.content {
+  flex: 1;
 }
 
-.stat-card .content span {
-  font-size: 12px;
-  font-weight: 400;
-  color: var(--text-muted);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
+.content span {
+  display: block;
 
-.stat-card .content h4 {
-  font-size: 20px;
+  color: #64748b;
+
+  font-size: 0.85rem;
+
   font-weight: 600;
-  color: var(--navy);
-  line-height: 1.2;
-  margin: 0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+
+  margin-bottom: 6px;
+
+  text-transform: uppercase;
+
+  letter-spacing: 0.4px;
 }
 
-/* ─── Variantes ─── */
+.content h4 {
+  margin: 0;
 
-/* Bleu — dépôts */
-.stat-blue::before       { background: var(--sky); }
-.stat-blue .icon         { background: var(--sky-light); color: var(--sky); }
+  color: #0f172a;
 
-/* Rouge — retraits */
-.stat-red::before        { background: var(--red); }
-.stat-red .icon          { background: var(--red-light); color: var(--red); }
+  font-size: 1.45rem;
 
-/* Vert — actifs */
-.stat-green::before      { background: var(--green); }
-.stat-green .icon        { background: var(--green-light); color: var(--green); }
+  font-weight: 800;
+}
 
-/* Orange — inactifs */
-.stat-orange::before     { background: var(--orange); }
-.stat-orange .icon       { background: var(--orange-light); color: var(--orange); }
+/* BLEU */
 
-/* Violet — commission retrait */
-.stat-purple::before     { background: var(--purple); }
-.stat-purple .icon       { background: var(--purple-light); color: var(--purple); }
+.stat-blue::before {
+  background: #2563eb;
+}
 
-/* Dark — solde commission */
-.stat-dark::before       { background: var(--dark); }
-.stat-dark .icon         { background: var(--dark-light); color: var(--dark); }
+.stat-blue .icon {
+  background: rgba(37,99,235,.12);
+  color: #2563eb;
+}
 
-/* Cyan — taux */
-.stat-cyan::before       { background: var(--cyan); }
-.stat-cyan .icon         { background: var(--cyan-light); color: var(--cyan); }
+/* VERT */
+
+.stat-green::before {
+  background: #16a34a;
+}
+
+.stat-green .icon {
+  background: rgba(22,163,74,.12);
+  color: #16a34a;
+}
+
+/* ORANGE */
+
+.stat-orange::before {
+  background: #f97316;
+}
+
+.stat-orange .icon {
+  background: rgba(249,115,22,.12);
+  color: #f97316;
+}
+
+/* WARNING */
+
+.stat-warning::before {
+  background: #eab308;
+}
+
+.stat-warning .icon {
+  background: rgba(234,179,8,.15);
+  color: #ca8a04;
+}
+
+/* ROUGE */
+
+.stat-red::before {
+  background: #dc2626;
+}
+
+.stat-red .icon {
+  background: rgba(220,38,38,.12);
+  color: #dc2626;
+}
+
+/* VIOLET */
+
+.stat-purple::before {
+  background: #9333ea;
+}
+
+.stat-purple .icon {
+  background: rgba(147,51,234,.12);
+  color: #9333ea;
+}
+
+/* NOIR */
+
+.stat-dark::before {
+  background: #1e293b;
+}
+
+.stat-dark .icon {
+  background: rgba(30,41,59,.12);
+  color: #1e293b;
+}
+
+/* CYAN */
+
+.stat-cyan::before {
+  background: #06b6d4;
+}
+
+.stat-cyan .icon {
+  background: rgba(6,182,212,.12);
+  color: #06b6d4;
+}
+
+/* SKELETON */
+
+.stat-skeleton {
+  background: #fff;
+}
+
+.skeleton-icon {
+  width: 64px;
+  height: 64px;
+
+  border-radius: 16px;
+
+  background: linear-gradient(
+    90deg,
+    #f1f5f9,
+    #e2e8f0,
+    #f1f5f9
+  );
+
+  animation: pulse 1.5s infinite;
+}
+
+.skeleton-text {
+  border-radius: 8px;
+
+  background: linear-gradient(
+    90deg,
+    #f1f5f9,
+    #e2e8f0,
+    #f1f5f9
+  );
+
+  animation: pulse 1.5s infinite;
+}
+
+.skeleton-label {
+  width: 120px;
+  height: 14px;
+
+  margin-bottom: 10px;
+}
+
+.skeleton-value {
+  width: 180px;
+  height: 24px;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: .6;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: .6;
+  }
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 768px) {
+
+  .stat-card {
+    height: auto;
+    min-height: 110px;
+  }
+
+  .content h4 {
+    font-size: 1.15rem;
+  }
+
+  .icon {
+    width: 55px;
+    height: 55px;
+    min-width: 55px;
+
+    font-size: 1.4rem;
+  }
+}

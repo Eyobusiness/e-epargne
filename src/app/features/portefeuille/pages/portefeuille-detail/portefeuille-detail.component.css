@@ -96,7 +96,7 @@
 }
 
 .withdraw-modal {
-  width: 850px;
+  width: 500px;
   max-width: 95vw;
 
   max-height: 90vh;
@@ -242,4 +242,58 @@
   .pagination-container {
     flex-wrap: wrap;
   }
+}
+
+
+.withdraw-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+
+  padding: 1rem;
+
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+
+  margin-bottom: 1rem;
+}
+
+.withdraw-content {
+  flex: 1;
+}
+
+.withdraw-content h5 {
+  margin: 0;
+  color: #0f172a;
+  font-weight: 700;
+}
+
+.withdraw-content p {
+  margin: .3rem 0;
+  color: #64748b;
+}
+
+.withdraw-content small {
+  color: #94a3b8;
+}
+
+.withdraw-actions {
+  display: flex;
+  gap: .75rem;
+}
+
+.badge.bg-warning {
+  background: #fef3c7;
+  color: #b45309;
+  padding: .5rem .8rem;
+  border-radius: 999px;
+  font-weight: 600;
+}
+
+.wallet-header-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-bottom: 1rem;
 }

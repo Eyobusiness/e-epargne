@@ -12,6 +12,8 @@ export class FormatMontantPipe implements PipeTransform {
     return new Intl.NumberFormat('fr-FR', {
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
-    }).format(value).replace(/\s/g, '.');
+    })
+      .format(value)
+      .replace(/\s/g, '.');
   }
 }
