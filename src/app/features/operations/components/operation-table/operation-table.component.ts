@@ -35,7 +35,7 @@ onReject(item: Operation): void {
     return item.id ?? index;
   }
 
-  getStatusLabel(status: string): string {
+  getStatusLabel(status?: string): string {
     switch (status) {
       case '100':
         return 'En attente';

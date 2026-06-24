@@ -139,28 +139,50 @@
    BADGE STATUS
 ======================= */
 
-.status-badge {
-  display: inline-block;
-  padding: 6px 14px;
-  border-radius: 30px;
-  font-size: 0.8rem;
+.type-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+
+  padding: .45rem .85rem;
+
+  border-radius: 999px;
+
+  font-size: .8rem;
   font-weight: 600;
 }
 
-.status-badge.valid {
-  background: #dcfce7;
+.type-dot {
+  width: 8px;
+  height: 8px;
+
+  border-radius: 50%;
+}
+
+/* DEPOT */
+
+.type-badge.deposit {
+  background: rgba(34, 197, 94, .12);
   color: #15803d;
 }
 
-.status-badge.pending {
-  background: #fef3c7;
-  color: #b45309;
+.type-badge.deposit .type-dot {
+  background: #22c55e;
+  box-shadow: 0 0 8px rgba(34, 197, 94, .5);
 }
 
-.status-badge.cancel {
-  background: #fee2e2;
+/* RETRAIT */
+
+.type-badge.withdraw {
+  background: rgba(239, 68, 68, .12);
   color: #dc2626;
 }
+
+.type-badge.withdraw .type-dot {
+  background: #ef4444;
+  box-shadow: 0 0 8px rgba(239, 68, 68, .5);
+}
+
 
 /* =======================
    PAGINATION
@@ -210,4 +232,74 @@
   .btn-outline-primary {
     min-width: auto;
   }
+}
+
+/* STATUS */
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+
+  padding: .45rem .9rem;
+
+  border-radius: 999px;
+
+  font-size: .8rem;
+  font-weight: 600;
+
+  white-space: nowrap;
+}
+
+/* Petit indicateur */
+
+.status-badge::before {
+  content: '';
+
+  width: 8px;
+  height: 8px;
+
+  border-radius: 50%;
+}
+
+/* VALIDÉ */
+
+.status-badge.valid {
+  background: rgba(34, 197, 94, .12);
+  color: #15803d;
+}
+
+.status-badge.valid::before {
+  background: #22c55e;
+
+  box-shadow:
+    0 0 10px rgba(34, 197, 94, .5);
+}
+
+/* EN ATTENTE */
+
+.status-badge.pending {
+  background: rgba(245, 158, 11, .12);
+  color: #b45309;
+}
+
+.status-badge.pending::before {
+  background: #f59e0b;
+
+  box-shadow:
+    0 0 10px rgba(245, 158, 11, .5);
+}
+
+/* ANNULÉ */
+
+.status-badge.cancel {
+  background: rgba(239, 68, 68, .12);
+  color: #dc2626;
+}
+
+.status-badge.cancel::before {
+  background: #ef4444;
+
+  box-shadow:
+    0 0 10px rgba(239, 68, 68, .5);
 }

@@ -1,3 +1,16 @@
+
+
+<div class="detail-top">
+      <button
+        class="btn btn-back"
+        (click)="goToAdherent()">
+        <i class="bi bi-arrow-left"></i>
+
+        Retour à la liste
+
+</button>
+    </div>
+
 <app-page-header
   [title]="adherentName()"
   description="Propriétaire du portefeuille">
@@ -36,7 +49,7 @@
 
   @if (isLoading()) {
 
-    <div class="loading-state spinner">
+    <div class="loading-state">
       Chargement...
     </div>
 
@@ -49,15 +62,7 @@
       [operations]="operations()">
     </app-portefeuille-stats>
 
-    <!-- <app-portefeuille-resume
-      [portefeuille]="portefeuille()"
-      [adherent]="
-        operations().length
-          ? operations()[0].adherent ?? null
-          : null
-      ">
-    </app-portefeuille-resume> -->
-
+   
     <app-portefeuille-operations
       [operations]="operations()">
     </app-portefeuille-operations>

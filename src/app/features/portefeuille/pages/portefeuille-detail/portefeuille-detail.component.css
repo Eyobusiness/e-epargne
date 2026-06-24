@@ -297,3 +297,36 @@
   gap: 1rem;
   margin-bottom: 1rem;
 }
+
+.detail-top {
+  margin-bottom: 20px;
+}
+
+.btn-back {
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  background: white;
+  color: #334155;
+
+  padding: 10px 16px;
+  border-radius: 12px;
+
+  box-shadow: 0 4px 12px rgba(0,0,0,.05);
+}
+.btn-back:hover{
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  background: #334155;
+  color: white;
+
+  padding: 10px 16px;
+  border-radius: 12px;
+
+  box-shadow: 0 4px 12px rgba(0,0,0,.05);
+}

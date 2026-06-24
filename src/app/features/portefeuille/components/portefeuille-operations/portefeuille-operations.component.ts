@@ -3,11 +3,12 @@ import { Component, computed, input, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { Operation } from '../../../operations/models/operation.model';
+import { FormatMontantPipe } from '@shared/pipes/pipe.component';
 
 @Component({
   selector: 'app-portefeuille-operations',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, FormatMontantPipe],
   templateUrl: './portefeuille-operations.component.html',
   styleUrls: ['./portefeuille-operations.component.css'],
 })
@@ -72,7 +73,7 @@ export class PortefeuilleOperationsComponent {
     return item.id ?? index.toString();
   }
 
-  getStatusLabel(status: string): string {
+  getStatusLabel(status?: string): string {
     switch (status) {
       case '200':
         return 'Payé';
@@ -84,7 +85,7 @@ export class PortefeuilleOperationsComponent {
         return 'Annulé';
 
       default:
-        return status;
+        return '--';
     }
   }
 }

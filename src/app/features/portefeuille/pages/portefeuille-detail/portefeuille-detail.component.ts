@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit, inject, signal, computed } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { finalize } from 'rxjs';
+import { Router } from '@angular/router';
 
 import { Portefeuille } from '../../models/portefeuille.model';
 import { PortefeuilleService } from '../../services/portefeuille.service';
@@ -37,6 +38,8 @@ import {RetraitDirectFormComponent } from'../../components/retrait-direct-form/r
 })
 export class PortefeuilleDetailComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
+
+  private readonly router = inject(Router);
 
   private readonly portefeuilleService = inject(PortefeuilleService);
 
@@ -118,50 +121,29 @@ export class PortefeuilleDetailComponent implements OnInit {
       });
   }
 
+  rejectWithdrawal(operation: Operation): void {
+    if (!operation.id) {
+      return;
+    }
 
-  rejectWithdrawal(
-  operation: Operation
-): void {
+    this.operationService
+      .reject(operation.id, {
+        motif: 'Retrait rejeté',
 
-  if (!operation.id) {
-    return;
+        description: "Retrait rejeté par l'administrateur",
+      })
+      .subscribe({
+        next: () => {
+          const adherentId = this.route.snapshot.paramMap.get('id');
+
+          if (adherentId) {
+            this.loadPortefeuille(adherentId);
+
+            this.loadOperations(adherentId);
+          }
+        },
+      });
   }
-
-  this.operationService
-    .reject(
-      operation.id,
-      {
-        motif:
-          'Retrait rejeté',
-
-        description:
-          'Retrait rejeté par l\'administrateur'
-      }
-    )
-    .subscribe({
-
-      next: () => {
-
-        const adherentId =
-          this.route.snapshot.paramMap.get('id');
-
-        if (adherentId) {
-
-          this.loadPortefeuille(
-            adherentId
-          );
-
-          this.loadOperations(
-            adherentId
-          );
-
-        }
-
-      }
-
-    });
-
-}
 
   openPendingWithdrawals(): void {
     this.showWithdrawModal.set(true);
@@ -318,5 +300,15 @@ export class PortefeuilleDetailComponent implements OnInit {
     if (adherentId) {
       this.loadOperations(adherentId);
     }
+  }
+
+  goToAdherent(): void {
+    const adherentId = this.portefeuille()?.adherent_id;
+
+    if (!adherentId) {
+      return;
+    }
+
+    this.router.navigate(['/adherents']);
   }
 }
