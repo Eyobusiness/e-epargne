@@ -1,31 +1,100 @@
-import { CommonModule } from '@angular/common';
-import { Component, input, output } from '@angular/core';
+import { Component, computed, input, output, signal } from '@angular/core';
 
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+
+import { Workflow } from '../../models/workflow.model';
+import { WorkflowState } from '../../models/workflow-state.model';
 import { WorkflowAction } from '../../models/workflow-action.model';
 
 @Component({
   selector: 'app-workflow-actions',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './workflow-actions.component.html',
   styleUrls: ['./workflow-actions.component.css'],
 })
 export class WorkflowActionsComponent {
+  readonly workflows = input<Workflow[]>([]);
+
+  readonly states = input<WorkflowState[]>([]);
+
   readonly actions = input<WorkflowAction[]>([]);
+
+  readonly create = output<void>();
 
   readonly edit = output<WorkflowAction>();
 
-  readonly delete = output<WorkflowAction>();
+  readonly remove = output<string>();
 
-  onEdit(item: WorkflowAction): void {
-    this.edit.emit(item);
+  readonly search = signal('');
+
+  readonly currentPage = signal(1);
+
+  readonly pageSize = 10;
+
+  onSearch(value: string): void {
+    this.search.set(value);
+
+    this.currentPage.set(1);
   }
 
-  onDelete(item: WorkflowAction): void {
-    this.delete.emit(item);
+  readonly filteredItems = computed(() => {
+    const term = this.search().trim().toLowerCase();
+
+    const data = this.actions().map((action) => ({
+      ...action,
+
+      workflowLabel:
+        this.workflows().find((workflow) => workflow.id === action.idWorkflow)?.label ?? '-',
+
+      stateLabel: this.states().find((state) => state.id === action.stepId)?.name ?? '-',
+
+      profileLabel: action.profile?.name ?? '-',
+    }));
+
+    if (!term) {
+      return data;
+    }
+
+    return data.filter(
+      (item) =>
+        item.workflowLabel.toLowerCase().includes(term) ||
+        item.stateLabel.toLowerCase().includes(term) ||
+        item.profileLabel.toLowerCase().includes(term) ||
+        item.endpoint?.toLowerCase().includes(term),
+    );
+  });
+
+  readonly totalPages = computed(() =>
+    Math.max(1, Math.ceil(this.filteredItems().length / this.pageSize)),
+  );
+
+  readonly paginatedItems = computed(() => {
+    const start = (this.currentPage() - 1) * this.pageSize;
+
+    const end = start + this.pageSize;
+
+    return this.filteredItems().slice(start, end);
+  });
+
+  changePage(page: number): void {
+    if (page < 1 || page > this.totalPages()) {
+      return;
+    }
+
+    this.currentPage.set(page);
   }
 
-  trackById(index: number, item: WorkflowAction): string {
-    return item.id ?? index.toString();
+  openCreate(): void {
+    this.create.emit();
+  }
+
+  onEdit(action: WorkflowAction): void {
+    this.edit.emit(action);
+  }
+
+  onDelete(id: string): void {
+    this.remove.emit(id);
   }
 }

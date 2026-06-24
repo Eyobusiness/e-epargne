@@ -1,115 +1,188 @@
-<div class="table-wrapper">
+<div class="table-card">
 
-  <table class="custom-table">
+  <div class="table-header">
 
-    <thead>
+    <h3>
 
-      <tr>
+      Workflows
 
-        <th>#</th>
+    </h3>
 
-        <th>Libellé</th>
+    <button
+      class="btn-add"
+      (click)="openCreate()">
 
-        <th>Endpoint</th>
+      <i class="bi bi-plus-circle"></i>
 
-        <th>Parent</th>
+      Ajouter
 
-        <th>Statut</th>
+    </button>
 
-        <th>Actions</th>
+  </div>
 
-      </tr>
+  <div class="table-toolbar">
 
-    </thead>
+    <div class="search-box">
 
-    <tbody>
+      <i class="bi bi-search"></i>
 
-      @for (
-        item of workflows();
-        track trackById($index, item)
-      ) {
+      <input
+        type="text"
+        placeholder="Rechercher..."
+        [ngModel]="search()"
+        (ngModelChange)="onSearch($event)">
+
+    </div>
+
+  </div>
+
+  <div class="table-responsive">
+
+    <table class="table align-middle">
+
+      <thead>
 
         <tr>
 
-          <td>
-            {{ $index + 1 }}
-          </td>
+          <th>Libellé</th>
 
-          <td>
+          <th>Endpoint</th>
 
-            <strong>
-              {{ item.label }}
-            </strong>
+          <th>Description</th>
 
-          </td>
+          <th>Statut</th>
 
-          <td>
-
-            <code>
-              {{ item.endpoint }}
-            </code>
-
-          </td>
-
-          <td>
-
-            {{ item.parent }}
-
-          </td>
-
-          <td>
-
-            <span
-              class="status-badge"
-              [class.valid]="item.status === '200'">
-
-              {{
-                item.status === '200'
-                  ? 'Actif'
-                  : 'Inactif'
-              }}
-
-            </span>
-
-          </td>
-
-          <td class="actions">
-
-            <button
-              class="btn-action btn-view"
-              title="Configurer"
-              (click)="onDetails(item)">
-
-              <i class="bi bi-gear"></i>
-
-            </button>
-
-            <button
-              class="btn-action btn-edit"
-              title="Modifier"
-              (click)="onEdit(item)">
-
-              <i class="bi bi-pencil-square"></i>
-
-            </button>
-
-            <button
-              class="btn-action btn-delete"
-              title="Supprimer"
-              (click)="onDelete(item)">
-
-              <i class="bi bi-trash3"></i>
-
-            </button>
-
-          </td>
+          <th class="text-center">
+            Actions
+          </th>
 
         </tr>
 
-      }
+      </thead>
 
-    </tbody>
+      <tbody>
 
-  </table>
+        @for(item of paginatedItems(); track item.id){
+
+          <tr>
+
+            <td>
+
+              <span class="workflow-badge">
+
+                {{ item.label }}
+
+              </span>
+
+            </td>
+
+            <td>
+
+              {{ item.endpoint }}
+
+            </td>
+
+            <td>
+
+              {{ item.description || '-' }}
+
+            </td>
+
+            <td>
+
+              <span class="status-badge">
+
+                {{ item.status || '-' }}
+
+              </span>
+
+            </td>
+
+            <td>
+
+              <div class="action-buttons">
+
+                <button
+                  title="Modifier"
+                  class="btn-edit"
+                  (click)="onEdit(item)">
+
+                  <i class="bi bi-pencil"></i>
+
+                </button>
+
+                <button
+                  title="Supprimer"
+                  class="btn-delete"
+                  (click)="onDelete(item.id!)">
+
+                  <i class="bi bi-trash"></i>
+
+                </button>
+
+              </div>
+
+            </td>
+
+          </tr>
+
+        }
+
+        @if(filteredItems().length === 0){
+
+          <tr>
+
+            <td colspan="5">
+
+              <div class="empty-state">
+
+                Aucun workflow trouvé
+
+              </div>
+
+            </td>
+
+          </tr>
+
+        }
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+  <div class="pagination-container">
+
+    <button
+      class="page-btn"
+      [disabled]="currentPage() === 1"
+      (click)="changePage(currentPage() - 1)">
+
+      <i class="bi bi-chevron-left"></i>
+
+      Précédent
+
+    </button>
+
+    <span class="page-info">
+
+      Page {{ currentPage() }}
+      sur {{ totalPages() }}
+
+    </span>
+
+    <button
+      class="page-btn"
+      [disabled]="currentPage() === totalPages()"
+      (click)="changePage(currentPage() + 1)">
+
+      Suivant
+
+      <i class="bi bi-chevron-right"></i>
+
+    </button>
+
+  </div>
 
 </div>

@@ -41,7 +41,7 @@ export class ParametreFormComponent {
     { label: 'TONTINE_APP', value: 'TONTINE_APP' },
   ];
 
-  private readonly formFields: ParametreField[] = ['libelle', 'nom', 'type', 'valeur', 'parent', 'status'];
+  private readonly formFields: ParametreField[] = ['libelle', 'nom', 'type', 'valeur', 'parent'];
 
   constructor() {
     effect(() => {
@@ -75,8 +75,7 @@ export class ParametreFormComponent {
 
   validateField(field: ParametreField): void {
     const currentErrors = { ...this.errors() };
-    const message = this.getFieldError(field, this.form()[field]);
-
+    const message = this.getFieldError(field, this.form()[field] ?? '');
     if (message) {
       currentErrors[field] = message;
     } else {
@@ -91,7 +90,8 @@ export class ParametreFormComponent {
     const errors: Record<string, string> = {};
 
     for (const field of this.formFields) {
-      const message = this.getFieldError(field, payload[field]);
+      
+    const message = this.getFieldError(field, payload[field] ?? '');
 
       if (message) {
         errors[field] = message;
@@ -142,7 +142,7 @@ export class ParametreFormComponent {
       type: value?.type ?? '',
       valeur: value?.valeur ?? '',
       parent: value?.parent ?? '',
-      status: value?.status ?? '200',
+    
     };
   }
 
@@ -159,7 +159,6 @@ export class ParametreFormComponent {
       type: true,
       valeur: true,
       parent: true,
-      status: true,
     });
   }
 
@@ -179,7 +178,6 @@ export class ParametreFormComponent {
       type: payload.type.trim(),
       valeur: payload.valeur.trim(),
       parent: payload.parent.trim(),
-      status: payload.status ?? '200',
     };
   }
 }

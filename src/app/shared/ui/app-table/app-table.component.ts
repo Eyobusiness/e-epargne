@@ -1,4 +1,4 @@
-import { Component, input, computed, signal } from '@angular/core';
+import { Component, input, output, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -25,6 +25,9 @@ export class AppTableComponent {
 
   readonly searchQuery = signal('');
   readonly filterValues = signal<Record<string, any>>({});
+  readonly edit = output<any>();
+
+  readonly remove = output<any>();
 
   readonly filteredData = computed(() => {
     let result = this.data();
@@ -33,10 +36,7 @@ export class AppTableComponent {
     const query = this.searchQuery().toLowerCase();
     if (query) {
       result = result.filter((row) => {
-        return this.columns().some(
-          (column) =>
-            String(row[column]).toLowerCase().includes(query)
-        );
+        return this.columns().some((column) => String(row[column]).toLowerCase().includes(query));
       });
     }
 
@@ -62,10 +62,13 @@ export class AppTableComponent {
   }
 
   hasActiveFilters(): boolean {
-    return (
-      this.searchQuery().length > 0 ||
-      Object.values(this.filterValues()).some((v) => v)
-    );
+    return this.searchQuery().length > 0 || Object.values(this.filterValues()).some((v) => v);
   }
+
+  hasActionsColumn(column: string): boolean {
+    return column === 'actions';
+  }
+
+ 
 }
 

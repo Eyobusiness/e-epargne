@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 
-import { Component, inject, input, output, effect } from '@angular/core';
+import { Component, computed, effect, inject, input, output } from '@angular/core';
 
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
@@ -23,6 +23,8 @@ export class WorkflowActionFormComponent {
 
   readonly profiles = input<any[]>([]);
 
+  readonly endpoints = input<any[]>([]);
+
   readonly isLoading = input(false);
 
   readonly submitForm = output<WorkflowAction>();
@@ -36,7 +38,7 @@ export class WorkflowActionFormComponent {
 
     idWorkflow: ['', Validators.required],
 
-    beforeStep: ['', Validators.required],
+    beforeStep: [''],
 
     stateOrder: ['', Validators.required],
 
@@ -49,6 +51,18 @@ export class WorkflowActionFormComponent {
     profileIds: [[] as string[]],
   });
 
+  readonly filteredStates = computed(() => {
+    const workflowId = this.form.controls.idWorkflow.value;
+
+    if (!workflowId) {
+      return [];
+    }
+
+    return this.states().filter(
+      (state) => state.workflowId === workflowId || state.parent === workflowId,
+    );
+  });
+
   constructor() {
     effect(() => {
       const action = this.action();
@@ -56,21 +70,13 @@ export class WorkflowActionFormComponent {
       if (!action) {
         this.form.reset({
           endpoint: '',
-
           stepId: '',
-
           idWorkflow: '',
-
           beforeStep: '',
-
           stateOrder: '',
-
           notification: '',
-
           nextField: '',
-
           parent: 'TONTINEAPP',
-
           profileIds: [],
         });
 
@@ -79,21 +85,13 @@ export class WorkflowActionFormComponent {
 
       this.form.patchValue({
         endpoint: action.endpoint,
-
         stepId: action.stepId,
-
         idWorkflow: action.idWorkflow,
-
-        beforeStep: action.beforeStep,
-
-        stateOrder: action.stateOrder,
-
+        beforeStep: action.beforeStep ?? '',
+        stateOrder: action.stateOrder ?? '',
         notification: action.notification ?? '',
-
         nextField: action.nextField ?? '',
-
-        parent: action.parent ?? 'TONTINEAPP',
-
+        parent: action.parent ?? '',
         profileIds: action.profileIds ?? [],
       });
     });

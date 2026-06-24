@@ -1,10 +1,7 @@
 import { CommonModule } from '@angular/common';
+import { Component, input, output, inject, effect } from '@angular/core';
 
-import { Component, inject, input, output, effect } from '@angular/core';
-
-
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-
+import { FormBuilder, ReactiveFormsModule,  Validators } from '@angular/forms';
 
 import { Workflow } from '../../models/workflow.model';
 
@@ -20,20 +17,16 @@ export class WorkflowFormComponent {
 
   readonly workflow = input<Workflow | null>(null);
 
-  readonly isLoading = input(false);
+  readonly close = output<void>();
 
   readonly submitForm = output<Workflow>();
 
-  readonly cancel = output<void>();
+  readonly isLoading = input(false);
 
-  readonly form = this.fb.nonNullable.group({
-    endpoint: ['', Validators.required],
-
+  form = this.fb.nonNullable.group({
     label: ['', Validators.required],
-
+    endpoint: ['', Validators.required],
     description: [''],
-
-    parent: ['TONTINEAPP', Validators.required],
   });
 
   constructor() {
@@ -42,52 +35,35 @@ export class WorkflowFormComponent {
 
       if (!workflow) {
         this.form.reset({
-          endpoint: '',
           label: '',
+          endpoint: '',
           description: '',
-          parent: 'TONTINEAPP',
         });
+
         return;
       }
 
       this.form.patchValue({
-        endpoint: workflow.endpoint,
         label: workflow.label,
-        description: workflow.description,
-        parent: workflow.parent,
+        endpoint: workflow.endpoint,
+        description: workflow.description ?? '',
       });
     });
   }
 
-  // save(): void {
-  //   if (this.form.invalid) {
-  //     this.form.markAllAsTouched();
-  //     return;
-  //   }
+  onSubmit(): void {
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
 
-  //   this.submitForm.emit({
-  //     ...this.workflow(),
-  //     ...this.form.getRawValue(),
-  //   });
-  // }
-
-  save(): void {
-
-  console.log('BOUTON CLIQUE');
-
-  if (this.form.invalid) {
-    console.log('FORMULAIRE INVALIDE');
-    return;
+    this.submitForm.emit({
+      ...this.workflow(),
+      ...this.form.getRawValue(),
+    });
   }
 
-  console.log(this.form.getRawValue());
-
-  this.submitForm.emit(
-    this.form.getRawValue()
-  );
-}
-
-  onCancel(): void {
-    this.cancel.emit();
+  onClose(): void {
+    this.close.emit();
   }
 }

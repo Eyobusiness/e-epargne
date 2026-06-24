@@ -5,5 +5,5 @@ export interface Parametre {
   type: string;
   valeur: string;
   parent: string;
-  status: string;
+  status?: string;
 }

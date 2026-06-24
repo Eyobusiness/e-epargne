@@ -1,70 +1,182 @@
-<app-page-header
-  title="Workflows"
-  description="Gestion des workflows"
-  buttonText="Nouveau workflow"
-  icon="bi bi-plus-lg"
-  (action)="openCreateModal()">
-</app-page-header>
+<div class="workflow-page">
 
-<div class="page-content">
+  <div class="page-header">
+    <app-page-header
+    title="Configuration Workflow"
+    description="Gestion des workflows, états et actions">
+  </app-page-header>
 
-  <app-workflow-filter
-    (filterChange)="onFilterChange($event)">
-  </app-workflow-filter>
+  </div>
 
-  @if (isPageLoading()) {
+  <div class="workflow-tabs">
 
-    <div class="loading-state">
+    <button
+      [class.active]="activeTab() === 'workflow'"
+      (click)="setTab('workflow')">
 
-      Chargement...
+      Workflows
 
-    </div>
+    </button>
+
+    <button
+      [class.active]="activeTab() === 'state'"
+      (click)="setTab('state')">
+
+      États
+
+    </button>
+
+    <button
+      [class.active]="activeTab() === 'action'"
+      (click)="setTab('action')">
+
+      Actions
+
+    </button>
+
+  </div>
+
+  @if(activeTab() === 'workflow') {
+
+   <app-workflow-table
+  [workflows]="workflows()"
+  (create)="openWorkflowModal()"
+  (edit)="openEditWorkflowModal($event)"
+  (remove)="openDeleteWorkflowDialog($event)">
+  </app-workflow-table>
 
   }
 
-  @if (!isPageLoading()) {
+  @if(activeTab() === 'state') {
 
-    <app-workflow-table
-      [workflows]="paginatedWorkflows()"
-      (details)="openDetails($event)"
-      (edit)="openEditModal($event)"
-      (delete)="openDeleteDialog($event)">
-    </app-workflow-table>
+    @if(activeTab() === 'state') {
+
+  <app-workflow-states
+
+    [states]="states()"
+
+    (create)="openStateModal()"
+
+    (edit)="openEditStateModal($event)"
+
+    (remove)="openDeleteStateDialog($event)">
+
+  </app-workflow-states>
+
+}
+
   }
 
-  @if (totalPages() > 1) {
+@if(activeTab() === 'action') {
 
-    <app-pagination
-      [currentPage]="currentPage()"
-      [totalPages]="totalPages()"
-      (pageChange)="changePage($event)">
-    </app-pagination>
+  <app-workflow-actions
+    [actions]="actions()"
+    [workflows]="workflows()"
+    [states]="states()"
 
-  }
+    (create)="openActionModal()"
+
+    (edit)="openEditActionModal($event)"
+
+    (remove)="openDeleteActionDialog($event)">
+  </app-workflow-actions>
+
+}
 
 </div>
 
-<app-modal
-  [isOpen]="isModalOpen()"
-  title="Workflow"
-  description="Création ou modification"
-  width="900px"
-  (close)="closeModal()">
 
-  <app-workflow-form
-    [workflow]="selected()"
-    [isLoading]="isLoading()"
-    (submitForm)="save($event)"
-    (cancel)="closeModal()">
-  </app-workflow-form>
+<app-modal
+  [isOpen]="isActionModalOpen()"
+  title="Action Workflow"
+  description="Ajouter ou modifier une action"
+  width="800px"
+  (close)="closeActionModal()">
+
+  <app-workflow-action-form
+    [action]="selectedAction()"
+    [workflows]="workflows()"
+    [states]="states()"
+    [profiles]="profiles()"
+    [endpoints]="endpoints()"
+
+    (submitForm)="saveAction($event)"
+    (cancel)="closeActionModal()">
+
+  </app-workflow-action-form>
 
 </app-modal>
 
 <app-confirm-dialog
-  [isOpen]="isDeleteOpen()"
+  [isOpen]="isDeleteActionOpen()"
   [isLoading]="isDeleteLoading()"
-  title="Suppression"
+  title="Supprimer action"
+  message="Voulez-vous supprimer cette action ?"
+  (confirm)="deleteAction()"
+  (cancel)="closeDeleteActionDialog()">
+</app-confirm-dialog>
+
+
+<app-modal
+  [isOpen]="isStateModalOpen()"
+  title="État Workflow"
+  description="Ajouter ou modifier un état"
+  width="700px"
+  (close)="closeStateModal()">
+
+  <app-workflow-state-form
+
+    [state]="selectedState()"
+
+    [states]="states()"
+
+    (submitForm)="saveState($event)"
+
+    (cancel)="closeStateModal()">
+
+  </app-workflow-state-form>
+
+</app-modal>
+
+
+
+<app-confirm-dialog
+  [isOpen]="isDeleteStateOpen()"
+  [isLoading]="isDeleteStateLoading()"
+  title="Supprimer état"
+  message="Voulez-vous supprimer cet état ?"
+  (confirm)="deleteState()"
+  (cancel)="closeDeleteStateDialog()">
+</app-confirm-dialog>
+
+
+<app-modal
+  [isOpen]="isWorkflowModalOpen()"
+  title="Workflow"
+  description="Ajouter ou modifier un workflow"
+  width="700px"
+  (close)="closeWorkflowModal()">
+
+  <app-workflow-form
+
+    [workflow]="selectedWorkflow()"
+
+    [isLoading]="false"
+
+    (submitForm)="saveWorkflow($event)"
+
+    (cancel)="closeWorkflowModal()">
+
+  </app-workflow-form>
+
+</app-modal>
+
+
+<app-confirm-dialog
+  [isOpen]="isDeleteWorkflowOpen()"
+  [isLoading]="isDeleteWorkflowLoading()"
+  title="Supprimer workflow"
   message="Voulez-vous supprimer ce workflow ?"
-  (confirm)="delete()"
-  (cancel)="isDeleteOpen.set(false)">
+  (confirm)="deleteWorkflow()"
+  (cancel)="closeDeleteWorkflowDialog()">
 </app-confirm-dialog>

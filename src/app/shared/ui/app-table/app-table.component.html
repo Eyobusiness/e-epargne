@@ -58,7 +58,37 @@
           @for (row of filteredData(); track $index) {
             <tr>
               @for (column of columns(); track column) {
-                <td>{{ row[column] }}</td>
+                <td>
+
+  @if(column === 'actions') {
+
+    <div class="table-actions">
+
+      <button title="Modifier"
+        class="btn-icon edit"
+        (click)="edit.emit(row)">
+
+        <i class="bi bi-pencil"></i>
+
+      </button>
+
+      <button title="Supprimer"
+        class="btn-icon delete"
+        (click)="remove.emit(row)">
+
+        <i class="bi bi-trash"></i>
+
+      </button>
+
+    </div>
+
+  } @else {
+
+    {{ row[column] }}
+
+  }
+
+</td>
               }
             </tr>
           }

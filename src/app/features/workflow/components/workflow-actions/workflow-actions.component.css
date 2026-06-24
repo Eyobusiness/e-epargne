@@ -1,126 +1,302 @@
-.table-wrapper {
+.table-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 1.5rem;
+  border: 1px solid #e9ecef;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+}
+
+/* ===================================
+   HEADER
+=================================== */
+
+.table-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.table-header h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #212529;
+}
+
+.btn-add {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  border: none;
+  border-radius: 10px;
+
+  padding: 10px 16px;
+
+  background: #0d6efd;
+  color: #fff;
+
+  font-size: 0.95rem;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: all 0.3s ease;
+}
+
+.btn-add:hover {
+  background: #0b5ed7;
+  transform: translateY(-1px);
+}
+
+.btn-add i {
+  font-size: 1rem;
+}
+
+/* ===================================
+   TOOLBAR
+=================================== */
+
+.table-toolbar {
+  margin-bottom: 1rem;
+}
+
+.search-box {
+  position: relative;
+  max-width: 350px;
+}
+
+.search-box i {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+
+  color: #6c757d;
+}
+
+.search-box input {
   width: 100%;
+
+  height: 44px;
+
+  border: 1px solid #dee2e6;
+  border-radius: 10px;
+
+  padding-left: 40px;
+  padding-right: 12px;
+
+  outline: none;
+
+  transition: all 0.3s ease;
+}
+
+.search-box input:focus {
+  border-color: #0d6efd;
+  box-shadow: 0 0 0 4px rgba(13, 110, 253, 0.15);
+}
+
+/* ===================================
+   TABLE
+=================================== */
+
+.table-responsive {
   overflow-x: auto;
 }
 
-.custom-table {
+.table {
   width: 100%;
+  margin-bottom: 0;
   border-collapse: collapse;
-  min-width: 900px;
 }
 
-.custom-table thead th {
-  background: #f8fafc;
-  color: #475569;
-  font-size: 13px;
-  font-weight: 600;
+.table thead th {
+  background: #f8f9fa;
+
+  color: #495057;
+
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+
   padding: 14px;
-  text-align: left;
-  border-bottom: 1px solid #e2e8f0;
+
+  border-bottom: 1px solid #dee2e6;
 }
 
-.custom-table tbody td {
+.table tbody td {
   padding: 14px;
-  border-bottom: 1px solid #f1f5f9;
   vertical-align: middle;
+
+  border-bottom: 1px solid #f1f3f5;
 }
 
-.custom-table tbody tr:hover {
-  background: #f8fafc;
+.table tbody tr {
+  transition: all 0.2s ease;
 }
 
-.actions {
+.table tbody tr:hover {
+  background: #f8f9fa;
+}
+
+/* ===================================
+   BADGES
+=================================== */
+
+.workflow-badge,
+.state-badge,
+.profile-badge {
+  display: inline-flex;
+  align-items: center;
+
+  padding: 6px 12px;
+
+  border-radius: 20px;
+
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.workflow-badge {
+  background: #e7f1ff;
+  color: #0d6efd;
+}
+
+.state-badge {
+  background: #e8fff1;
+  color: #198754;
+}
+
+.profile-badge {
+  background: #fff4e5;
+  color: #fd7e14;
+}
+
+/* ===================================
+   ACTIONS
+=================================== */
+
+.action-buttons {
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
-.btn-action {
-  width: 36px;
-  height: 36px;
+.btn-edit,
+.btn-delete {
+  width: 38px;
+  height: 38px;
+
   border: none;
   border-radius: 10px;
-  cursor: pointer;
-  transition: all .2s ease;
+
   display: flex;
   align-items: center;
   justify-content: center;
-}
 
-.btn-action i {
-  font-size: 15px;
+  cursor: pointer;
+
+  transition: all 0.3s ease;
 }
 
 .btn-edit {
-  background: #ecfdf5;
-  color: #16a34a;
+  background: #e7f1ff;
+  color: #0d6efd;
 }
 
 .btn-edit:hover {
-  background: #16a34a;
-  color: #fff;
+  background: #d6e6ff;
 }
 
 .btn-delete {
-  background: #fef2f2;
-  color: #dc2626;
+  background: #ffe5e5;
+  color: #dc3545;
 }
 
 .btn-delete:hover {
-  background: #dc2626;
-  color: #fff;
+  background: #ffd6d6;
 }
 
-.profile-badge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 6px 12px;
-  border-radius: 999px;
-  background: #eff6ff;
-  color: #2563eb;
-  font-size: 12px;
-  font-weight: 600;
+.btn-edit i,
+.btn-delete i {
+  font-size: 1rem;
 }
 
-.state-badge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 6px 12px;
-  border-radius: 999px;
-  background: #fef3c7;
-  color: #d97706;
-  font-size: 12px;
-  font-weight: 600;
+/* ===================================
+   EMPTY STATE
+=================================== */
+
+.empty-state {
+  padding: 2rem;
+  text-align: center;
+
+  color: #6c757d;
+  font-size: 0.95rem;
 }
 
-.order-badge {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: #1e293b;
-  color: #fff;
-  font-size: 13px;
-  font-weight: 700;
+/* ===================================
+   PAGINATION
+=================================== */
+
+.pagination-container {
+  margin-top: 1rem;
+
   display: flex;
+  justify-content: flex-end;
   align-items: center;
-  justify-content: center;
+  gap: 1rem;
 }
 
-.endpoint-code {
-  background: #f1f5f9;
-  color: #0f172a;
-  padding: 4px 8px;
+.page-btn {
+  border: 1px solid #dee2e6;
+  background: #fff;
+
   border-radius: 8px;
-  font-size: 12px;
-  font-family: monospace;
+
+  padding: 8px 14px;
+
+  cursor: pointer;
+
+  transition: all 0.3s ease;
 }
+
+.page-btn:hover:not(:disabled) {
+  background: #f8f9fa;
+}
+
+.page-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.page-info {
+  font-size: 0.9rem;
+  color: #6c757d;
+}
+
+/* ===================================
+   RESPONSIVE
+=================================== */
 
 @media (max-width: 768px) {
 
-  .custom-table {
-    min-width: 700px;
+  .table-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
   }
 
+  .btn-add {
+    justify-content: center;
+  }
+
+  .search-box {
+    max-width: 100%;
+  }
+
+  .pagination-container {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
 }

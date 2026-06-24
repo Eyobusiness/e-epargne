@@ -1,252 +1,269 @@
-import { CommonModule } from '@angular/common';
-import { Component, OnInit, computed, inject, signal } from '@angular/core';
-import { finalize } from 'rxjs';
+import { Component, OnInit, inject, input, signal } from '@angular/core';
+
+import { WorkflowService } from '../../services/workflow.service';
 
 import { Workflow } from '../../models/workflow.model';
-import { WorkflowService } from '../../services/workflow.service';
-import { Router } from '@angular/router';
+import { WorkflowState } from '../../models/workflow-state.model';
+import { WorkflowAction } from '../../models/workflow-action.model';
 
-
-import {
-  WorkflowFilter,
-  WorkflowFilterComponent,
-} from '../../components/workflow-filter/workflow-filter.component';
-
-import { WorkflowTableComponent } from '../../components/workflow-table/workflow-table.component';
-import { WorkflowFormComponent } from '../../components/workflow-form/workflow-form.component';
-
-import { AppModalComponent } from '../../../../shared/ui/app-modal/app-modal.component';
 import { AppPageHeaderComponent } from '../../../../shared/ui/app-page-header/app-page-header.component';
-import { AppPaginationComponent } from '../../../../shared/ui/app-pagination/app-pagination.component';
-import { AppConfirmDialogComponent } from '../../../../shared/ui/app-confirm-dialog/app-confirm-dialog.component';
-// import { AppEmptyStateComponent } from '../../../../shared/ui/app-empty-state/app-empty-state.component';
+import { WorkflowTableComponent } from '../../components/workflow-table/workflow-table.component';
+import { WorkflowStatesComponent } from '../../components/workflow-states/workflow-states.component';
+import { WorkflowActionsComponent } from '../../components/workflow-actions/workflow-actions.component';
+import { WorkflowActionFormComponent } from '../../components/workflow-action-form/workflow-action-form.component';
 
-import { ToastService } from '../../../../core/services/toast.service';
+import { AppModalComponent } from '@shared/ui/app-modal/app-modal.component';
+import { AppConfirmDialogComponent } from '../../../../shared/ui/app-confirm-dialog/app-confirm-dialog.component';
+import { WorkflowStateFormComponent } from '@features/workflow/components/workflow-state-form/workflow-state-form.component';
+import { WorkflowFormComponent } from '@features/workflow/components/workflow-form/workflow-form.component';
+// import { AppToastComponent } from '../../../../shared/ui/app-toast/app-toast.component';
+
+type WorkflowTab = 'workflow' | 'state' | 'action';
 
 @Component({
-  selector: 'app-workflows',
+  selector: 'app-workflow-page',
   standalone: true,
   imports: [
-    CommonModule,
-    AppModalComponent,
     AppPageHeaderComponent,
-    AppPaginationComponent,
-    AppConfirmDialogComponent,
-    // AppEmptyStateComponent,
     WorkflowTableComponent,
+    WorkflowStatesComponent,
+    WorkflowActionsComponent,
+    WorkflowActionFormComponent,
+    AppModalComponent,
+    AppConfirmDialogComponent,
+    WorkflowStateFormComponent,
     WorkflowFormComponent,
-    WorkflowFilterComponent,
+    // AppToastComponent,
   ],
   templateUrl: './workflows.component.html',
   styleUrls: ['./workflows.component.css'],
 })
-export class WorkflowsComponent implements OnInit {
-  private readonly service = inject(WorkflowService);
+export class WorkflowPageComponent implements OnInit {
+  private readonly workflowService = inject(WorkflowService);
 
-  private readonly toastService = inject(ToastService);
+  activeTab = signal<WorkflowTab>('workflow');
 
-  private readonly router = inject(Router);
+  workflows = signal<Workflow[]>([]);
 
-  readonly workflows = signal<Workflow[]>([]);
+  states = signal<WorkflowState[]>([]);
 
-  readonly selected = signal<Workflow | null>(null);
+  actions = signal<WorkflowAction[]>([]);
 
-  readonly isLoading = signal(false);
+  profiles = signal<any[]>([]);
 
-  readonly isPageLoading = signal(false);
+  endpoints = signal<any[]>([]);
+
+ 
+
+  readonly isStateModalOpen = signal(false);
+
+  readonly isDeleteStateOpen = signal(false);
+
+  readonly selectedState = signal<WorkflowState | null>(null);
+
+  readonly selectedStateId = signal<string | null>(null);
+
+  readonly isWorkflowModalOpen = signal(false);
+
+  readonly isDeleteWorkflowOpen = signal(false);
+
+  readonly selectedWorkflow = signal<Workflow | null>(null);
+
+  readonly selectedWorkflowId = signal<string | null>(null);
+
+  readonly isDeleteWorkflowLoading = signal(false);
+
+  readonly isDeleteStateLoading = signal(false);
+
+  readonly isActionModalOpen = signal(false);
+
+  readonly isDeleteActionOpen = signal(false);
+
+  readonly selectedAction = signal<WorkflowAction | null>(null);
+
+  readonly selectedActionId = signal<string | null>(null);
 
   readonly isDeleteLoading = signal(false);
 
-  readonly isModalOpen = signal(false);
-
-  readonly isDeleteOpen = signal(false);
-
-  readonly currentPage = signal(1);
-
-  readonly itemsPerPage = 10;
-
-  readonly filters = signal<WorkflowFilter>({
-    search: '',
-    status: '',
-  });
-
-  readonly filteredWorkflows = computed(() => {
-    const filter = this.filters();
-
-    return this.workflows().filter((item) => {
-      const search = filter.search.toLowerCase();
-
-      const matchSearch =
-        !search ||
-        item.label?.toLowerCase().includes(search) ||
-        item.endpoint?.toLowerCase().includes(search);
-
-      const matchStatus = !filter.status || item.status === filter.status;
-
-      return matchSearch && matchStatus;
-    });
-  });
-
-  readonly totalItems = computed(() => this.filteredWorkflows().length);
-
-  readonly totalPages = computed(() =>
-    Math.max(1, Math.ceil(this.totalItems() / this.itemsPerPage)),
-  );
-
-  readonly paginatedWorkflows = computed(() => {
-    const start = (this.currentPage() - 1) * this.itemsPerPage;
-
-    return this.filteredWorkflows().slice(start, start + this.itemsPerPage);
-  });
-
-
-
   ngOnInit(): void {
     this.loadWorkflows();
+
+    this.loadStates();
+
+    // this.loadActions();
+
+    // this.loadProfiles();
+
+    // this.loadEndpoints();
+  }
+
+  setTab(tab: WorkflowTab): void {
+    this.activeTab.set(tab);
   }
 
   loadWorkflows(): void {
-    this.isPageLoading.set(true);
-
-    this.service
-      .getWorkflows()
-      .pipe(finalize(() => this.isPageLoading.set(false)))
-      .subscribe({
-        next: (response) => {
-          this.workflows.set(response);
-        },
-
-        error: () => {
-          this.workflows.set([]);
-        },
-      });
-  }
-
-  onFilterChange(filters: WorkflowFilter): void {
-    this.filters.set(filters);
-
-    this.currentPage.set(1);
-  }
-
-  changePage(page: number): void {
-    this.currentPage.set(page);
-  }
-
-  openCreateModal(): void {
-    this.selected.set(null);
-
-    this.isModalOpen.set(true);
-  }
-
-  openEditModal(workflow: Workflow): void {
-    this.selected.set(workflow);
-
-    this.isModalOpen.set(true);
-  }
-
-  closeModal(): void {
-    this.selected.set(null);
-
-    this.isModalOpen.set(false);
-  }
-
-  save(workflow: Workflow): void {
-
-  this.isLoading.set(true);
-
-  const selected = this.selected();
-
-  const payload = {
-    endpoint: workflow.endpoint,
-    label: workflow.label,
-    description: workflow.description,
-    parent: workflow.parent,
-  };
-
-  const request = selected?.id
-    ? this.service.updateWorkflow(
-        selected.id,
-        payload,
-      )
-    : this.service.createWorkflow(
-        payload,
-      );
-
-  request
-    .pipe(
-      finalize(() =>
-        this.isLoading.set(false),
-      ),
-    )
-    .subscribe({
-      next: () => {
-
-        this.closeModal();
-
-        this.loadWorkflows();
-
-        this.toastService.show(
-          'Workflow enregistré',
-          'success',
-        );
-      },
-
-      error: (error) => {
-
-        console.log(error);
-
-        this.toastService.show(
-          'Erreur enregistrement',
-          'error',
-        );
-      },
+    this.workflowService.getWorkflows().subscribe({
+      next: (data) => this.workflows.set(data),
     });
-}
-
-  openDeleteDialog(workflow: Workflow): void {
-    this.selected.set(workflow);
-
-    this.isDeleteOpen.set(true);
   }
 
-  delete(): void {
-    const selected = this.selected();
+  loadStates(): void {
+    this.workflowService.getStates().subscribe({
+      next: (data) => this.states.set(data),
+    });
+  }
 
-    if (!selected?.id) {
+  openActionModal(): void {
+    this.selectedAction.set(null);
+
+    this.isActionModalOpen.set(true);
+  }
+
+  openEditActionModal(action: WorkflowAction): void {
+    this.selectedAction.set(action);
+
+    this.isActionModalOpen.set(true);
+  }
+
+  closeActionModal(): void {
+    this.selectedAction.set(null);
+
+    this.isActionModalOpen.set(false);
+  }
+
+  saveAction(payload: WorkflowAction): void {
+    console.log('ACTION', payload);
+
+    this.closeActionModal();
+  }
+
+  openDeleteActionDialog(id: string): void {
+    this.selectedActionId.set(id);
+
+    this.isDeleteActionOpen.set(true);
+  }
+
+  closeDeleteActionDialog(): void {
+    this.selectedActionId.set(null);
+
+    this.isDeleteActionOpen.set(false);
+  }
+
+  deleteAction(): void {
+    const id = this.selectedActionId();
+
+    if (!id) {
       return;
     }
 
     this.isDeleteLoading.set(true);
 
-    this.service
-      .deleteWorkflow(selected.id)
-      .pipe(finalize(() => this.isDeleteLoading.set(false)))
-      .subscribe({
-        next: () => {
-          this.loadWorkflows();
+    this.workflowService.deleteAction(id).subscribe({
+      next: () => {
+        this.actions.update((actions) => actions.filter((action) => action.id !== id));
 
-          this.isDeleteOpen.set(false);
+        this.closeDeleteActionDialog();
 
-          this.toastService.show('Workflow supprimé', 'success');
-        },
+        this.isDeleteLoading.set(false);
+      },
 
-        error: () => {
-          this.toastService.show('Erreur suppression', 'error');
-        },
-      });
+      error: () => {
+        this.isDeleteLoading.set(false);
+      },
+    });
   }
 
-openDetails(workflow: Workflow): void {
+  openEditStateModal(state: WorkflowState): void {
+    this.selectedState.set(state);
 
-  if (!workflow.id) {
-    return;
+    this.isStateModalOpen.set(true);
   }
 
-  this.router.navigate([
-    '/workflow',
-    workflow.id,
-  ]);
+  closeStateModal(): void {
+    this.selectedState.set(null);
 
+    this.isStateModalOpen.set(false);
+  }
+  openDeleteStateDialog(id: string): void {
+    this.selectedStateId.set(id);
+
+    this.isDeleteStateOpen.set(true);
+  }
+
+  closeDeleteStateDialog(): void {
+    this.selectedStateId.set(null);
+
+    this.isDeleteStateOpen.set(false);
+  }
+
+  saveState(payload: WorkflowState): void {
+    console.log(payload);
+
+    this.closeStateModal();
+  }
+
+  deleteState(): void {
+    const id = this.selectedStateId();
+
+    if (!id) {
+      return;
+    }
+
+    console.log('DELETE STATE', id);
+
+    this.closeDeleteStateDialog();
+  }
+  openStateModal(): void {
+    this.selectedState.set(null);
+
+    this.isStateModalOpen.set(true);
+  }
+
+  openWorkflowModal(): void {
+    this.selectedWorkflow.set(null);
+
+    this.isWorkflowModalOpen.set(true);
+  }
+
+  openEditWorkflowModal(workflow: Workflow): void {
+    this.selectedWorkflow.set(workflow);
+
+    this.isWorkflowModalOpen.set(true);
+  }
+
+  saveWorkflow(payload: Workflow): void {
+    console.log(payload);
+
+    this.closeWorkflowModal();
+  }
+
+  closeWorkflowModal(): void {
+    this.selectedWorkflow.set(null);
+
+    this.isWorkflowModalOpen.set(false);
+  }
+
+  openDeleteWorkflowDialog(id: string): void {
+    this.selectedWorkflowId.set(id);
+
+    this.isDeleteWorkflowOpen.set(true);
+  }
+
+  closeDeleteWorkflowDialog(): void {
+    this.selectedWorkflowId.set(null);
+
+    this.isDeleteWorkflowOpen.set(false);
+  }
+  deleteWorkflow(): void {
+    const id = this.selectedWorkflowId();
+
+    if (!id) {
+      return;
+    }
+
+    console.log('DELETE WORKFLOW', id);
+
+    this.closeDeleteWorkflowDialog();
+  }
 }
 
-}

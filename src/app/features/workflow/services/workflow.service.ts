@@ -1,17 +1,15 @@
-// services/workflow.service.ts
+import { Injectable, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
-import { HttpClient } from "@angular/common/http";
-import { Injectable, inject } from "@angular/core";
-import { Observable } from "rxjs";
+import { environment } from '../../../../environments/environment';
 
-import { environment } from "../../../../environments/environment";
-
-import { Workflow } from "../models/workflow.model";
-import { WorkflowState } from "../models/workflow-state.model";
-import { WorkflowAction } from "../models/workflow-action.model";
+import { Workflow } from '../models/workflow.model';
+import { WorkflowState } from '../models/workflow-state.model';
+import { WorkflowAction } from '../models/workflow-action.model';
 
 @Injectable({
-  providedIn: "root",
+  providedIn: 'root',
 })
 export class WorkflowService {
   private readonly http = inject(HttpClient);
@@ -26,20 +24,20 @@ export class WorkflowService {
     return this.http.get<Workflow[]>(this.apiUrl);
   }
 
-  getWorkflowById(id: string): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/${id}`);
+  getWorkflow(id: string): Observable<Workflow> {
+    return this.http.get<Workflow>(`${this.apiUrl}/${id}`);
   }
 
-  createWorkflow(payload: Workflow): Observable<any> {
-    return this.http.post(this.apiUrl, payload);
+  createWorkflow(payload: Workflow): Observable<Workflow> {
+    return this.http.post<Workflow>(this.apiUrl, payload);
   }
 
-  updateWorkflow(id: string, payload: Workflow): Observable<any> {
-    return this.http.put(`${this.apiUrl}/${id}`, payload);
+  updateWorkflow(id: string, payload: Partial<Workflow>): Observable<Workflow> {
+    return this.http.put<Workflow>(`${this.apiUrl}/${id}`, payload);
   }
 
-  deleteWorkflow(id: string): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/${id}`);
+  deleteWorkflow(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 
   // ======================================================
@@ -50,37 +48,35 @@ export class WorkflowService {
     return this.http.get<WorkflowState[]>(`${this.apiUrl}/states`);
   }
 
-  getStateById(stateId: string): Observable<WorkflowState> {
-    return this.http.get<WorkflowState>(`${this.apiUrl}/states/${stateId}`);
+  getState(id: string): Observable<WorkflowState> {
+    return this.http.get<WorkflowState>(`${this.apiUrl}/states/${id}`);
   }
 
-  createState(payload: WorkflowState): Observable<any> {
-    return this.http.post(`${this.apiUrl}/states`, payload);
+  createState(payload: WorkflowState): Observable<WorkflowState> {
+    return this.http.post<WorkflowState>(`${this.apiUrl}/states`, payload);
   }
 
-  deleteState(stateId: string): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/states/${stateId}`);
+  deleteState(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/states/${id}`);
   }
 
   // ======================================================
   // ACTIONS
   // ======================================================
 
-  getWorkflowActions(workflowId: string): Observable<WorkflowAction[]> {
-    return this.http.get<WorkflowAction[]>(
-      `${this.apiUrl}/${workflowId}/actions`
-    );
+  getActions(workflowId: string): Observable<WorkflowAction[]> {
+    return this.http.get<WorkflowAction[]>(`${this.apiUrl}/${workflowId}/actions`);
   }
 
-  getActionById(actionId: string): Observable<WorkflowAction> {
-    return this.http.get<WorkflowAction>(`${this.apiUrl}/actions/${actionId}`);
+  getAction(id: string): Observable<WorkflowAction> {
+    return this.http.get<WorkflowAction>(`${this.apiUrl}/actions/${id}`);
   }
 
-  createAction(payload: WorkflowAction): Observable<any> {
-    return this.http.post(`${this.apiUrl}/actions`, payload);
+  createAction(payload: WorkflowAction): Observable<WorkflowAction> {
+    return this.http.post<WorkflowAction>(`${this.apiUrl}/actions`, payload);
   }
 
-  deleteAction(actionId: string): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/actions/${actionId}`);
+  deleteAction(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/actions/${id}`);
   }
 }

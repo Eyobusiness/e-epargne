@@ -56,20 +56,6 @@
       name="parent">
     </app-input>
 
-    <app-select
-      label="Statut"
-      placeholder="Choisir un statut"
-      [options]="[
-        { label: 'Actif', value: '200' },
-        { label: 'Inactif', value: '100' }
-      ]"
-      [ngModel]="form().status"
-      (ngModelChange)="updateField('status', $event)"
-      (blurred)="markAsTouched('status')"
-      [error]="getError('status')"
-      name="status">
-    </app-select>
-
   </div>
 
   <div class="form-actions">

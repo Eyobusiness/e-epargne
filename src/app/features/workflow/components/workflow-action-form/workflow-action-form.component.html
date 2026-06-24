@@ -8,11 +8,16 @@
 
     <div class="col-md-12">
 
-      <label for="workflow" class="form-label">
+      <label
+        for="workflow"
+        class="form-label">
+
         Workflow
+
       </label>
 
-      <select id="workflow"
+      <select
+        id="workflow"
         class="form-select"
         formControlName="idWorkflow">
 
@@ -41,7 +46,8 @@
 
     <div class="col-md-12">
 
-      <label for="pa" class="form-label">
+      <label
+        class="form-label" for="profil">
 
         Profils autorisés
 
@@ -56,7 +62,8 @@
 
           <div class="profile-item">
 
-            <input id="pa"
+            <input id="profil"
+              [id]="'profile-' + profile.id"
               type="checkbox"
 
               [checked]="
@@ -70,11 +77,12 @@
                 )
               ">
 
-            <span>
+            <label
+              [for]="'profile-' + profile.id">
 
               {{ profile.libelle }}
 
-            </span>
+            </label>
 
           </div>
 
@@ -88,11 +96,16 @@
 
     <div class="col-md-6">
 
-      <label for=""etat class="form-label">
+      <label
+        for="etat"
+        class="form-label">
+
         Etat
+
       </label>
 
-      <select id="etat" title="Sélectionner un état"
+      <select
+        id="etat"
         class="form-select"
         formControlName="stepId">
 
@@ -101,13 +114,14 @@
         </option>
 
         @for (
-          item of states();
+          item of filteredStates();
           track item.id
         ) {
 
-          <option [value]="item.id">
+          <option
+            [value]="item.id">
 
-            {{ item.name }}
+            {{ item.label ?? item.name }}
 
           </option>
 
@@ -121,27 +135,77 @@
 
     <div class="col-md-6">
 
-      <label for="endpoint" class="form-label">
+      <label
+        for="endpoint"
+        class="form-label">
+
         Endpoint
+
       </label>
 
-      <input id="endpoint"
-        class="form-control"
+      <select
+        id="endpoint"
+        class="form-select"
         formControlName="endpoint">
+
+        <option value="">
+          Sélectionner
+        </option>
+
+        @for (
+          endpoint of endpoints();
+          track endpoint.id
+        ) {
+
+          <option
+            [value]="endpoint.valeur">
+
+            {{ endpoint.libelle }}
+
+          </option>
+
+        }
+
+      </select>
 
     </div>
 
-    <!-- BEFORE STEP -->
+    <!-- ETAT PRECEDENT -->
 
     <div class="col-md-6">
 
-      <label for="bs" class="form-label">
-        Before Step
+      <label
+        for="bs"
+        class="form-label">
+
+        Etat précédent
+
       </label>
 
-      <input id="bs"
-        class="form-control"
+      <select
+        id="bs"
+        class="form-select"
         formControlName="beforeStep">
+
+        <option value="">
+          Aucun
+        </option>
+
+        @for (
+          item of filteredStates();
+          track item.id
+        ) {
+
+          <option
+            [value]="item.id">
+
+            {{ item.label ?? item.name }}
+
+          </option>
+
+        }
+
+      </select>
 
     </div>
 
@@ -149,44 +213,74 @@
 
     <div class="col-md-6">
 
-      <label for="ordre" class="form-label">
+      <label
+        for="ordre"
+        class="form-label">
+
         Ordre
+
       </label>
 
-      <input id="ordre"
-        type="number"
-        class="form-control"
+      <select
+        id="ordre"
+        class="form-select"
         formControlName="stateOrder">
+
+        @for (
+          item of [1,2,3,4];
+          track item
+        ) {
+
+          <option
+            [value]="item">
+
+            {{ item }}
+
+          </option>
+
+        }
+
+      </select>
 
     </div>
 
     <!-- NOTIFICATION -->
 
-    <div class="col-md-6">
+    <!-- <div class="col-md-6">
 
-      <label for="notif" class="form-label">
+      <label
+        for="notif"
+        class="form-label">
+
         Notification
+
       </label>
 
-      <input id="notif"
+      <input
+        id="notif"
         class="form-control"
         formControlName="notification">
 
-    </div>
+    </div> -->
 
     <!-- NEXT FIELD -->
 
-    <div class="col-md-6">
+    <!-- <div class="col-md-6">
 
-      <label for="nf" class="form-label">
+      <label
+        for="nf"
+        class="form-label">
+
         Next Field
+
       </label>
 
-      <input id="nf"
+      <input
+        id="nf"
         class="form-control"
         formControlName="nextField">
 
-    </div>
+    </div> -->
 
   </div>
 

@@ -1,25 +1,25 @@
 export interface WorkflowAction {
   id?: string;
 
-  endpoint: string;
+  idWorkflow: string;
 
   stepId: string;
 
+  endpoint: string;
+
+  beforeStep?: string;
+
+  stateOrder?: string;
+
   profileIds?: string[];
 
-  idWorkflow: string;
-
-  beforeStep: string;
-
-  stateOrder: string;
+  profileId?: string;
 
   notification?: string;
 
-  nextField?: string;
-
   parent?: string;
 
-  profileId?: string;
+  nextField?: string;
 
   profile?: {
     id: string;

@@ -1,70 +1,132 @@
-<div class="table-wrapper">
+<div class="table-card">
 
-  @if (states().length > 0) {
+  <div class="table-header">
 
-    <table class="custom-table">
+    <h3>
+
+      États Workflow
+
+    </h3>
+
+    <button
+      class="btn-add"
+      (click)="openCreate()">
+
+      <i class="bi bi-plus-circle"></i>
+
+      Ajouter
+
+    </button>
+
+  </div>
+
+  <div class="table-toolbar">
+
+    <div class="search-box">
+
+      <i class="bi bi-search"></i>
+
+      <input
+        type="text"
+        placeholder="Rechercher..."
+        [ngModel]="search()"
+        (ngModelChange)="onSearch($event)">
+
+    </div>
+
+  </div>
+
+  <div class="table-responsive">
+
+    <table class="table align-middle">
 
       <thead>
 
         <tr>
-          <th>#</th>
+
           <th>Nom</th>
-          <th>Before Step</th>
+
+          <th>État précédent</th>
+
           <th>Description</th>
-          <th>Parent</th>
-          <th class="text-center">Actions</th>
+
+          <th class="text-center">
+            Actions
+          </th>
+
         </tr>
 
       </thead>
 
       <tbody>
 
-        @for (
-          state of states();
-          track trackById($index, state)
-        ) {
+        @for(item of paginatedItems(); track item.id){
 
           <tr>
 
-            <td>{{ $index + 1 }}</td>
-
             <td>
-              <span class="state-name">
-                {{ state.name }}
+
+              <span class="state-badge">
+
+                {{ item.name }}
+
               </span>
-            </td>
 
-            <td>{{ state.beforeStep }}</td>
-
-            <td>
-              {{ state.description || '-' }}
             </td>
 
             <td>
-              {{ state.parent || '-' }}
+
+              {{ item.etatPrecedent }}
+
             </td>
 
-            <td class="actions">
+            <td>
 
-              <button
-                type="button"
-                class="btn-action btn-edit"
-                title="Modifier"
-                (click)="onEdit(state)">
+              {{ item.description || '-' }}
 
-                <i class="bi bi-pencil-square"></i>
+            </td>
 
-              </button>
+            <td>
 
-              <button
-                type="button"
-                class="btn-action btn-delete"
-                title="Supprimer"
-                (click)="onDelete(state)">
+              <div class="action-buttons">
 
-                <i class="bi bi-trash"></i>
+                <button
+                  title="Modifier"
+                  class="btn-edit"
+                  (click)="onEdit(item)">
 
-              </button>
+                  <i class="bi bi-pencil"></i>
+
+                </button>
+
+                <button
+                  title="Supprimer"
+                  class="btn-delete"
+                  (click)="onDelete(item.id!)">
+
+                  <i class="bi bi-trash"></i>
+
+                </button>
+
+              </div>
+
+            </td>
+
+          </tr>
+
+        }
+
+        @if(filteredItems().length === 0){
+
+          <tr>
+
+            <td colspan="4">
+
+              <div class="empty-state">
+
+                Aucun état trouvé
+
+              </div>
 
             </td>
 
@@ -76,16 +138,39 @@
 
     </table>
 
-  } @else {
+  </div>
 
-    <div class="empty-state">
+  <div class="pagination-container">
 
-      <i class="bi bi-diagram-3"></i>
+    <button
+      class="page-btn"
+      [disabled]="currentPage() === 1"
+      (click)="changePage(currentPage() - 1)">
 
-      <p>Aucun état enregistré</p>
+      <i class="bi bi-chevron-left"></i>
 
-    </div>
+      Précédent
 
-  }
+    </button>
+
+    <span class="page-info">
+
+      Page {{ currentPage() }}
+      sur {{ totalPages() }}
+
+    </span>
+
+    <button
+      class="page-btn"
+      [disabled]="currentPage() === totalPages()"
+      (click)="changePage(currentPage() + 1)">
+
+      Suivant
+
+      <i class="bi bi-chevron-right"></i>
+
+    </button>
+
+  </div>
 
 </div>

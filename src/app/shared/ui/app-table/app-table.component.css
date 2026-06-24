@@ -171,3 +171,25 @@
   }
 }
 
+.table-actions {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
+
+.btn-icon {
+  width: 34px;
+  height: 34px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.btn-icon.edit {
+  background: #eff6ff;
+}
+
+.btn-icon.delete {
+  background: #fef2f2;
+}
+

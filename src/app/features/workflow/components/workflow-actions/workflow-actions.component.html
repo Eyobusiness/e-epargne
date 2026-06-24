@@ -1,92 +1,186 @@
-<div class="table-wrapper">
+<div class="table-card">
 
-  <table class="custom-table">
+  <div class="table-header">
 
-    <thead>
+    <h3>
 
-      <tr>
+      Actions Workflow
 
-        <th>#</th>
+    </h3>
 
-        <th>Profil</th>
+    <button
+      class="btn-add"
+      (click)="openCreate()">
 
-        <th>Etat</th>
+      <i class="bi bi-plus-circle"></i>
 
-        <th>Ordre</th>
+      Ajouter
 
-        <th>Endpoint</th>
+    </button>
 
-        <th>Actions</th>
+  </div>
 
-      </tr>
+  <div class="table-toolbar">
 
-    </thead>
+    <div class="search-box">
 
-    <tbody>
+      <i class="bi bi-search"></i>
 
-  @for (
-    item of actions();
-    track trackById($index, item)
-  ) {
+      <input
+        type="text"
+        placeholder="Rechercher..."
+        [ngModel]="search()"
+        (ngModelChange)="onSearch($event)">
 
-    <tr>
+    </div>
 
-      <td>
-        {{ $index + 1 }}
-      </td>
+  </div>
 
-      <td>
-        <span class="profile-badge">
-          {{ item.profile?.name || '--' }}
-        </span>
-      </td>
+  <div class="table-responsive">
 
-      <td>
-        <span class="state-badge">
-          {{ item.beforeStep }}
-        </span>
-      </td>
+    <table class="table align-middle">
 
-      <td>
-        <span class="order-badge">
-          {{ item.stateOrder }}
-        </span>
-      </td>
+      <thead>
 
-      <td>
-        <span class="endpoint-code">
-          {{ item.endpoint }}
-        </span>
-      </td>
+        <tr>
 
-      <td class="actions">
+          <th>Workflow</th>
 
-        <button
-          title="Modifier"
-          class="btn-action btn-edit"
-          (click)="onEdit(item)">
+          <th>Etat</th>
 
-          <i class="bi bi-pencil-square"></i>
+          <th>Profil</th>
 
-        </button>
+          <th>Endpoint</th>
 
-        <button
-          title="Supprimer"
-          class="btn-action btn-delete"
-          (click)="onDelete(item)">
+          <th>Ordre</th>
 
-          <i class="bi bi-trash"></i>
+          <th>Actions</th>
 
-        </button>
+        </tr>
 
-      </td>
+      </thead>
 
-    </tr>
+      <tbody>
 
-  }
+        @for(item of paginatedItems(); track item.id){
 
-</tbody>
+          <tr>
 
-  </table>
+            <td>
+
+              {{ item.workflowLabel }}
+
+            </td>
+
+            <td>
+
+              {{ item.stateLabel }}
+
+            </td>
+
+            <td>
+
+              {{ item.profileLabel }}
+
+            </td>
+
+            <td>
+
+              {{ item.endpoint }}
+
+            </td>
+
+            <td>
+
+              {{ item.stateOrder }}
+
+            </td>
+
+            <td>
+
+              <div class="action-buttons">
+
+                <button title="modifier"
+                  class="btn-edit"
+                  (click)="onEdit(item)">
+
+                  <i class="bi bi-pencil"></i>
+
+                </button>
+
+                <button title="supprimer"
+                  class="btn-delete"
+                  (click)="onDelete(item.id!)">
+
+                  <i class="bi bi-trash"></i>
+
+                </button>
+
+              </div>
+
+            </td>
+
+          </tr>
+
+        }
+
+        @if(filteredItems().length === 0){
+
+          <tr>
+
+            <td colspan="6">
+
+              <div class="empty-state">
+
+                Aucune action trouvée
+
+              </div>
+
+            </td>
+
+          </tr>
+
+        }
+
+      </tbody>
+
+    </table>
+
+    <div class="pagination-container">
+
+  <button
+    class="page-btn"
+    [disabled]="currentPage() === 1"
+    (click)="changePage(currentPage() - 1)">
+
+    <i class="bi bi-chevron-left"></i>
+
+    Précédent
+
+  </button>
+
+  <span class="page-info">
+
+    Page {{ currentPage() }}
+    sur {{ totalPages() }}
+
+  </span>
+
+  <button
+    class="page-btn"
+    [disabled]="currentPage() === totalPages()"
+    (click)="changePage(currentPage() + 1)">
+
+    Suivant
+
+    <i class="bi bi-chevron-right"></i>
+
+  </button>
+
+</div>
+
+  </div>
+
+
 
 </div>

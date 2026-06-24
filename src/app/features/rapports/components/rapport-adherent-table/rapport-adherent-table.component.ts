@@ -28,21 +28,52 @@ export class RapportAdherentTableComponent {
     this.currentPage.set(1);
   }
 
-  readonly filteredItems = computed(() => {
-    const term = this.search().trim().toLowerCase();
+  readonly groupedItems = computed(() => {
+    const map = new Map<string, RapportAdherent>();
 
-    if (!term) {
-      return this.items();
-    }
+    this.items().forEach((item) => {
+      const key = `${item.adherentId}-${item.groupeId}`;
 
-    return this.items().filter(
-      (item) =>
-        item.nom.toLowerCase().includes(term) ||
-        item.matricule.toLowerCase().includes(term) ||
-        item.groupe.toLowerCase().includes(term) ||
-        item.telephone.toLowerCase().includes(term),
-    );
+      if (!map.has(key)) {
+        map.set(key, {
+          ...item,
+          montantPrevu: Number(item.montantPrevu || 0),
+          montantPaye: Number(item.montantPaye || 0),
+          montantReste: Number(item.montantReste || 0),
+        });
+      } else {
+        const existing = map.get(key)!;
+
+        existing.montantPrevu += Number(item.montantPrevu || 0);
+        existing.montantPaye += Number(item.montantPaye || 0);
+        existing.montantReste += Number(item.montantReste || 0);
+
+        existing.tauxRealisation =
+          existing.montantPrevu > 0 ? (existing.montantPaye / existing.montantPrevu) * 100 : 0;
+      }
+    });
+
+    return Array.from(map.values());
   });
+
+  readonly filteredItems = computed(() => {
+
+  const term = this.search().trim().toLowerCase();
+
+  const data = this.groupedItems();
+
+  if (!term) {
+    return data;
+  }
+
+  return data.filter(
+    item =>
+      item.nom.toLowerCase().includes(term) ||
+      item.matricule.toLowerCase().includes(term) ||
+      item.groupe.toLowerCase().includes(term) ||
+      item.telephone.toLowerCase().includes(term)
+  );
+});
 
   readonly totalPages = computed(() => {
     return Math.max(1, Math.ceil(this.filteredItems().length / this.pageSize));
