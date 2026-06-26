@@ -4,6 +4,7 @@ import { Component, input, output, inject, effect } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule,  Validators } from '@angular/forms';
 
 import { Workflow } from '../../models/workflow.model';
+import { Parametre } from '../../../parametres/models/parametre.models';
 
 @Component({
   selector: 'app-workflow-form',
@@ -16,8 +17,8 @@ export class WorkflowFormComponent {
   private readonly fb = inject(FormBuilder);
 
   readonly workflow = input<Workflow | null>(null);
-
-  readonly close = output<void>();
+  readonly endpoints = input<Parametre[]>([]);
+  readonly cancel = output<void>();
 
   readonly submitForm = output<Workflow>();
 
@@ -64,6 +65,6 @@ export class WorkflowFormComponent {
   }
 
   onClose(): void {
-    this.close.emit();
+    this.cancel.emit();
   }
 }

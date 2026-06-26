@@ -1,56 +1,29 @@
-<!-- components/cotisation-adherent-stats/cotisation-adherent-stats.component.html -->
-
-<div class="stats-grid stats-grid--2">
-
-  <div class="stat-card stat-card--blue">
-
-    <div class="stat-icon stat-icon--blue">
-
-      <i class="bi bi-cash-stack"></i>
-
-    </div>
-
-    <div class="stat-content">
-
-      <span>
-        Total paiements
-      </span>
-
-      <h5>
-        {{ totalCotisations() }}
-      </h5>
-
-    </div>
-
+@if (isLoading()) {
+  <div class="stats-grid stats-grid--2">
+    @for (item of [1, 2]; track item) {
+      <div class="stat-card skeleton-card"></div>
+    }
   </div>
-
-  <div class="stat-card stat-card--green">
-
-    <div class="stat-icon stat-icon--green">
-
-      <i class="bi bi-wallet2"></i>
-
+} @else {
+  <div class="stats-grid stats-grid--2">
+    <div class="stat-card stat-card--blue">
+      <div class="stat-icon stat-icon--blue">
+        <i class="bi bi-cash-stack"></i>
+      </div>
+      <div class="stat-content">
+        <span>Total paiements</span>
+        <h5>{{ totalCotisations() }}</h5>
+      </div>
     </div>
 
-    <div class="stat-content">
-
-      <span>
-        Montant total
-      </span>
-
-      <h5>
-
-        {{
-          totalMontant()
-            | formatMontant
-        }}
-
-        FCFA
-
-      </h5>
-
+    <div class="stat-card stat-card--green">
+      <div class="stat-icon stat-icon--green">
+        <i class="bi bi-wallet2"></i>
+      </div>
+      <div class="stat-content">
+        <span>Montant total</span>
+        <h5>{{ totalMontant() | formatMontant }} FCFA</h5>
+      </div>
     </div>
-
   </div>
-
-</div>
+}

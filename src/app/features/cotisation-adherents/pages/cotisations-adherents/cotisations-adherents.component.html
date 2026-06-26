@@ -9,7 +9,8 @@
 <div class="page-content">
 
   <app-cotisation-adherent-stats
-    [cotisations]="cotisations()">
+    [cotisations]="cotisations()"
+    [isLoading]="isPageLoading()">
   </app-cotisation-adherent-stats>
 
   <app-cotisation-adherent-filter

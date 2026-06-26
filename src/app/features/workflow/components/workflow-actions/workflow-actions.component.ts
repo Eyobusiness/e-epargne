@@ -1,11 +1,11 @@
 import { Component, computed, input, output, signal } from '@angular/core';
-
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 import { Workflow } from '../../models/workflow.model';
 import { WorkflowState } from '../../models/workflow-state.model';
 import { WorkflowAction } from '../../models/workflow-action.model';
+import { Profile } from '../../../profil/models/profil.model';
 
 @Component({
   selector: 'app-workflow-actions',
@@ -16,26 +16,18 @@ import { WorkflowAction } from '../../models/workflow-action.model';
 })
 export class WorkflowActionsComponent {
   readonly workflows = input<Workflow[]>([]);
-
   readonly states = input<WorkflowState[]>([]);
-
   readonly actions = input<WorkflowAction[]>([]);
-
+  readonly profiles = input<Profile[]>([]);
   readonly create = output<void>();
-
   readonly edit = output<WorkflowAction>();
-
   readonly remove = output<string>();
-
   readonly search = signal('');
-
   readonly currentPage = signal(1);
-
   readonly pageSize = 10;
 
   onSearch(value: string): void {
     this.search.set(value);
-
     this.currentPage.set(1);
   }
 
@@ -44,13 +36,10 @@ export class WorkflowActionsComponent {
 
     const data = this.actions().map((action) => ({
       ...action,
-
       workflowLabel:
         this.workflows().find((workflow) => workflow.id === action.idWorkflow)?.label ?? '-',
-
       stateLabel: this.states().find((state) => state.id === action.stepId)?.name ?? '-',
-
-      profileLabel: action.profile?.name ?? '-',
+      profileLabel: this.resolveProfileLabel(action),
     }));
 
     if (!term) {
@@ -72,7 +61,6 @@ export class WorkflowActionsComponent {
 
   readonly paginatedItems = computed(() => {
     const start = (this.currentPage() - 1) * this.pageSize;
-
     const end = start + this.pageSize;
 
     return this.filteredItems().slice(start, end);
@@ -96,5 +84,27 @@ export class WorkflowActionsComponent {
 
   onDelete(id: string): void {
     this.remove.emit(id);
+  }
+
+  private resolveProfileLabel(action: WorkflowAction): string {
+    if (action.profile?.name) {
+      return action.profile.name;
+    }
+
+    const ids = action.profileIds?.length
+      ? action.profileIds
+      : action.profileId
+        ? [action.profileId]
+        : [];
+
+    if (ids.length === 0) {
+      return '-';
+    }
+
+    const labels = ids
+      .map((id) => this.profiles().find((profile) => profile.id === id)?.libelle)
+      .filter((label): label is string => Boolean(label));
+
+    return labels.length > 0 ? labels.join(', ') : '-';
   }
 }

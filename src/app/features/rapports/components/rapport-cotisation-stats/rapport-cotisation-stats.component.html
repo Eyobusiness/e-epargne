@@ -1,169 +1,185 @@
 <div class="row g-3">
 
-  <!-- ADHERENTS -->
-  <div class="col-xl-2 col-lg-4 col-md-6">
+  @if (isLoading()) {
 
-    <div class="stat-card stat-blue">
+    @for (item of [1,2,3,4,5,6]; track item) {
 
-      <div class="icon-box">
-        <i class="bi bi-people-fill"></i>
-      </div>
+      <div class="col-xl-4 col-md-6">
 
-      <div class="content">
-
-        <span>
-          Adhérents
-        </span>
-
-        <h4>
-          {{ stats()?.totalAdherents ?? 0 }}
-        </h4>
+        <div class="stat-card skeleton-card"></div>
 
       </div>
 
-      <div class="shape"></div>
+    }
+
+  } @else {
+
+    <!-- ADHERENTS -->
+    <div class="col-xl-4 col-md-6">
+
+      <div class="stat-card stat-blue">
+
+        <div class="icon-box">
+          <i class="bi bi-people-fill"></i>
+        </div>
+
+        <div class="content">
+
+          <span>
+            Adhérents
+          </span>
+
+          <h4>
+            {{ stats()?.totalAdherents ?? 0 }}
+          </h4>
+
+        </div>
+
+        <div class="shape"></div>
+
+      </div>
 
     </div>
 
-  </div>
+    <!-- GROUPES -->
+    <div class="col-xl-4 col-md-6">
 
-  <!-- GROUPES -->
-  <div class="col-xl-2 col-lg-4 col-md-6">
+      <div class="stat-card stat-green">
 
-    <div class="stat-card stat-green">
+        <div class="icon-box">
+          <i class="bi bi-collection-fill"></i>
+        </div>
 
-      <div class="icon-box">
-        <i class="bi bi-collection-fill"></i>
+        <div class="content">
+
+          <span>
+            Groupes
+          </span>
+
+          <h4>
+            {{ stats()?.totalGroupes ?? 0 }}
+          </h4>
+
+        </div>
+
+        <div class="shape"></div>
+
       </div>
-
-      <div class="content">
-
-        <span>
-          Groupes
-        </span>
-
-        <h4>
-          {{ stats()?.totalGroupes ?? 0 }}
-        </h4>
-
-      </div>
-
-      <div class="shape"></div>
 
     </div>
 
-  </div>
+    <!-- PREVU -->
+    <div class="col-xl-4 col-md-6">
 
-  <!-- PREVU -->
-  <div class="col-xl-2 col-lg-4 col-md-6">
+      <div class="stat-card stat-cyan">
 
-    <div class="stat-card stat-cyan">
+        <div class="icon-box">
+          <i class="bi bi-wallet2"></i>
+        </div>
 
-      <div class="icon-box">
-        <i class="bi bi-wallet2"></i>
+        <div class="content">
+
+          <span>
+            Total prévu
+          </span>
+
+          <h4>
+            {{ stats()?.totalPrevu | formatMontant }}
+            <small>FCFA</small>
+          </h4>
+
+        </div>
+
+        <div class="shape"></div>
+
       </div>
-
-      <div class="content">
-
-        <span>
-          Total prévu
-        </span>
-
-        <h4>
-          {{ stats()?.totalPrevu | formatMontant }}
-          <small>FCFA</small>
-        </h4>
-
-      </div>
-
-      <div class="shape"></div>
 
     </div>
 
-  </div>
+    <!-- PAYE -->
+    <div class="col-xl-4 col-md-6">
 
-  <!-- PAYE -->
-  <div class="col-xl-2 col-lg-4 col-md-6">
+      <div class="stat-card stat-success">
 
-    <div class="stat-card stat-success">
+        <div class="icon-box">
+          <i class="bi bi-check-circle-fill"></i>
+        </div>
 
-      <div class="icon-box">
-        <i class="bi bi-check-circle-fill"></i>
+        <div class="content">
+
+          <span>
+            Total payé
+          </span>
+
+          <h4>
+            {{ stats()?.totalPaye | formatMontant }}
+            <small>FCFA</small>
+          </h4>
+
+        </div>
+
+        <div class="shape"></div>
+
       </div>
-
-      <div class="content">
-
-        <span>
-          Total payé
-        </span>
-
-        <h4>
-          {{ stats()?.totalPaye | formatMontant }}
-          <small>FCFA</small>
-        </h4>
-
-      </div>
-
-      <div class="shape"></div>
 
     </div>
 
-  </div>
+    <!-- RESTE -->
+    <div class="col-xl-4 col-md-6">
 
-  <!-- RESTE -->
-  <div class="col-xl-2 col-lg-4 col-md-6">
+      <div class="stat-card stat-warning">
 
-    <div class="stat-card stat-warning">
+        <div class="icon-box">
+          <i class="bi bi-hourglass-split"></i>
+        </div>
 
-      <div class="icon-box">
-        <i class="bi bi-hourglass-split"></i>
+        <div class="content">
+
+          <span>
+            Reste à cotiser
+          </span>
+
+          <h4>
+            {{ stats()?.totalReste | formatMontant }}
+            <small>FCFA</small>
+          </h4>
+
+        </div>
+
+        <div class="shape"></div>
+
       </div>
-
-      <div class="content">
-
-        <span>
-          Reste à cotiser
-        </span>
-
-        <h4>
-          {{ stats()?.totalReste | formatMontant }}
-          <small>FCFA</small>
-        </h4>
-
-      </div>
-
-      <div class="shape"></div>
 
     </div>
 
-  </div>
+    <!-- TAUX -->
+    <div class="col-xl-4 col-md-6">
 
-  <!-- TAUX -->
-  <div class="col-xl-2 col-lg-4 col-md-6">
+      <div class="stat-card stat-purple">
 
-    <div class="stat-card stat-purple">
+        <div class="icon-box">
+          <i class="bi bi-graph-up-arrow"></i>
+        </div>
 
-      <div class="icon-box">
-        <i class="bi bi-graph-up-arrow"></i>
+        <div class="content">
+
+          <span>
+            Taux réalisé
+          </span>
+
+          <h4>
+            {{ stats()?.tauxRealisation ?? 0 }}
+            <small>%</small>
+          </h4>
+
+        </div>
+
+        <div class="shape"></div>
+
       </div>
-
-      <div class="content">
-
-        <span>
-          Taux réalisé
-        </span>
-
-        <h4>
-          {{ stats()?.tauxRealisation ?? 0 }}
-          <small>%</small>
-        </h4>
-
-      </div>
-
-      <div class="shape"></div>
 
     </div>
 
-  </div>
+  }
 
 </div>

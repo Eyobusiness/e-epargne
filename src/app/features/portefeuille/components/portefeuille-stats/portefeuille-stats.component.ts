@@ -16,6 +16,7 @@ export class PortefeuilleStatsComponent {
   readonly portefeuille = input<Portefeuille | null>(null);
 
   readonly operations = input<Operation[]>([]);
+  readonly isLoading = input<boolean>(false);
 
   readonly solde = computed(() => this.portefeuille()?.montant ?? 0);
 

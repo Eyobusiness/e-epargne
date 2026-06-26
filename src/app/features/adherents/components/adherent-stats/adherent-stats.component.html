@@ -1,31 +1,39 @@
-<div class="stats-grid stats-grid--3">
-  <div class="stat-card stat-card--total">
-    <div class="stat-icon stat-icon--total">
-      <i class="bi bi-people"></i>
-    </div>
-    <div class="stat-content">
-      <span class="stat-label">Total adherents</span>
-      <h5>{{ totalAdherents() }}</h5>
-    </div>
+@if (isLoading()) {
+  <div class="stats-grid stats-grid--3">
+    @for (item of [1, 2, 3]; track item) {
+      <div class="stat-card skeleton-card"></div>
+    }
   </div>
+} @else {
+  <div class="stats-grid stats-grid--3">
+    <div class="stat-card stat-card--total">
+      <div class="stat-icon stat-icon--total">
+        <i class="bi bi-people"></i>
+      </div>
+      <div class="stat-content">
+        <span class="stat-label">Total adherents</span>
+        <h5>{{ totalAdherents() }}</h5>
+      </div>
+    </div>
 
-  <div class="stat-card stat-card--active">
-    <div class="stat-icon stat-icon--active">
-      <i class="bi bi-person-check"></i>
+    <div class="stat-card stat-card--active">
+      <div class="stat-icon stat-icon--active">
+        <i class="bi bi-person-check"></i>
+      </div>
+      <div class="stat-content">
+        <span class="stat-label">Actifs</span>
+        <h5>{{ activeAdherents() }}</h5>
+      </div>
     </div>
-    <div class="stat-content">
-      <span class="stat-label">Actifs</span>
-      <h5>{{ activeAdherents() }}</h5>
-    </div>
-  </div>
 
-  <div class="stat-card stat-card--blocked">
-    <div class="stat-icon stat-icon--blocked">
-      <i class="bi bi-person-x"></i>
-    </div>
-    <div class="stat-content">
-      <span class="stat-label">Inactifs</span>
-      <h5>{{ inactiveAdherents() }}</h5>
+    <div class="stat-card stat-card--blocked">
+      <div class="stat-icon stat-icon--blocked">
+        <i class="bi bi-person-x"></i>
+      </div>
+      <div class="stat-content">
+        <span class="stat-label">Inactifs</span>
+        <h5>{{ inactiveAdherents() }}</h5>
+      </div>
     </div>
   </div>
-</div>
+}

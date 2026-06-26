@@ -1,63 +1,49 @@
-<div class="stats-grid stats-grid--4">
-
-  <div class="stat-card stat-card--green">
-    <div class="stat-icon stat-icon--green">
-      <i class="bi bi-cash-stack"></i>
+@if (isLoading()) {
+  <div class="stats-grid stats-grid--4">
+    @for (item of [1, 2, 3, 4]; track item) {
+      <div class="stat-card skeleton-card"></div>
+    }
+  </div>
+} @else {
+  <div class="stats-grid stats-grid--4">
+    <div class="stat-card stat-card--green">
+      <div class="stat-icon stat-icon--green">
+        <i class="bi bi-cash-stack"></i>
+      </div>
+      <div class="stat-content">
+        <span>Montant total</span>
+        <h5>{{ totalMontant() | formatMontant }} FCFA</h5>
+      </div>
     </div>
 
-    <div class="stat-content">
-      <span>Montant total</span>
+    <div class="stat-card stat-card--orange">
+      <div class="stat-icon stat-icon--orange">
+        <i class="bi bi-hourglass-split"></i>
+      </div>
+      <div class="stat-content">
+        <span>Montant en attente</span>
+        <h5>{{ montantAttente() | formatMontant }} FCFA</h5>
+      </div>
+    </div>
 
-      <h5>
-        {{ totalMontant() |  formatMontant }}
-        FCFA
-      </h5>
+    <div class="stat-card stat-card--emerald">
+      <div class="stat-icon stat-icon--emerald">
+        <i class="bi bi-check-circle"></i>
+      </div>
+      <div class="stat-content">
+        <span>Montant payé</span>
+        <h5>{{ montantPaye() | formatMontant }} FCFA</h5>
+      </div>
+    </div>
+
+    <div class="stat-card stat-card--red">
+      <div class="stat-icon stat-icon--emerald">
+        <i class="bi bi-check-circle"></i>
+      </div>
+      <div class="stat-content">
+        <span>Montant Annulé</span>
+        <h5>{{ montantAnnule() | formatMontant }} FCFA</h5>
+      </div>
     </div>
   </div>
-
-  <div class="stat-card stat-card--orange">
-    <div class="stat-icon stat-icon--orange">
-      <i class="bi bi-hourglass-split"></i>
-    </div>
-
-    <div class="stat-content">
-      <span>Montant en attente</span>
-
-      <h5>
-        {{ montantAttente() | formatMontant }}
-        FCFA
-      </h5>
-    </div>
-  </div>
-
-  <div class="stat-card stat-card--emerald">
-    <div class="stat-icon stat-icon--emerald">
-      <i class="bi bi-check-circle"></i>
-    </div>
-
-    <div class="stat-content">
-      <span>Montant payé</span>
-
-      <h5>
-        {{ montantPaye() | formatMontant }}
-        FCFA
-      </h5>
-    </div>
-  </div>
-
-  <div class="stat-card stat-card--red">
-    <div class="stat-icon stat-icon--emerald">
-      <i class="bi bi-check-circle"></i>
-    </div>
-
-    <div class="stat-content">
-      <span>Montant Annulé</span>
-
-      <h5>
-        {{ montantAnnule() | formatMontant }}
-        FCFA
-      </h5>
-    </div>
-  </div>
-
-</div>
+}

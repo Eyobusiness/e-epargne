@@ -141,20 +141,19 @@ padding: 8px;
 }
 
 .table thead {
-  background: #f8fafc;
+  background: #f9fafb;
 }
 
 .table thead th {
-  padding: 1rem;
+  background-color: #f9fafb !important;
+  padding: 16px;
 
-  font-size: .8rem;
+  font-size: 13px;
   font-weight: 700;
 
-  text-transform: uppercase;
+  color: #374151;
 
-  color: #64748b;
-
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 1px solid #e5e7eb;
 }
 
 .table tbody td {

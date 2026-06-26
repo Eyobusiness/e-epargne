@@ -15,6 +15,7 @@ import { FormatMontantPipe } from '../../../../shared/pipes/pipe.component';
 })
 export class CotisationAdherentStatsComponent {
   readonly cotisations = input<CotisationAdherent[]>([]);
+  readonly isLoading = input<boolean>(false);
 
   readonly totalCotisations = computed(() => this.cotisations().length);
 

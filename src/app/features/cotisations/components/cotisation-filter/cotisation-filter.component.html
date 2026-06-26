@@ -1,94 +1,86 @@
 <div class="filter-container">
 
-  <div class="row g-3 align-items-end">
+  <div class="row g-3 align-items-end w-100 m-0">
 
-    <div class="col-lg-3 col-md-6">
-      <label class="form-label">Recherche</label>
-      <input
-        type="text"
-        class="form-control"
-        placeholder="Libellé..."
-        [ngModel]="search()"
-        (ngModelChange)="search.set($event)">
+    <div class="col-lg-2 col-md-6">
+      <div class="form-group">
+        <label class="form-label">Recherche</label>
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Libellé..."
+          [ngModel]="search()"
+          (ngModelChange)="search.set($event)">
+      </div>
     </div>
 
     <div class="col-lg-2 col-md-6">
-      <label for="date_debut" class="form-label">
-        Date début
-      </label>
-      <input
-        id="date_debut"
-        type="date"
-        class="form-control"
-        [ngModel]="startDate()"
-        (ngModelChange)="startDate.set($event)">
+      <div class="form-group">
+        <label for="date_debut" class="form-label">Date début</label>
+        <input
+          id="date_debut"
+          type="date"
+          class="form-control"
+          [ngModel]="startDate()"
+          (ngModelChange)="startDate.set($event)">
+      </div>
     </div>
 
     <div class="col-lg-2 col-md-6">
-      <label for="date_fin" class="form-label">
-        Date fin
-      </label>
-      <input
-        id="date_fin"
-        type="date"
-        class="form-control"
-        [ngModel]="endDate()"
-        (ngModelChange)="endDate.set($event)">
+      <div class="form-group">
+        <label for="date_fin" class="form-label">Date fin</label>
+        <input
+          id="date_fin"
+          type="date"
+          class="form-control"
+          [ngModel]="endDate()"
+          (ngModelChange)="endDate.set($event)">
+      </div>
     </div>
 
     <div class="col-lg-2 col-md-6">
-      <label class="form-label">Adhérent</label>
-      <select title="Filtrer par adhérent"
-        class="form-select"
-        [ngModel]="adherentId()"
-        (ngModelChange)="adherentId.set($event)">
-
-        <option value="">Tous</option>
-
-        @for (item of adherents(); track item.id) {
-          <option [value]="item.id">
-            {{ item.name }}
-          </option>
-        }
-
-      </select>
+      <div class="form-group">
+        <label class="form-label">Adhérent</label>
+        <select title="Filtrer par adhérent"
+          class="form-select"
+          [ngModel]="adherentId()"
+          (ngModelChange)="adherentId.set($event)">
+          <option value="">Tous</option>
+          @for (item of adherents(); track item.id) {
+            <option [value]="item.id">{{ item.name }}</option>
+          }
+        </select>
+      </div>
     </div>
 
-    <div class="col-lg-3 col-md-6">
-      <label class="form-label">Statut</label>
-      <select title="Filtrer par statut"
-        class="form-select"
-        [ngModel]="status()"
-        (ngModelChange)="status.set($event)">
-
-        <option value="200">Actif</option>
-        <option value="0">Inactif</option>
-        <option value="200,100">Tous actifs</option>
-
-      </select>
+    <div class="col-lg-2 col-md-6">
+      <div class="form-group">
+        <label class="form-label">Statut</label>
+        <select title="Filtrer par statut"
+          class="form-select"
+          [ngModel]="status()"
+          (ngModelChange)="status.set($event)">
+          <option value="200">Actif</option>
+          <option value="0">Inactif</option>
+          <option value="200,100">Tous actifs</option>
+        </select>
+      </div>
     </div>
 
-  
-
-  </div>
-
-  <div class="d-flex justify-content-end gap-2 mt-3">
-
-    <button
-      class="btn btn-outline-secondary"
-      (click)="resetFilters()">
-
-      Réinitialiser
-
-    </button>
-
-    <button
-      class="btn btn-primary"
-      (click)="applyFilters()">
-
-      Filtrer
-
-    </button>
+    <div class="col-lg-2 col-md-6 d-flex gap-2">
+      <button
+        class="btn btn-primary flex-grow-1"
+        (click)="applyFilters()">
+        <i class="bi bi-funnel"></i>
+        Filtrer
+      </button>
+      <button
+        class="btn btn-outline-secondary px-2"
+        (click)="resetFilters()"
+        title="Réinitialiser">
+        <i class="bi bi-arrow-counterclockwise"></i>
+      </button>
+    </div>
 
   </div>
 

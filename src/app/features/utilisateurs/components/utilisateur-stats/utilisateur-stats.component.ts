@@ -19,6 +19,7 @@ import { User } from '../../models/utilisateur.model';
 })
 export class UtilisateurStatsComponent {
   readonly utilisateurs = input<User[]>([]);
+  readonly isLoading = input<boolean>(false);
 
   readonly totalUtilisateurs = computed(() => this.utilisateurs().length);
 

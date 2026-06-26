@@ -15,6 +15,7 @@ import { FormatMontantPipe } from '../../../../shared/pipes/pipe.component';
 })
 export class GroupeStatsComponent {
   readonly groupes = input<Groupe[]>([]);
+  readonly isLoading = input<boolean>(false);
 
   readonly totalGroupes = computed(() => this.groupes().length);
 

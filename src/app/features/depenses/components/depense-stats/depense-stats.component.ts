@@ -12,6 +12,7 @@ import { Depense } from '../../models/depense.model';
 })
 export class DepenseStatsComponent {
   readonly depenses = input<Depense[]>([]);
+  readonly isLoading = input<boolean>(false);
 
   readonly totalAmount = computed(() => {
     return this.depenses().reduce((sum, item) => sum + Number(item.amount), 0);

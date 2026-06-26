@@ -1,56 +1,206 @@
 <!-- features/auth/pages/login/login.component.html -->
 
 <div class="login-page">
-  <div class="login-card">
-    <div class="login-header">
-      <h1>Connexion</h1>
-      <p>Accedez a votre espace de gestion</p>
-    </div>
 
-    <form [formGroup]="form" (ngSubmit)="login()">
-      <div class="form-group">
-        <label for="username">Email</label>
+  <!-- Arrière-plan animé avec formes flottantes -->
+  <div class="bg-canvas" aria-hidden="true">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+    <div class="blob blob-4"></div>
 
-        <input
-          id="username"
-          type="email"
-          placeholder="Entrez votre email"
-          formControlName="username"
-          autocomplete="username"
-          [class.input-error]="emailControl.invalid && emailControl.touched">
-
-        @if (emailControl.invalid && emailControl.touched) {
-          <p class="field-error">L'email est obligatoire.</p>
-        }
-      </div>
-
-      <div class="form-group">
-        <label for="password">Mot de passe</label>
-        <input
-          id="password"
-          type="password"
-          placeholder="Entrez votre mot de passe"
-          formControlName="password"
-          autocomplete="current-password"
-          [class.input-error]="passwordControl.invalid && passwordControl.touched">
-        @if (passwordControl.invalid && passwordControl.touched) {
-          <p class="field-error">Le mot de passe est obligatoire.</p>
-        }
-      </div>
-
-      <div class="login-actions">
-        <a routerLink="/auth/forgot-password">Mot de passe oublie ?</a>
-      </div>
-
-      <button type="submit" class="btn btn-login" [disabled]="isLoading()">
-        @if (!isLoading()) {
-          Connexion
-        }
-        @if (isLoading()) {
-          <span class="spinner"></span>
-          Chargement...
-        }
-      </button>
-    </form>
+    <!-- Formes géométriques décoratives -->
+    <div class="shape shape-ring ring-1"></div>
+    <div class="shape shape-ring ring-2"></div>
+    <div class="shape shape-dot dot-1"></div>
+    <div class="shape shape-dot dot-2"></div>
+    <div class="shape shape-dot dot-3"></div>
+    <div class="shape shape-diamond diamond-1"></div>
+    <div class="shape shape-diamond diamond-2"></div>
   </div>
+
+  <!-- Panneau gauche : branding & infos -->
+  <aside class="login-brand-panel" aria-hidden="true">
+    <div class="brand-content">
+      <!-- Logo -->
+      <div class="brand-logo-wrap">
+        <div class="brand-logo-icon">
+          <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M18 4L32 12V24L18 32L4 24V12L18 4Z" fill="white" fill-opacity="0.9"/>
+            <path d="M18 10L26 15V21L18 26L10 21V15L18 10Z" fill="white" fill-opacity="0.3"/>
+            <circle cx="18" cy="18" r="4" fill="white"/>
+          </svg>
+        </div>
+        <span class="brand-logo-text">E-EPARGNE</span>
+      </div>
+
+      <div class="brand-copy">
+        <h2 class="brand-headline">
+          Gérez votre épargne<br>
+          <span class="brand-highlight">avec intelligence</span>
+        </h2>
+        <p class="brand-subtext">
+          Plateforme de gestion d'épargne collaborative — sécurisée, transparente et performante.
+        </p>
+      </div>
+
+      <!-- Stats clés -->
+      <div class="brand-stats">
+        <div class="stat-item">
+          <span class="stat-value">100%</span>
+          <span class="stat-label">Sécurisé</span>
+        </div>
+        <div class="stat-sep"></div>
+        <div class="stat-item">
+          <span class="stat-value">24/7</span>
+          <span class="stat-label">Disponible</span>
+        </div>
+        <div class="stat-sep"></div>
+        <div class="stat-item">
+          <span class="stat-value">∞</span>
+          <span class="stat-label">Groupes</span>
+        </div>
+      </div>
+
+      <!-- Icônes features -->
+      <div class="brand-features">
+        <div class="feature-pill">
+          <i class="bi bi-shield-check-fill"></i>
+          <span>Données chiffrées</span>
+        </div>
+        <div class="feature-pill">
+          <i class="bi bi-graph-up-arrow"></i>
+          <span>Suivi en temps réel</span>
+        </div>
+        <div class="feature-pill">
+          <i class="bi bi-people-fill"></i>
+          <span>Gestion collective</span>
+        </div>
+      </div>
+
+      <!-- Floating cards intégrées dans le flux -->
+      <div class="brand-cards-row">
+        <div class="floating-card card-savings">
+          <div class="fc-icon"><i class="bi bi-piggy-bank-fill"></i></div>
+          <div class="fc-body">
+            <span class="fc-label">Épargne totale</span>
+            <span class="fc-value">2 450 000 F</span>
+          </div>
+          <div class="fc-trend up"><i class="bi bi-arrow-up-right"></i> +12%</div>
+        </div>
+
+        <div class="floating-card card-members">
+          <div class="fc-icon"><i class="bi bi-people-fill"></i></div>
+          <div class="fc-body">
+            <span class="fc-label">Membres actifs</span>
+            <span class="fc-value">38</span>
+          </div>
+          <div class="fc-badge">En ligne</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Panneau droit : formulaire -->
+  <main class="login-form-panel">
+    <div class="login-card">
+
+      <!-- Logo mobile (visible uniquement en mobile) -->
+      <div class="mobile-brand">
+        <div class="mobile-logo-icon">
+          <svg width="28" height="28" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M18 4L32 12V24L18 32L4 24V12L18 4Z" fill="white" fill-opacity="0.9"/>
+            <circle cx="18" cy="18" r="4" fill="white"/>
+          </svg>
+        </div>
+        <span>E-EPARGNE</span>
+      </div>
+
+      <div class="login-card-header">
+        <div class="login-card-icon">
+          <i class="bi bi-lock-fill"></i>
+        </div>
+        <h1 class="login-title">Bienvenue</h1>
+        <p class="login-subtitle">Connectez-vous à votre espace de gestion</p>
+      </div>
+
+      <form [formGroup]="form" (ngSubmit)="login()" class="login-form" novalidate>
+
+        <!-- Email -->
+        <div class="field-group">
+          <label for="username" class="field-label">
+            <i class="bi bi-envelope-fill"></i>
+            Adresse email
+          </label>
+          <div class="input-wrap" [class.has-error]="emailControl.invalid && emailControl.touched">
+            <input
+              id="username"
+              type="email"
+              placeholder="exemple@email.com"
+              formControlName="username"
+              autocomplete="username"
+              class="field-input">
+            @if (emailControl.valid && emailControl.dirty) {
+              <span class="input-check"><i class="bi bi-check-circle-fill"></i></span>
+            }
+          </div>
+          @if (emailControl.invalid && emailControl.touched) {
+            <p class="field-error"><i class="bi bi-exclamation-circle-fill"></i> L'email est obligatoire.</p>
+          }
+        </div>
+
+        <!-- Mot de passe -->
+        <div class="field-group">
+          <label for="password" class="field-label">
+            <i class="bi bi-key-fill"></i>
+            Mot de passe
+          </label>
+          <div class="input-wrap" [class.has-error]="passwordControl.invalid && passwordControl.touched">
+            <input
+              id="password"
+              type="password"
+              placeholder="••••••••"
+              formControlName="password"
+              autocomplete="current-password"
+              class="field-input">
+          </div>
+          @if (passwordControl.invalid && passwordControl.touched) {
+            <p class="field-error"><i class="bi bi-exclamation-circle-fill"></i> Le mot de passe est obligatoire.</p>
+          }
+        </div>
+
+        <!-- Mot de passe oublié -->
+        <div class="login-extra">
+          <a routerLink="/auth/forgot-password" class="forgot-link">
+            <i class="bi bi-question-circle"></i>
+            Mot de passe oublié ?
+          </a>
+        </div>
+
+        <!-- Bouton connexion -->
+        <button type="submit" class="btn-login" [disabled]="isLoading()">
+          @if (!isLoading()) {
+            <span class="btn-login-content">
+              <i class="bi bi-arrow-right-circle-fill"></i>
+              Se connecter
+            </span>
+          }
+          @if (isLoading()) {
+            <span class="btn-login-content">
+              <span class="login-spinner"></span>
+              Connexion en cours...
+            </span>
+          }
+        </button>
+
+      </form>
+
+      <!-- Footer de la carte -->
+      <p class="card-footer-text">
+        <i class="bi bi-shield-lock-fill"></i>
+        Connexion sécurisée SSL — vos données sont protégées
+      </p>
+    </div>
+  </main>
+
 </div>

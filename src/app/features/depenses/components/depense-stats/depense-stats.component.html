@@ -1,102 +1,49 @@
-<!-- components/depense-stats/depense-stats.component.html -->
-
-<div class="stats-grid stats-grid--4">
-
-  <div class="stat-card stat-card--total">
-
-    <div class="stat-icon stat-icon--total">
-      <i class="bi bi-cash-stack"></i>
-    </div>
-
-    <div class="stat-content">
-
-      <span class="stat-label">
-        Total depenses
-      </span>
-
-      <h5>
-        {{
-          formatAmount(
-            totalAmount()
-          )
-        }}
-        FCFA
-      </h5>
-
-    </div>
-
+@if (isLoading()) {
+  <div class="stats-grid stats-grid--4">
+    @for (item of [1, 2, 3, 4]; track item) {
+      <div class="stat-card skeleton-card"></div>
+    }
   </div>
-
-  <div class="stat-card stat-card--today">
-
-    <div class="stat-icon stat-icon--today">
-      <i class="bi bi-calendar-day"></i>
+} @else {
+  <div class="stats-grid stats-grid--4">
+    <div class="stat-card stat-card--total">
+      <div class="stat-icon stat-icon--total">
+        <i class="bi bi-cash-stack"></i>
+      </div>
+      <div class="stat-content">
+        <span class="stat-label">Total depenses</span>
+        <h5>{{ formatAmount(totalAmount()) }} FCFA</h5>
+      </div>
     </div>
 
-    <div class="stat-content">
-
-      <span class="stat-label">
-        Aujourd'hui
-      </span>
-
-      <h5>
-        {{
-          formatAmount(
-            todayAmount()
-          )
-        }}
-        FCFA
-      </h5>
-
+    <div class="stat-card stat-card--today">
+      <div class="stat-icon stat-icon--today">
+        <i class="bi bi-calendar-day"></i>
+      </div>
+      <div class="stat-content">
+        <span class="stat-label">Aujourd'hui</span>
+        <h5>{{ formatAmount(todayAmount()) }} FCFA</h5>
+      </div>
     </div>
 
+    <div class="stat-card stat-card--month">
+      <div class="stat-icon stat-icon--month">
+        <i class="bi bi-bar-chart"></i>
+      </div>
+      <div class="stat-content">
+        <span class="stat-label">Ce mois</span>
+        <h5>{{ formatAmount(monthlyAmount()) }} FCFA</h5>
+      </div>
+    </div>
+
+    <div class="stat-card stat-card--operation">
+      <div class="stat-icon stat-icon--operation">
+        <i class="bi bi-receipt"></i>
+      </div>
+      <div class="stat-content">
+        <span class="stat-label">Operations</span>
+        <h5>{{ totalOperations() }}</h5>
+      </div>
+    </div>
   </div>
-
-  <div class="stat-card stat-card--month">
-
-    <div class="stat-icon stat-icon--month">
-      <i class="bi bi-bar-chart"></i>
-    </div>
-
-    <div class="stat-content">
-
-      <span class="stat-label">
-        Ce mois
-      </span>
-
-      <h5>
-        {{
-          formatAmount(
-            monthlyAmount()
-          )
-        }}
-        FCFA
-      </h5>
-
-    </div>
-
-  </div>
-
-  <div class="stat-card stat-card--operation">
-
-    <div class="stat-icon stat-icon--operation">
-      <i class="bi bi-receipt"></i>
-    </div>
-
-    <div class="stat-content">
-
-      <span class="stat-label">
-        Operations
-      </span>
-
-      <h5>
-        {{
-          totalOperations()
-        }}
-      </h5>
-
-    </div>
-
-  </div>
-
-</div>
+}

@@ -12,6 +12,7 @@ import { Profile } from '../../models/profil.model';
 })
 export class ProfileStatsComponent {
   readonly profiles = input<Profile[]>([]);
+  readonly isLoading = input<boolean>(false);
 
   readonly totalProfiles = computed(() => this.profiles().length);
 

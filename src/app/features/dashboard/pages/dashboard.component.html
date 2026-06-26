@@ -72,106 +72,20 @@
 
     </div>
 
-    <!-- APERCU RAPIDE -->
+    <!-- PERFORMANCE DES GROUPES & GRAPHIQUE CIRCULAIRE -->
 
     <div class="dashboard-content-grid mt-4">
 
-      <div class="dashboard-card">
+      <div class="d-flex flex-column gap-4">
 
-        <div class="dashboard-card-header">
+        <app-classement-groupes
+          [items]="classement()"
+          [showExports]="false">
+        </app-classement-groupes>
 
-          <div>
-
-            <h3>
-              Aperçu rapide
-            </h3>
-
-            <p>
-              Indicateurs principaux
-            </p>
-
-          </div>
-
-        </div>
-
-        <div class="overview-list">
-
-          <div class="overview-item">
-
-            <span>
-              Total dépôts
-            </span>
-
-            <strong>
-
-              {{
-                dashboard()?.totalDepot
-                  | formatMontant
-              }}
-
-              FCFA
-
-            </strong>
-
-          </div>
-
-          <div class="overview-item">
-
-            <span>
-              Total retraits
-            </span>
-
-            <strong>
-
-              {{
-                dashboard()?.totalRetrait
-                  | formatMontant
-              }}
-
-              FCFA
-
-            </strong>
-
-          </div>
-
-          <div class="overview-item">
-
-            <span>
-              Solde commissions
-            </span>
-
-            <strong>
-
-              {{
-                dashboard()?.soldeCommission
-                  | formatMontant
-              }}
-
-              FCFA
-
-            </strong>
-
-          </div>
-
-          <div class="overview-item">
-
-            <span>
-              Taux commission
-            </span>
-
-            <strong>
-
-              {{
-                dashboard()?.tauxCommissionRetrait
-              }}
-
-              %
-
-            </strong>
-
-          </div>
-
-        </div>
+        <app-dashboard-group-chart
+          [items]="classement()">
+        </app-dashboard-group-chart>
 
       </div>
 

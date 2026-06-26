@@ -1,10 +1,12 @@
 import { CommonModule } from '@angular/common';
-
 import { Component, computed, effect, inject, input, output } from '@angular/core';
-
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { WorkflowAction } from '../../models/workflow-action.model';
+import { Workflow } from '../../models/workflow.model';
+import { WorkflowState } from '../../models/workflow-state.model';
+import { Profile } from '../../../profil/models/profil.model';
+import { Parametre } from '../../../parametres/models/parametre.models';
 
 @Component({
   selector: 'app-workflow-action-form',
@@ -16,52 +18,27 @@ export class WorkflowActionFormComponent {
   private readonly fb = inject(FormBuilder);
 
   readonly action = input<WorkflowAction | null>(null);
-
-  readonly workflows = input<any[]>([]);
-
-  readonly states = input<any[]>([]);
-
-  readonly profiles = input<any[]>([]);
-
-  readonly endpoints = input<any[]>([]);
-
+  readonly workflows = input<Workflow[]>([]);
+  readonly states = input<WorkflowState[]>([]);
+  readonly profiles = input<Profile[]>([]);
+  readonly endpoints = input<Parametre[]>([]);
   readonly isLoading = input(false);
-
   readonly submitForm = output<WorkflowAction>();
-
   readonly cancel = output<void>();
 
   readonly form = this.fb.nonNullable.group({
     endpoint: ['', Validators.required],
-
     stepId: ['', Validators.required],
-
     idWorkflow: ['', Validators.required],
-
     beforeStep: [''],
-
     stateOrder: ['', Validators.required],
-
     notification: [''],
-
     nextField: [''],
-
     parent: ['TONTINEAPP', Validators.required],
-
     profileIds: [[] as string[]],
   });
 
-  readonly filteredStates = computed(() => {
-    const workflowId = this.form.controls.idWorkflow.value;
-
-    if (!workflowId) {
-      return [];
-    }
-
-    return this.states().filter(
-      (state) => state.workflowId === workflowId || state.parent === workflowId,
-    );
-  });
+  readonly filteredStates = computed(() => this.states());
 
   constructor() {
     effect(() => {
@@ -91,8 +68,12 @@ export class WorkflowActionFormComponent {
         stateOrder: action.stateOrder ?? '',
         notification: action.notification ?? '',
         nextField: action.nextField ?? '',
-        parent: action.parent ?? '',
-        profileIds: action.profileIds ?? [],
+        parent: action.parent ?? 'TONTINEAPP',
+        profileIds: action.profileIds?.length
+          ? action.profileIds
+          : action.profileId
+            ? [action.profileId]
+            : [],
       });
     });
   }
@@ -112,9 +93,7 @@ export class WorkflowActionFormComponent {
       }
     }
 
-    this.form.patchValue({
-      profileIds: ids,
-    });
+    this.form.patchValue({ profileIds: ids });
   }
 
   isChecked(profileId: string): boolean {
@@ -128,8 +107,12 @@ export class WorkflowActionFormComponent {
       return;
     }
 
+    const rawValue = this.form.getRawValue();
+
     this.submitForm.emit({
-      ...this.form.getRawValue(),
+      ...this.action(),
+      ...rawValue,
+      profileId: rawValue.profileIds[0] ?? this.action()?.profileId,
     });
   }
 

@@ -1,60 +1,43 @@
-<div class="filter-card">
+<div class="filter-container">
 
-  <div class="filter-header">
+  <div class="row g-3 align-items-end w-100 m-0">
 
-    <h3>
-      Filtres
-    </h3>
-
-  </div>
-
-  <div class="filter-grid">
-
-    <div class="form-group">
-
-      <label for="date_debut">
-        Date début
-      </label>
-
-      <input id="date_debut"
-        type="date"
-        [(ngModel)]="filter().startDate">
-
+    <div class="col-md-4">
+      <div class="form-group">
+        <label for="date_debut">Date début</label>
+        <input id="date_debut"
+          type="date"
+          class="form-control"
+          [(ngModel)]="filter().startDate">
+      </div>
     </div>
 
-    <div class="form-group">
-
-      <label for="date_fin">
-        Date fin
-      </label>
-
-      <input id='date_fin'
-        type="date"
-        [(ngModel)]="filter().endDate">
-
+    <div class="col-md-4">
+      <div class="form-group">
+        <label for="date_fin">Date fin</label>
+        <input id="date_fin"
+          type="date"
+          class="form-control"
+          [(ngModel)]="filter().endDate">
+      </div>
     </div>
 
-  </div>
-
-  <div class="filter-actions">
-
-    <button
-      type="button"
-      class="btn btn-outline"
-      (click)="onReset()">
-
-      Réinitialiser
-
-    </button>
-
-    <button
-      type="button"
-      class="btn btn-primary"
-      (click)="onApply()">
-
-      Filtrer
-
-    </button>
+    <div class="col-md-4 d-flex gap-2">
+      <button
+        type="button"
+        class="btn btn-primary flex-grow-1"
+        (click)="onApply()">
+        <i class="bi bi-funnel"></i>
+        Filtrer
+      </button>
+      <button
+        type="button"
+        class="btn btn-outline-secondary px-2"
+        (click)="onReset()"
+        title="Réinitialiser">
+        <i class="bi bi-arrow-counterclockwise"></i>
+      </button>
+    </div>
 
   </div>
 

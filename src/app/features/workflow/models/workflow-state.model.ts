@@ -3,11 +3,13 @@ export interface WorkflowState {
 
   name: string;
 
-  beforeStep: string;
+  beforeStep?: string;
 
   description?: string;
 
   parent?: string;
+
+  status?: string;
 
   created_at?: string;
 

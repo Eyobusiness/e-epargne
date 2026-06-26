@@ -13,6 +13,7 @@ import { FormatMontantPipe } from '../../../../shared/pipes/pipe.component';
 })
 export class OperationStatsComponent {
   readonly operations = input<Operation[]>([]);
+  readonly isLoading = input<boolean>(false);
 
   readonly totalMontant = computed(() =>
     this.operations().reduce((acc, item) => acc + (item.montant || 0), 0),

@@ -249,28 +249,82 @@
 
 .dropdown-menu {
   display: block;
-  min-width: 240px;
+  min-width: 270px;
   margin-top: 10px;
   opacity: 0;
   pointer-events: none;
-  transform: translateY(-6px);
-  transition: opacity var(--transition), transform var(--transition);
+  transform: translateY(-8px) scale(0.97);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  background: #fff;
 }
 
 .dropdown-menu.show {
   opacity: 1;
   pointer-events: auto;
-  transform: translateY(0);
+  transform: translateY(0) scale(1);
 }
 
-.dropdown-user-summary strong {
-  font-size: 0.92rem;
+/* --- Dropdown profil centré --- */
+.dropdown-user-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 20px 16px 16px;
+  gap: 6px;
+}
+
+.dropdown-user-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #1a345c 0%, #7ca1c4 100%);
+  color: #fff;
+  font-size: 1.25rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 4px;
+  box-shadow: 0 4px 14px rgba(26, 52, 92, 0.3);
+  flex-shrink: 0;
+}
+
+.dropdown-user-name {
+  font-size: 0.95rem;
+  font-weight: 700;
   color: #111827;
+  line-height: 1.2;
+  max-width: 220px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
+.dropdown-user-role {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #fff;
+  background: linear-gradient(135deg, #1a345c, #7ca1c4);
+  padding: 2px 10px;
+  border-radius: 999px;
+  letter-spacing: 0.02em;
+}
+
+.dropdown-user-email {
+  font-size: 0.78rem;
+  color: #9ca3af;
+  max-width: 220px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* --- Items du dropdown --- */
 .dropdown-item {
   padding: 10px 12px;
   font-weight: 500;
+  border-radius: 10px;
 }
 
 .dropdown-item:hover {

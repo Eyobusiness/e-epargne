@@ -14,7 +14,6 @@ import { ClassementGroupesComponent } from '../../components/classement-groupes/
 import { computed } from '@angular/core';
 import { RapportCotisationStatsComponent } from '../../components/rapport-cotisation-stats/rapport-cotisation-stats.component';
 import { AppPageHeaderComponent } from '@shared/ui/app-page-header/app-page-header.component';
-import{ RapportExportComponent } from '../../components/rapport-export/rapport-export.component';
 import { RapportAdherentTableComponent } from '../../components/rapport-adherent-table/rapport-adherent-table.component';
 
 @Component({
@@ -27,7 +26,7 @@ import { RapportAdherentTableComponent } from '../../components/rapport-adherent
     ClassementGroupesComponent,
     RapportCotisationStatsComponent,
     AppPageHeaderComponent,
-    RapportExportComponent,
+  
     RapportAdherentTableComponent
   ],
   templateUrl: './rapport-adherents.component.html',

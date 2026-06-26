@@ -13,6 +13,7 @@ import { isMemberActive } from '../../utils/member-api.utils';
 })
 export class AdherentStatsComponent {
   readonly adherents = input<Adherent[]>([]);
+  readonly isLoading = input<boolean>(false);
 
   readonly totalAdherents = computed(() => this.adherents().length);
 

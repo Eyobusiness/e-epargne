@@ -11,27 +11,15 @@
         Adhérent
       </label>
 
-      <select
+      <input
         id="adherent"
-        formControlName="adherent_id"
-        (change)="onAdherentChange($any($event.target).value)" readonly>
+        type="text"
+        [value]="getAdherentName(form.get('adherent_id')?.value)"
+        readonly>
 
-        <option value="">
-          Sélectionner
-        </option>
-
-        @for (
-          item of adherents();
-          track item.id
-        ) {
-
-          <option [value]="item.id">
-            {{ item.name }}
-          </option>
-
-        }
-
-      </select>
+      <input
+        type="hidden"
+        formControlName="adherent_id">
 
     </div>
 
@@ -46,15 +34,15 @@
         id="moyen_operation"
         formControlName="moyen_operation" required>
               
-        <option value="CASH"selected>Espèces</option>
+        <option value="">Sélectionner un moyen de paiement</option>
+
+        <option value="CASH">Espèces</option>
 
         <option value="ORANGE MONEY">Orange Money</option>
 
         <option value="MTN MONEY">MTN Money</option>
 
         <option value="WAVE">Wave</option>
-
-        
 
       </select>
       @if (
@@ -76,19 +64,15 @@
         Type opération
       </label>
 
-      <select
+      <input
         id="type_operation"
-        formControlName="type_operation" readonly>
+        type="text"
+        [value]="form.get('type_operation')?.value === 'DEPOT' ? 'Dépôt' : (form.get('type_operation')?.value === 'RETRAIT' ? 'Retrait' : form.get('type_operation')?.value)"
+        readonly>
 
-        <option value="DEPOT">
-          Dépôt
-        </option>
-
-        <option value="RETRAIT">
-          Retrait
-        </option>
-
-      </select>
+      <input
+        type="hidden"
+        formControlName="type_operation">
 
     </div>
 

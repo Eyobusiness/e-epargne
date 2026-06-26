@@ -1,5 +1,5 @@
 export interface Parametre {
-  id: string;
+  id?: string;
   libelle: string;
   nom: string;
   type: string;

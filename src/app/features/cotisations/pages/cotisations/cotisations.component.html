@@ -7,7 +7,10 @@
 </app-page-header>
 
 <div class="page-content">
-  <app-cotisation-stats [cotisations]="cotisations()"></app-cotisation-stats>
+  <app-cotisation-stats
+    [cotisations]="cotisations()"
+    [isLoading]="isPageLoading()">
+  </app-cotisation-stats>
 
   <app-cotisation-filter
     [adherents]="adherents()"

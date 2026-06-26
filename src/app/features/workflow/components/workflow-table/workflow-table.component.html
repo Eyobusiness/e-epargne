@@ -90,9 +90,9 @@
 
             <td>
 
-              <span class="status-badge">
+              <span class="status-badge" [class.active]="item.status === '200'" [class.pending]="item.status === '100'">
 
-                {{ item.status || '-' }}
+                {{ item.status === '200' ? 'Active' : (item.status === '100' ? 'En attente' : (item.status || '-')) }}
 
               </span>
 

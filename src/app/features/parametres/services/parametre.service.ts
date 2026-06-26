@@ -17,8 +17,10 @@ export class ParametreService {
 
   private readonly API_URL = `${environment.apiUrl}/settings`;
 
-  getAll(): Observable<ApiResponse<{ items: Parametre[] }>> {
-    return this.http.get<ApiResponse<{ items: Parametre[] }>>(`${this.API_URL}/all`);
+  getAll(limit = 1000): Observable<ApiResponse<{ items: Parametre[] }>> {
+    return this.http.get<ApiResponse<{ items: Parametre[] }>>(`${this.API_URL}/all`, {
+      params: { limit: String(limit) },
+    });
   }
 
   getById(id: string): Observable<ApiResponse<Parametre>> {

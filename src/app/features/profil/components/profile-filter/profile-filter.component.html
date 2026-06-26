@@ -1,30 +1,25 @@
 <form
   [formGroup]="form"
-  class="card p-3 mb-4">
+  class="filter-container m-0 p-0">
 
-  <div class="row g-2">
+  <div class="row g-2 align-items-end w-100 m-0">
 
     <div class="col-md-10">
-
       <input
         type="text"
         class="form-control"
         placeholder="Rechercher un profil..."
         formControlName="search">
-
     </div>
 
     <div class="col-md-2">
-
       <button
         type="button"
         class="btn btn-primary w-100"
         (click)="apply()">
-
+        <i class="bi bi-search"></i>
         Rechercher
-
       </button>
-
     </div>
 
   </div>

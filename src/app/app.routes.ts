@@ -126,6 +126,22 @@ export const routes: Routes = [
           import('./features/workflow/routes/workflow.routes').then((m) => m.WORKFLOW_ROUTES),
       },
 
+      //plafonds routes
+      {
+        path: 'plafonds',
+        title: 'Gestion des Plafonds',
+        loadChildren: () =>
+          import('./features/plafonds/routes/plafonds.routes').then((m) => m.PLAFONDS_ROUTES),
+      },
+
+      //collection routes
+      {
+        path: 'collection',
+        title: 'Suivi des Encaissements',
+        loadChildren: () =>
+          import('./features/collection/routes/collection.routes').then((m) => m.COLLECTION_ROUTES),
+      },
+
       //change password routes
       {
         path: 'auth',

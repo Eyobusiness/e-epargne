@@ -14,6 +14,8 @@ import { FormatMontantPipe } from '@shared/pipes/pipe.component';
 export class ClassementGroupesComponent {
   readonly items = input<ClassementGroupe[]>([]);
 
+  readonly showExports = input<boolean>(true);
+
   readonly podium = computed(() => this.items().slice(0, 3));
 
   readonly autres = computed(() => this.items().slice(3));

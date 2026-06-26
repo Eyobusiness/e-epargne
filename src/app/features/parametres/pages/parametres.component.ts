@@ -1,8 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
-import { finalize } from 'rxjs';
+import { finalize, map, of, switchMap } from 'rxjs';
 
 import { Parametre } from '../models/parametre.models';
 import { ParametreService } from '../services/parametre.service';
@@ -35,28 +34,17 @@ import { ToastService } from '../../../core/services/toast.service';
 export class ParametresComponent implements OnInit {
   private readonly parametreService = inject(ParametreService);
   private readonly toastService = inject(ToastService);
-  private readonly router = inject(Router);
 
   readonly parametres = signal<Parametre[]>([]);
-
   readonly selectedParametre = signal<Parametre | null>(null);
-
   readonly isLoading = signal<boolean>(false);
-
   readonly isPageLoading = signal<boolean>(false);
-
   readonly isDeleteLoading = signal<boolean>(false);
-
   readonly isModalOpen = signal<boolean>(false);
-
   readonly isDeleteOpen = signal<boolean>(false);
-
   readonly search = signal<string>('');
-
   readonly selectedType = signal<string>('all');
-
   readonly currentPage = signal<number>(1);
-
   readonly itemsPerPage = 5;
 
   readonly filteredParametres = computed(() => {
@@ -64,12 +52,15 @@ export class ParametresComponent implements OnInit {
     const type = this.selectedType();
 
     return this.parametres().filter((item) => {
+      if (!item) {
+        return false;
+      }
       const matchesSearch =
         !query ||
-        item.nom.toLowerCase().includes(query) ||
-        item.type.toLowerCase().includes(query) ||
-        item.valeur.toLowerCase().includes(query) ||
-        item.libelle.toLowerCase().includes(query);
+        (item.nom ?? '').toLowerCase().includes(query) ||
+        (item.type ?? '').toLowerCase().includes(query) ||
+        (item.valeur ?? '').toLowerCase().includes(query) ||
+        (item.libelle ?? '').toLowerCase().includes(query);
 
       const matchesType = type === 'all' || item.type === type;
 
@@ -78,26 +69,17 @@ export class ParametresComponent implements OnInit {
   });
 
   readonly totalItems = computed(() => this.filteredParametres().length);
-
   readonly totalPages = computed(() => Math.max(1, Math.ceil(this.totalItems() / this.itemsPerPage)));
-
   readonly paginatedParametres = computed(() => {
     const start = (this.currentPage() - 1) * this.itemsPerPage;
+
     return this.filteredParametres().slice(start, start + this.itemsPerPage);
   });
-
   readonly isEmpty = computed(() => !this.isPageLoading() && this.parametres().length === 0);
-
-  readonly hasResults = computed(() => !this.isPageLoading() && this.totalItems() > 0);
-
   readonly hasMultiplePages = computed(() => this.totalItems() > this.itemsPerPage);
-
   readonly hasStoredParametres = computed(() => !this.isPageLoading() && this.parametres().length > 0);
-
   readonly hasFilteredResults = computed(() => !this.isPageLoading() && this.filteredParametres().length > 0);
-
   readonly isFilterEmpty = computed(() => this.hasStoredParametres() && this.filteredParametres().length === 0);
-
   readonly emptyStateDescription = computed(() => 'Aucun parametre disponible actuellement');
 
   ngOnInit(): void {
@@ -152,7 +134,6 @@ export class ParametresComponent implements OnInit {
     this.selectedParametre.set(parametre);
     this.isModalOpen.set(true);
   }
-
 
   closeModal(force = false): void {
     if (!force && this.isLoading()) {
@@ -212,56 +193,38 @@ export class ParametresComponent implements OnInit {
 
     this.isLoading.set(true);
 
-    if (selected?.id) {
-      this.parametreService
-        .update(selected.id, payload)
-        .pipe(finalize(() => this.isLoading.set(false)))
-        .subscribe({
-          next: (response) => {
-            // Recharger les données pour resynchroniser la pagination
-            this.loadParametres();
-            this.closeModal(true);
-            this.toastService.show('Parametre modifie avec succes', 'success');
-          },
-          error: (error) => {
-            const errorMessage = this.extractErrorMessage(error);
-            console.error('Erreur modification parametre:', error);
-            this.toastService.show(errorMessage || 'Erreur modification parametre', 'error');
-          },
-        });
+    const request$ = this.preparePayload(payload).pipe(
+      switchMap((preparedPayload) =>
+        selected?.id
+          ? this.parametreService.update(selected.id, preparedPayload)
+          : this.parametreService.create(preparedPayload),
+      ),
+      finalize(() => this.isLoading.set(false)),
+    );
 
-      return;
-    }
-
-    this.parametreService
-      .create(payload)
-      .pipe(finalize(() => this.isLoading.set(false)))
-      .subscribe({
-        next: (response) => {
-          if (response?.data) {
-            this.parametres.update((items) => [response.data, ...items].filter(Boolean));
-          }
-          this.currentPage.set(1);
-          this.closeModal(true);
-          this.toastService.show('Parametre cree avec succes', 'success');
-        },
-        error: (error) => {
-          const errorMessage = this.extractErrorMessage(error);
-          console.error('Erreur creation parametre:', error);
-          this.toastService.show(errorMessage || 'Erreur creation parametre', 'error');
-        },
-      });
+    request$.subscribe({
+      next: () => {
+        this.loadParametres();
+        this.currentPage.set(1);
+        this.closeModal(true);
+        const msg = selected?.id ? 'Parametre modifie avec succes' : 'Parametre cree avec succes';
+        this.toastService.show(msg, 'success');
+      },
+      error: (error) => {
+        const errorMessage = this.extractErrorMessage(error);
+        console.error('Erreur enregistrement parametre:', error);
+        this.toastService.show(errorMessage || 'Erreur enregistrement parametre', 'error');
+      },
+    });
   }
 
   private extractErrorMessage(error: any): string {
-    // Handle array of error messages
     if (error?.error?.message && Array.isArray(error.error.message)) {
       return error.error.message
         .map((msg: any) => (typeof msg === 'string' ? msg : msg?.message || JSON.stringify(msg)))
         .join(', ');
     }
 
-    // Handle single error message
     if (error?.error?.message) {
       return error.error.message;
     }
@@ -271,6 +234,41 @@ export class ParametresComponent implements OnInit {
     }
 
     return '';
+  }
+
+  private preparePayload(payload: Parametre) {
+    if (!this.shouldEncrypt(payload.type) || !payload.valeur.trim()) {
+      return of(payload);
+    }
+
+    return this.parametreService.encrypt(payload).pipe(
+      map((response) => ({
+        ...payload,
+        valeur: this.extractEncryptedValue(response, payload.valeur),
+      })),
+    );
+  }
+
+  private shouldEncrypt(type: string): boolean {
+    const normalizedType = type.trim().toUpperCase();
+
+    return normalizedType === 'CRYP' || normalizedType === 'CODE';
+  }
+
+  private extractEncryptedValue(response: any, fallback: string): string {
+    if (typeof response === 'string' && response.trim()) {
+      return response;
+    }
+
+    const candidate =
+      response?.data?.valeur ??
+      response?.data?.value ??
+      response?.valeur ??
+      response?.value ??
+      response?.encryptedValue ??
+      response?.data?.encryptedValue;
+
+    return typeof candidate === 'string' && candidate.trim() ? candidate : fallback;
   }
 
   private syncCurrentPage(): void {

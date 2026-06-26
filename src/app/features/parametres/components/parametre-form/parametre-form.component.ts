@@ -38,6 +38,7 @@ export class ParametreFormComponent {
   readonly typeOptions = [
     { label: 'CODE', value: 'CODE' },
     { label: 'CRYP', value: 'CRYP' },
+    { label: 'ENDPOINT', value: 'ENDPOINT' },
     { label: 'TONTINE_APP', value: 'TONTINE_APP' },
   ];
 
@@ -141,8 +142,7 @@ export class ParametreFormComponent {
       nom: value?.nom ?? '',
       type: value?.type ?? '',
       valeur: value?.valeur ?? '',
-      parent: value?.parent ?? '',
-    
+      parent: value?.parent ?? 'TONTINE_APP',
     };
   }
 

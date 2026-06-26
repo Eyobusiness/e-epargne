@@ -74,7 +74,7 @@ export class OperationFormComponent {
       if (!data) {
         this.form.reset({
           description: '',
-          moyen_operation: 'CASH',
+          moyen_operation: '',
           montant: 0,
           adherent_id: '',
           cotisation_adherent_id: '',
@@ -89,7 +89,7 @@ export class OperationFormComponent {
 
       this.form.patchValue({
         description: data.description ?? '',
-        moyen_operation: data.moyen_operation,
+        moyen_operation: data.moyen_operation || '',
         montant: data.montant,
         adherent_id: data.adherent_id ?? '',
         cotisation_adherent_id:
@@ -142,6 +142,14 @@ export class OperationFormComponent {
           });
         },
       });
+  }
+
+  getAdherentName(id: string | null | undefined): string {
+    if (!id) {
+      return '';
+    }
+    const found = this.adherents().find((a) => a.id === id);
+    return found ? found.name : id;
   }
 
   save(): void {

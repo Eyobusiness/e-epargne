@@ -1,9 +1,9 @@
 <!-- components/groupe-filter/groupe-filter.component.html -->
 
 <div class="filter-container">
-  <div class="row align-items-end g-1">
+  <div class="row align-items-end g-3 w-100 m-0">
 
-    <div class="col-12 col-md-6 col-lg-5">
+    <div class="col-12 col-md-6 col-lg-7">
       <label class="filter-label">Recherche</label>
       <div class="search-box">
         <i class="bi bi-search"></i>
@@ -15,9 +15,10 @@
       </div>
     </div>
 
-    <div class="col-12 col-md-2 col-lg-2">
+    <div class="col-12 col-md-3 col-lg-2">
       <label class="filter-label">Statut</label>
       <select
+        class="form-select"
         title="Selectionner un statut"
         [ngModel]="status()"
         (ngModelChange)="status.set($event)">
@@ -26,18 +27,20 @@
       </select>
     </div>
 
-    <div class="col-12 col-md-4 col-lg-5 filter-actions">
+    <div class="col-12 col-md-3 col-lg-3 d-flex gap-2">
       <button
         type="button"
-        class="btn btn-reset"
-        (click)="resetFilters()">
-        Réinitialiser
+        class="btn btn-primary flex-grow-1"
+        (click)="applyFilters()">
+        <i class="bi bi-funnel"></i>
+        Filtrer
       </button>
       <button
         type="button"
-        class="btn btn-primary"
-        (click)="applyFilters()">
-        Filtrer
+        class="btn btn-outline-secondary px-2"
+        (click)="resetFilters()"
+        title="Réinitialiser">
+        <i class="bi bi-arrow-counterclockwise"></i>
       </button>
     </div>
 

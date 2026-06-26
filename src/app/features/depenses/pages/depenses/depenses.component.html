@@ -8,7 +8,10 @@
 
 <div class="page-content">
 
-  <app-depense-stats [depenses]="depenses()"></app-depense-stats>
+  <app-depense-stats
+    [depenses]="depenses()"
+    [isLoading]="isPageLoading()">
+  </app-depense-stats>
 
   <app-depense-filter
     [categories]="categories()"

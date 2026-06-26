@@ -80,30 +80,26 @@
 
 
   <div class="export-actions">
-<span class="count">
-    {{ items().length }}
-    groupe(s)
-  </span>
-    <button
-      title="Exporter en Excel"
-      class="btn-excel"
-      (click)="onExportExcel()">
+    <span class="count">
+      {{ items().length }} groupe(s)
+    </span>
+    @if (showExports()) {
+      <button
+        title="Exporter en Excel"
+        class="btn-excel"
+        (click)="onExportExcel()">
+        <i class="bi bi-file-earmark-excel"></i>
+        Excel
+      </button>
 
-      <i class="bi bi-file-earmark-excel"></i>
-      Excel
-
-    </button>
-
-    <button
-      title="Exporter en PDF"
-      class="btn-pdf"
-      (click)="onExportPdf()">
-
-      <i class="bi bi-file-earmark-pdf"></i>
-      PDF
-
-    </button>
-
+      <button
+        title="Exporter en PDF"
+        class="btn-pdf"
+        (click)="onExportPdf()">
+        <i class="bi bi-file-earmark-pdf"></i>
+        PDF
+      </button>
+    }
   </div>
 
 </div>
@@ -175,13 +171,17 @@
               </td>
 
               <td>
-
-                <span class="badge-rate">
-
-                  {{ item.tauxRealisation | number:'1.0-0' }} %
-
-                </span>
-
+                <div class="progress-wrapper">
+                  <div class="progress">
+                    <div
+                      class="progress-bar"
+                      [style.width.%]="item.tauxRealisation">
+                    </div>
+                  </div>
+                  <span>
+                    {{ item.tauxRealisation | number:'1.0-0' }} %
+                  </span>
+                </div>
               </td>
 
             </tr>

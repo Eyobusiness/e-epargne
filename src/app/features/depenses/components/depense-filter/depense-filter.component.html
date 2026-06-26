@@ -1,137 +1,75 @@
 <div class="filter-container">
 
-  <div class="row g-3">
+  <div class="row g-3 align-items-end w-100 m-0">
 
     <!-- Recherche -->
-<div class="col-12 col-md-6 col-lg-3">
-
-  <label class="form-label">
-    Recherche
-  </label>
-
-  <div class="position-relative">
-
-    <i
-      class="bi bi-search position-absolute"
-      style="
-        left: 14px;
-        top: 50%;
-        transform: translateY(-50%);
-        z-index: 5;
-        color: #6c757d;
-      ">
-    </i>
-
-    <input
-      type="text"
-      class="form-control ps-5"
-      placeholder="Rechercher..."
-      [ngModel]="search()"
-      (ngModelChange)="search.set($event)">
-
-  </div>
-
-</div>
+    <div class="col-12 col-md-6 col-lg-3">
+      <label class="form-label">Recherche</label>
+      <div class="position-relative search-box">
+        <i class="bi bi-search"></i>
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Rechercher..."
+          [ngModel]="search()"
+          (ngModelChange)="search.set($event)">
+      </div>
+    </div>
 
     <!-- Catégorie -->
-
-    <div class="col-12 col-md-6 col-lg-3">
-
-      <label
-        for="categorie_depense_filter"
-        class="form-label">
-
-        Catégorie
-
-      </label>
-
+    <div class="col-12 col-md-6 col-lg-2">
+      <label for="categorie_depense_filter" class="form-label">Catégorie</label>
       <select
         id="categorie_depense_filter"
         class="form-select"
         [ngModel]="categorieId()"
         (ngModelChange)="categorieId.set($event)">
-
-        <option [ngValue]="null">
-          Toutes les catégories
-        </option>
-
+        <option [ngValue]="null">Toutes les catégories</option>
         @for (item of categories(); track item.id) {
-
-          <option [value]="item.id">
-            {{ item.name }}
-          </option>
-
+          <option [value]="item.id">{{ item.name }}</option>
         }
-
       </select>
-
     </div>
 
     <!-- Date début -->
-
-    <div class="col-12 col-md-6 col-lg-3">
-
-      <label
-        for="date_debut"
-        class="form-label">
-
-        Date début
-
-      </label>
-
+    <div class="col-12 col-md-6 col-lg-2">
+      <label for="date_debut" class="form-label">Date début</label>
       <input
         id="date_debut"
         type="date"
         class="form-control"
         [ngModel]="startDate()"
         (ngModelChange)="startDate.set($event)">
-
     </div>
 
     <!-- Date fin -->
-
-    <div class="col-12 col-md-6 col-lg-3">
-
-      <label
-        for="date_fin"
-        class="form-label">
-
-        Date fin
-
-      </label>
-
+    <div class="col-12 col-md-6 col-lg-2">
+      <label for="date_fin" class="form-label">Date fin</label>
       <input
         id="date_fin"
         type="date"
         class="form-control"
         [ngModel]="endDate()"
         (ngModelChange)="endDate.set($event)">
-
     </div>
 
-  </div>
-
-  <div class="d-flex justify-content-end gap-2 mt-4 flex-wrap">
-
-    <button
-      type="button"
-      class="btn btn-outline-secondary"
-      (click)="resetFilters()">
-
-      Réinitialiser
-
-    </button>
-
-    <button
-      type="button"
-      class="btn btn-primary"
-      (click)="applyFilters()">
-
-      <i class="bi bi-funnel me-1"></i>
-
-      Filtrer
-
-    </button>
+    <!-- Actions -->
+    <div class="col-12 col-md-6 col-lg-3 d-flex gap-2">
+      <button
+        type="button"
+        class="btn btn-primary flex-grow-1"
+        (click)="applyFilters()">
+        <i class="bi bi-funnel"></i>
+        Filtrer
+      </button>
+      <button
+        type="button"
+        class="btn btn-outline-secondary px-2"
+        (click)="resetFilters()"
+        title="Réinitialiser">
+        <i class="bi bi-arrow-counterclockwise"></i>
+      </button>
+    </div>
 
   </div>
 

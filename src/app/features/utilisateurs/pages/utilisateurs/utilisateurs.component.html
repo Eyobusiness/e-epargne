@@ -11,7 +11,8 @@
 <div class="page-content">
 
   <app-utilisateur-stats
-    [utilisateurs]="utilisateurs()">
+    [utilisateurs]="utilisateurs()"
+    [isLoading]="isPageLoading()">
   </app-utilisateur-stats>
 
   <app-utilisateur-filter

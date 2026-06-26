@@ -11,22 +11,36 @@
     import { Operation } from'../../operations/models/operation.model';
     import { FormatMontantPipe } from '../../../shared/pipes/pipe.component';
     import { ChangerDatePipe } from '../../../shared/pipes/changer-date.pipe';
+    import { RapportService } from '../../rapports/services/rapport.service';
+    import { ClassementGroupe } from '../../rapports/models/classement-groupe.model';
+    import { ClassementGroupesComponent } from '../../rapports/components/classement-groupes/classement-groupes.component';
+    import { DashboardGroupChartComponent } from '../components/dashboard-group-chart/dashboard-group-chart.component';
 
 
 
     @Component({
       selector: 'app-dashboard',
       standalone: true,
-      imports: [CommonModule, DashboardStatsComponent, DashboardChartComponent, FormatMontantPipe, ChangerDatePipe],
+      imports: [
+        CommonModule,
+        DashboardStatsComponent,
+        DashboardChartComponent,
+        FormatMontantPipe,
+        ChangerDatePipe,
+        ClassementGroupesComponent,
+        DashboardGroupChartComponent
+      ],
       templateUrl: './dashboard.component.html',
       styleUrls: ['./dashboard.component.css'],
     })
     export class DashboardComponent implements OnInit {
       private readonly dashboardService = inject(DashboardService);
       private readonly operationService = inject(OperationService);
+      private readonly rapportService = inject(RapportService);
 
       readonly dashboard = signal<DashboardStats | null>(null);
       readonly recentOperations = signal<any[]>([]);
+      readonly classement = signal<ClassementGroupe[]>([]);
 
       readonly currentPeriod = new Intl.DateTimeFormat('fr-FR', {
         month: 'long',
@@ -39,6 +53,8 @@
         this.loadStats();
 
         this.loadRecentOperations();
+
+        this.loadClassement();
       }
 
       // loadStats(): void {
@@ -134,5 +150,16 @@
               this.recentOperations.set(response?.data?.items ?? []);
             },
           });
+      }
+
+      loadClassement(): void {
+        this.rapportService.getClassementGroupes({ startDate: '', endDate: '' }).subscribe({
+          next: (data) => {
+            this.classement.set(data);
+          },
+          error: (error) => {
+            console.error('Erreur lors du chargement du classement des groupes', error);
+          },
+        });
       }
     }

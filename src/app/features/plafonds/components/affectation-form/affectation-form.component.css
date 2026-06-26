@@ -1,0 +1,67 @@
+.affectation-form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.form-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.target-type-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-label-custom {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--primary-color);
+}
+
+.toggle-buttons {
+  display: flex;
+  gap: 12px;
+}
+
+.toggle-btn {
+  flex: 1;
+  height: 48px;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  background: white;
+  color: var(--text-secondary);
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: var(--transition);
+}
+
+.toggle-btn:hover {
+  border-color: var(--secondary-color);
+  color: var(--secondary-color);
+}
+
+.toggle-btn.active {
+  border-color: var(--secondary-color);
+  background: rgba(26, 52, 92, 0.05);
+  color: var(--primary-color);
+  font-weight: 700;
+  box-shadow: 0 0 0 3px rgba(26, 52, 92, 0.08);
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 8px;
+  border-top: 1px solid var(--border-color);
+  padding-top: 20px;
+}

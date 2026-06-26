@@ -1,0 +1,50 @@
+<form class="plafond-form" novalidate (ngSubmit)="onSubmit()">
+  <div class="form-grid">
+    <app-input
+      label="Nom du plafond"
+      placeholder="Ex: Plafond journalier standard"
+      [ngModel]="form().name"
+      (ngModelChange)="updateField('name', $event)"
+      (blurred)="markAsTouched('name')"
+      [error]="getError('name')"
+      name="name">
+    </app-input>
+
+    <app-input
+      type="number"
+      label="Montant maximum (FCFA)"
+      placeholder="Ex: 500000"
+      [ngModel]="form().amount"
+      (ngModelChange)="updateField('amount', $event)"
+      (blurred)="markAsTouched('amount')"
+      [error]="getError('amount')"
+      name="amount">
+    </app-input>
+
+    <app-textarea
+      label="Description"
+      placeholder="Description explicative de l'utilisation de ce plafond..."
+      [ngModel]="form().description"
+      (ngModelChange)="updateField('description', $event)"
+      (blurred)="markAsTouched('description')"
+      [error]="getError('description')"
+      name="description">
+    </app-textarea>
+  </div>
+
+  <div class="form-actions">
+    <app-button
+      type="button"
+      label="Annuler"
+      variant="secondary"
+      [disabled]="isLoading()"
+      (clicked)="onCancel()">
+    </app-button>
+
+    <app-button
+      type="submit"
+      label="Enregistrer"
+      [loading]="isLoading()">
+    </app-button>
+  </div>
+</form>

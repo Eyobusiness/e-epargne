@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, input } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 
 import { FormatMontantPipe } from '../../../../shared/pipes/pipe.component';
 
@@ -14,4 +14,6 @@ import { RapportCotisationStats } from '../../models/rapport-cotisation-stats.mo
 })
 export class RapportCotisationStatsComponent {
   readonly stats = input<RapportCotisationStats | null>(null);
+
+  readonly isLoading = computed(() => !this.stats());
 }

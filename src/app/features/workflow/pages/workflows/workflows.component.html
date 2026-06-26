@@ -1,90 +1,61 @@
 <div class="workflow-page">
-
   <div class="page-header">
     <app-page-header
-    title="Configuration Workflow"
-    description="Gestion des workflows, états et actions">
-  </app-page-header>
-
+      title="Configuration Workflow"
+      description="Gestion des workflows, etats et actions">
+    </app-page-header>
   </div>
 
   <div class="workflow-tabs">
-
     <button
       [class.active]="activeTab() === 'workflow'"
       (click)="setTab('workflow')">
-
       Workflows
-
     </button>
 
     <button
       [class.active]="activeTab() === 'state'"
       (click)="setTab('state')">
-
-      États
-
+      Etats
     </button>
 
     <button
       [class.active]="activeTab() === 'action'"
       (click)="setTab('action')">
-
       Actions
-
     </button>
-
   </div>
 
-  @if(activeTab() === 'workflow') {
-
-   <app-workflow-table
-  [workflows]="workflows()"
-  (create)="openWorkflowModal()"
-  (edit)="openEditWorkflowModal($event)"
-  (remove)="openDeleteWorkflowDialog($event)">
-  </app-workflow-table>
-
+  @if (activeTab() === 'workflow') {
+    <app-workflow-table
+      [workflows]="workflows()"
+      (create)="openWorkflowModal()"
+      (edit)="openEditWorkflowModal($event)"
+      (remove)="openDeleteWorkflowDialog($event)">
+    </app-workflow-table>
   }
 
-  @if(activeTab() === 'state') {
-
-    @if(activeTab() === 'state') {
-
-  <app-workflow-states
-
-    [states]="states()"
-
-    (create)="openStateModal()"
-
-    (edit)="openEditStateModal($event)"
-
-    (remove)="openDeleteStateDialog($event)">
-
-  </app-workflow-states>
-
-}
-
+  @if (activeTab() === 'state') {
+    <app-workflow-states
+      [states]="states()"
+      (create)="openStateModal()"
+      (edit)="openEditStateModal($event)"
+      (remove)="openDeleteStateDialog($event)">
+    </app-workflow-states>
   }
 
-@if(activeTab() === 'action') {
-
-  <app-workflow-actions
-    [actions]="actions()"
-    [workflows]="workflows()"
-    [states]="states()"
-
-    (create)="openActionModal()"
-
-    (edit)="openEditActionModal($event)"
-
-    (remove)="openDeleteActionDialog($event)">
-  </app-workflow-actions>
-
-}
-
+  @if (activeTab() === 'action') {
+    <app-workflow-actions
+      [actions]="actions()"
+      [workflows]="workflows()"
+      [states]="states()"
+      [profiles]="profiles()"
+      (create)="openActionModal()"
+      (edit)="openEditActionModal($event)"
+      (remove)="openDeleteActionDialog($event)">
+    </app-workflow-actions>
+  }
 </div>
-
 
 <app-modal
   [isOpen]="isActionModalOpen()"
@@ -92,19 +63,16 @@
   description="Ajouter ou modifier une action"
   width="800px"
   (close)="closeActionModal()">
-
   <app-workflow-action-form
     [action]="selectedAction()"
     [workflows]="workflows()"
     [states]="states()"
     [profiles]="profiles()"
     [endpoints]="endpoints()"
-
+    [isLoading]="isActionLoading()"
     (submitForm)="saveAction($event)"
     (cancel)="closeActionModal()">
-
   </app-workflow-action-form>
-
 </app-modal>
 
 <app-confirm-dialog
@@ -116,39 +84,29 @@
   (cancel)="closeDeleteActionDialog()">
 </app-confirm-dialog>
 
-
 <app-modal
   [isOpen]="isStateModalOpen()"
-  title="État Workflow"
-  description="Ajouter ou modifier un état"
+  title="Etat Workflow"
+  description="Ajouter ou modifier un etat"
   width="700px"
   (close)="closeStateModal()">
-
   <app-workflow-state-form
-
     [state]="selectedState()"
-
     [states]="states()"
-
+    [isLoading]="isStateLoading()"
     (submitForm)="saveState($event)"
-
     (cancel)="closeStateModal()">
-
   </app-workflow-state-form>
-
 </app-modal>
-
-
 
 <app-confirm-dialog
   [isOpen]="isDeleteStateOpen()"
   [isLoading]="isDeleteStateLoading()"
-  title="Supprimer état"
-  message="Voulez-vous supprimer cet état ?"
+  title="Supprimer etat"
+  message="Voulez-vous supprimer cet etat ?"
   (confirm)="deleteState()"
   (cancel)="closeDeleteStateDialog()">
 </app-confirm-dialog>
-
 
 <app-modal
   [isOpen]="isWorkflowModalOpen()"
@@ -156,21 +114,14 @@
   description="Ajouter ou modifier un workflow"
   width="700px"
   (close)="closeWorkflowModal()">
-
   <app-workflow-form
-
     [workflow]="selectedWorkflow()"
-
-    [isLoading]="false"
-
+    [endpoints]="endpoints()"
+    [isLoading]="isWorkflowLoading()"
     (submitForm)="saveWorkflow($event)"
-
     (cancel)="closeWorkflowModal()">
-
   </app-workflow-form>
-
 </app-modal>
-
 
 <app-confirm-dialog
   [isOpen]="isDeleteWorkflowOpen()"

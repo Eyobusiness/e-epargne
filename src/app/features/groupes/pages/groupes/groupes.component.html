@@ -11,7 +11,8 @@
 <div class="page-content">
 
   <app-groupe-stats
-    [groupes]="groupes()">
+    [groupes]="groupes()"
+    [isLoading]="isPageLoading()">
   </app-groupe-stats>
 
   <app-groupe-filter

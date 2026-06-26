@@ -1,0 +1,103 @@
+<div class="collections-page">
+  <app-page-header
+    title="Suivi des Encaissements"
+    description="Consultez l'historique et les encaissements en cours des agents collecteurs">
+  </app-page-header>
+
+  @if (isPageLoading()) {
+    <div class="loading-state">
+      <div class="loading-spinner"></div>
+      <p>Chargement des collectes...</p>
+    </div>
+  } @else {
+    <div class="table-toolbar">
+      <div class="results-info">
+        <span>{{ totalItems() }} collecte(s) trouvée(s)</span>
+      </div>
+
+      <div class="search-box">
+        <i class="bi bi-search"></i>
+        <input
+          type="text"
+          placeholder="Rechercher par agent, montant..."
+          [ngModel]="search()"
+          (ngModelChange)="onSearch($event)">
+      </div>
+    </div>
+
+    @if (filteredCollections().length > 0) {
+      <div class="table-card">
+        <div class="table-responsive">
+          <table class="table align-middle">
+            <thead>
+              <tr>
+                <th>Agent Collecteur</th>
+                <th>Montant Encaissé</th>
+                <th>Statut</th>
+                <th>Créé le</th>
+                <th>Mis à jour le</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (item of paginatedCollections(); track item.id || $index) {
+                <tr>
+                  <td>
+                    @if (item.agent) {
+                      <div class="user-info">
+                        <span class="fw-bold text-primary">{{ item.agent.name }}</span>
+                        <span class="email-sub">{{ item.agent.email }}</span>
+                      </div>
+                    } @else {
+                      <span class="text-muted">Agent ID: {{ item.agent_id }}</span>
+                    }
+                  </td>
+                  <td>
+                    <span class="amount-badge">{{ item.amount | number:'1.0-0' }} FCFA</span>
+                  </td>
+                  <td>
+                    <span class="status-badge" [class.active]="item.status === '200'">
+                      {{ item.status === '200' ? 'Confirmé' : 'En attente' }}
+                    </span>
+                  </td>
+                  <td>
+                    {{ item.created_at | date:'dd/MM/yyyy HH:mm' }}
+                  </td>
+                  <td>
+                    {{ item.updated_at | date:'dd/MM/yyyy HH:mm' }}
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+
+        @if (totalPages() > 1) {
+          <div class="pagination-container">
+            <button
+              class="page-btn"
+              [disabled]="currentPage() === 1"
+              (click)="changePage(currentPage() - 1)">
+              <i class="bi bi-chevron-left"></i>
+              Précédent
+            </button>
+            <span class="page-info">
+              Page {{ currentPage() }} sur {{ totalPages() }}
+            </span>
+            <button
+              class="page-btn"
+              [disabled]="currentPage() === totalPages()"
+              (click)="changePage(currentPage() + 1)">
+              Suivant
+              <i class="bi bi-chevron-right"></i>
+            </button>
+          </div>
+        }
+      </div>
+    } @else {
+      <app-empty-state
+        title="Aucune collecte trouvée"
+        description="Il n'y a actuellement aucune collecte enregistrée ou correspondant à votre recherche.">
+      </app-empty-state>
+    }
+  }
+</div>

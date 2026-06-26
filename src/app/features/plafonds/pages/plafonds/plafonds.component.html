@@ -1,0 +1,104 @@
+<div class="plafonds-page">
+  <div class="page-header-wrapper">
+    <app-page-header
+      title="Gestion des Plafonds"
+      description="Définissez les plafonds de collecte et affectez-les aux agents collecteurs ou profils"
+      [buttonText]="activeTab() === 'limit' ? 'Nouveau Plafond' : 'Nouvelle Affectation'"
+      icon="bi bi-plus-lg"
+      (action)="activeTab() === 'limit' ? openCreatePlafond() : openCreateAffectation()">
+    </app-page-header>
+  </div>
+
+  <div class="plafond-tabs">
+    <button
+      type="button"
+      [class.active]="activeTab() === 'limit'"
+      (click)="setTab('limit')">
+      <i class="bi bi-sliders"></i> Liste des Plafonds
+    </button>
+
+    <button
+      type="button"
+      [class.active]="activeTab() === 'affectation'"
+      (click)="setTab('affectation')">
+      <i class="bi bi-link"></i> Affectations aux Collecteurs
+    </button>
+  </div>
+
+  @if (isPageLoading()) {
+    <div class="loading-state">
+      <div class="loading-spinner"></div>
+      <p>Chargement des données...</p>
+    </div>
+  } @else {
+    @if (activeTab() === 'limit') {
+      <app-plafond-table
+        [plafonds]="plafonds()"
+        (edit)="openEditPlafond($event)"
+        (delete)="openDeletePlafondDialog($event)"
+        (toggleStatus)="togglePlafondStatus($event)">
+      </app-plafond-table>
+    }
+
+    @if (activeTab() === 'affectation') {
+      <app-affectation-table
+        [affectations]="affectations()"
+        (edit)="openEditAffectation($event)"
+        (delete)="openDeleteAffectationDialog($event)">
+      </app-affectation-table>
+    }
+  }
+</div>
+
+<!-- Plafond Modal -->
+<app-modal
+  [isOpen]="isPlafondModalOpen()"
+  [title]="selectedPlafond() ? 'Modifier Plafond' : 'Nouveau Plafond'"
+  [description]="selectedPlafond() ? 'Mettre à jour les informations du plafond' : 'Créer un nouveau plafond de collecte'"
+  width="600px"
+  (close)="closePlafondModal()">
+  <app-plafond-form
+    [plafond]="selectedPlafond()"
+    [isLoading]="isLoading()"
+    (submitForm)="savePlafond($event)"
+    (cancel)="closePlafondModal()">
+  </app-plafond-form>
+</app-modal>
+
+<!-- Plafond Delete Confirmation -->
+<app-confirm-dialog
+  [isOpen]="isDeletePlafondOpen()"
+  [isLoading]="isDeleteLoading()"
+  title="Supprimer le Plafond"
+  message="Voulez-vous vraiment supprimer ce plafond ? Cette action est irréversible."
+  (confirm)="deletePlafond()"
+  (cancel)="closeDeletePlafondDialog()">
+</app-confirm-dialog>
+
+<!-- Affectation Modal -->
+<app-modal
+  [isOpen]="isAffectationModalOpen()"
+  [title]="selectedAffectation() ? 'Modifier Affectation' : 'Nouvelle Affectation'"
+  [description]="selectedAffectation() ? 'Mettre à jour les paramètres d\'affectation' : 'Associer un plafond à un agent ou profil'"
+  width="600px"
+  (close)="closeAffectationModal()">
+  <app-affectation-form
+    [affectation]="selectedAffectation()"
+    [plafonds]="plafonds()"
+    [agents]="agents()"
+    [profiles]="profiles()"
+    [isLoading]="isLoading()"
+    (submitForm)="saveAffectation($event)"
+    (cancel)="closeAffectationModal()">
+  </app-affectation-form>
+</app-modal>
+
+<!-- Affectation Delete Confirmation -->
+<app-confirm-dialog
+  [isOpen]="isDeleteAffectationOpen()"
+  [isLoading]="isDeleteLoading()"
+  title="Supprimer l'Affectation"
+  message="Voulez-vous vraiment retirer ce plafond pour cet agent ou profil ?"
+  (confirm)="deleteAffectation()"
+  (cancel)="closeDeleteAffectationDialog()">
+</app-confirm-dialog>

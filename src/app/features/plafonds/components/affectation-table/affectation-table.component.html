@@ -1,0 +1,103 @@
+<div class="table-card">
+  <div class="table-toolbar">
+    <div class="search-box">
+      <i class="bi bi-search"></i>
+      <input
+        type="text"
+        placeholder="Rechercher une affectation..."
+        [ngModel]="search()"
+        (ngModelChange)="onSearch($event)">
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table align-middle">
+      <thead>
+        <tr>
+          <th>Cible</th>
+          <th>Type Cible</th>
+          <th>Plafond Associé</th>
+          <th>Montant Max (FCFA)</th>
+          <th>Statut</th>
+          <th class="text-end">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (item of paginatedItems(); track item.id || $index) {
+          <tr>
+            <td>
+              @if (item.agent) {
+                <div class="user-info">
+                  <span class="fw-bold text-primary">{{ item.agent.name }}</span>
+                  <span class="email-sub">{{ item.agent.email }}</span>
+                </div>
+              } @else if (item.profil) {
+                <span class="fw-bold text-secondary">{{ item.profil.name }}</span>
+              } @else {
+                <span class="text-muted">--</span>
+              }
+            </td>
+            <td>
+              <span class="target-type-badge" [class.agent]="item.agent_id" [class.profil]="item.profil_id">
+                {{ item.agent_id ? 'Agent' : (item.profil_id ? 'Profil' : 'Général') }}
+              </span>
+            </td>
+            <td>
+              <span class="plafond-badge">{{ item.plafond?.name || '--' }}</span>
+            </td>
+            <td>
+              <span class="amount-badge">{{ (item.plafond?.amount ?? 0) | number:'1.0-0' }} FCFA</span>
+            </td>
+            <td>
+              <span class="status-badge" [class.active]="item.status === '200'">
+                {{ item.status === '200' ? 'Actif' : 'Inactif' }}
+              </span>
+            </td>
+            <td class="actions-cell">
+              <div class="table-actions">
+                <button type="button" title="Modifier" class="btn-action btn-edit" (click)="edit.emit(item)">
+                  <i class="bi bi-pencil-square"></i>
+                </button>
+                <button type="button" title="Supprimer" class="btn-action btn-delete" (click)="delete.emit(item)">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        }
+        @if (filteredItems().length === 0) {
+          <tr>
+            <td colspan="6">
+              <div class="empty-state-row">
+                <i class="bi bi-info-circle"></i>
+                Aucune affectation trouvée
+              </div>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  @if (totalPages() > 1) {
+    <div class="pagination-container">
+      <button
+        class="page-btn"
+        [disabled]="currentPage() === 1"
+        (click)="changePage(currentPage() - 1)">
+        <i class="bi bi-chevron-left"></i>
+        Précédent
+      </button>
+      <span class="page-info">
+        Page {{ currentPage() }} sur {{ totalPages() }}
+      </span>
+      <button
+        class="page-btn"
+        [disabled]="currentPage() === totalPages()"
+        (click)="changePage(currentPage() + 1)">
+        Suivant
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  }
+</div>

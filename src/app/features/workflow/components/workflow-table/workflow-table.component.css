@@ -28,6 +28,16 @@
   font-weight: 600;
 }
 
+.status-badge.active {
+  background: #e6f4ea;
+  color: #137333;
+}
+
+.status-badge.pending {
+  background: #fef7e0;
+  color: #b06000;
+}
+
 .table-card {
   background: #fff;
   border-radius: 16px;

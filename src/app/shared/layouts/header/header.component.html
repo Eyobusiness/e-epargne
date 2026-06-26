@@ -106,17 +106,22 @@
       </button>
 
       <div
-        class="dropdown-menu dropdown-menu-end shadow-sm border-0 rounded-4 p-2"
+        class="dropdown-menu dropdown-menu-end shadow-lg border-0 rounded-4 p-2"
         [class.show]="isProfileMenuOpen()">
-        <div class="dropdown-user-summary px-2 py-2 mb-1">
-          <strong class="d-block">{{ displayName() }}</strong>
-          <span class="text-muted small">{{ profilLabel() }}</span>
+
+        <!-- En-tête profil centré -->
+        <div class="dropdown-user-header">
+          <div class="dropdown-user-avatar">
+            {{ initials() }}
+          </div>
+          <strong class="dropdown-user-name">{{ displayName() }}</strong>
+          <span class="dropdown-user-role">{{ profilLabel() }}</span>
           @if (currentUser()?.email) {
-            <span class="d-block text-muted small mt-1">{{ currentUser()?.email }}</span>
+            <span class="dropdown-user-email">{{ currentUser()?.email }}</span>
           }
         </div>
 
-        <div class="dropdown-divider my-1"></div>
+        <div class="dropdown-divider my-2"></div>
 
         <button
           type="button"
@@ -131,7 +136,7 @@
           class="dropdown-item rounded-3 d-flex align-items-center gap-2 text-danger"
           (click)="logout()">
           <i class="bi bi-box-arrow-right"></i>
-          <span>Deconnexion</span>
+          <span>Déconnexion</span>
         </button>
       </div>
     </div>
