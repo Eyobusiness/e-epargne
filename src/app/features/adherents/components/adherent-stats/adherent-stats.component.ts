@@ -22,6 +22,6 @@ export class AdherentStatsComponent {
   );
 
   readonly inactiveAdherents = computed(
-    () => this.adherents().filter((item) => item.status === '0').length,
+    () => this.adherents().filter((item) => !isMemberActive(item.status)).length,
   );
 }

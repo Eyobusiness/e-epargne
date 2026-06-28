@@ -4,98 +4,80 @@
 
     <div class="document-card">
 
-      <!-- PREVIEW -->
-
-      <div class="preview">
-
-        @if (isImage(item.extension)) {
-
-          <img title="{{ item.type }}"
-            [src]="getFileUrl(item)"
-            [alt]="item.type">
-
-        } @else if (item.extension?.toLowerCase() === 'pdf') {
-
-          <div class="pdf-preview">
-
-            <i class="bi bi-file-earmark-pdf-fill"></i>
-
-            <span>Document PDF</span>
-
+      <!-- PREVIEW AREA (CLICKABLE TO OPEN IN NEW TAB) -->
+      <a class="preview-clickable-area" 
+         [href]="getFileUrl(item)" 
+         target="_blank" 
+         rel="noopener" 
+         title="Cliquer pour ouvrir dans un nouvel onglet"
+      >
+        <div class="preview-container">
+          @if (isImage(item.extension)) {
+            <img [src]="getFileUrl(item)" [alt]="item.type" class="preview-image">
+          } @else if (item.extension?.toLowerCase() === 'pdf') {
+            <div class="pdf-preview-box">
+              <i class="bi bi-file-earmark-pdf-fill"></i>
+              <span>Document PDF</span>
+            </div>
+          } @else {
+            <div class="file-placeholder-box">
+              <i class="bi bi-file-earmark-text"></i>
+              <span>Document</span>
+            </div>
+          }
+          
+          <!-- Modern Hover Glass Overlay -->
+          <div class="hover-overlay-glass">
+            <div class="overlay-content">
+              <i class="bi bi-fullscreen"></i>
+              <span>Agrandir</span>
+            </div>
           </div>
-
-        } @else {
-
-          <div class="file-placeholder">
-
-            <i class="bi bi-file-earmark"></i>
-
-            <span>Document</span>
-
-          </div>
-
-        }
-
-      </div>
+        </div>
+      </a>
 
       <!-- INFOS -->
-
       <div class="document-content">
-
         <div class="document-header">
-
           <h4>{{ item.type }}</h4>
-
-          <span class="extension">
+          <span class="extension-badge" [class]="item.extension?.toLowerCase() || ''">
             {{ item.extension?.toUpperCase() }}
           </span>
-
         </div>
 
-        <div class="document-meta">
-
-          @if(item.numero){
-
-            <span>
-              <strong>N° :</strong>
-              {{ item.numero }}
-            </span>
-
+        <div class="document-meta-list">
+          @if (item.numero) {
+            <div class="meta-item">
+              <i class="bi bi-hash"></i>
+              <span><strong>N° :</strong> {{ item.numero }}</span>
+            </div>
           }
 
-          @if(item.validite){
-
-            <span>
-              <strong>Validité :</strong>
-              {{ item.validite | date:'dd/MM/yyyy' }}
-            </span>
-
+          @if (item.validite) {
+            <div class="meta-item">
+              <i class="bi bi-calendar-check"></i>
+              <span><strong>Validité :</strong> {{ item.validite | date:'dd/MM/yyyy' }}</span>
+            </div>
           }
 
-          <span>
-            <strong>Ajouté le :</strong>
-            {{ item.created_at | date:'dd/MM/yyyy' }}
-          </span>
-
+          <div class="meta-item">
+            <i class="bi bi-calendar-plus"></i>
+            <span><strong>Ajouté le :</strong> {{ item.created_at | date:'dd/MM/yyyy' }}</span>
+          </div>
         </div>
-
       </div>
 
       <!-- ACTION -->
-
       <div class="document-actions">
-
         <a
-          class="btn-action btn-view"
+          class="btn-action-premium"
           [href]="getFileUrl(item)"
           target="_blank"
-          rel="noopener">
-
-          <i class="bi bi-eye"></i>
-          Voir
-
+          rel="noopener"
+        >
+          <i class="bi bi-box-arrow-up-right"></i>
+          <span>Ouvrir dans un autre onglet</span>
         </a>
-
       </div>
 
     </div>

@@ -5,97 +5,155 @@
 }
 
 @if (adherent(); as item) {
-
-<div class="detail-page">
-
-  <div class="detail-top">
-      <a routerLink="/adherents" class="btn btn-secondary">
-        <i class="bi bi-arrow-left"></i>
-        Retour a la liste
-      </a>
-    </div>
-
-  <!-- PROFIL -->
-
-  <div class="profile-card">
-
-    <div class="profile-avatar">
-      {{ item.name.charAt(0) }}
-    </div>
-
-    <h2>{{ item.name }}</h2>
-    <h4 class="badge bg-primary text-white">{{ item.matricule }}</h4> <br>
-
-    <span
-      class="status-badge"
-      [class.active]="isActive(item.status)">
-      {{ statusLabel(item.status) }}
-    </span>
-
+<div class="detail-page-container">
+  
+  <!-- HEADER & BACK BUTTON -->
+  <div class="detail-header">
+    <a routerLink="/adherents" class="btn-back">
+      <i class="bi bi-arrow-left"></i>
+      <span>Retour à la liste</span>
+    </a>
   </div>
 
-  <!-- INFOS -->
-
-  <div class="section-title">
-    Informations générales
-  </div>
-
-  <div class="info-grid">
-
-    <div class="info-card">
-      <span class="label">Téléphone</span>
-      <strong>{{ item.phone || '--' }}</strong>
-    </div>
-
-    <div class="info-card">
-      <span class="label">Email</span>
-      <strong>{{ item.email || '--' }}</strong>
-    </div>
-
-    <div class="info-card">
-      <span class="label">Adresse</span>
-      <strong>{{ item.address || '--' }}</strong>
-    </div>
-
-    <div class="info-card">
-      <span class="label">Matricule</span>
-      <strong>{{ item.matricule || '--' }}</strong>
-    </div>
-
-    <div class="info-card">
-      <span class="label">Statut</span>
-      <strong>{{ statusLabel(item.status) }}</strong>
-    </div>
-
-    <div class="info-card">
-      <span class="label">Date création</span>
-      <strong>
-        {{
-          item.created_at
-            ? (item.created_at | date:'dd/MM/yyyy')
-            : '--'
-        }}
-      </strong>
-    </div>
-
-  </div>
-
-  <!-- DOCUMENTS -->
-
-  <div class="documents-section"> 
-    <div class="documents-header"> 
-      <h3>Documents</h3> </div> 
-      @if (hasDocuments()) 
-      { <app-document-table 
-        [documents]="documents()">
-      </app-document-table> } 
-      @else { 
-        <app-empty-state title="Aucun document" description="Aucun document disponible pour cet adherent">
-           </app-empty-state> } 
+  <div class="detail-layout">
+    
+    <!-- LEFT SIDEBAR: PROFILE HERO CARD -->
+    <div class="detail-sidebar">
+      <div class="profile-hero-card">
+        <div class="avatar-container">
+          <div class="profile-avatar">
+            {{ item.name.charAt(0) }}
+          </div>
+          <span 
+            class="status-indicator-badge"
+            [class.active]="isActive(item.status)"
+            [class.inactive]="!isActive(item.status)"
+            [title]="statusLabel(item.status)"
+          >
+            <span class="pulse-dot"></span>
+            {{ statusLabel(item.status) }}
+          </span>
         </div>
 
-</div>
+        <div class="profile-info">
+          <h2>{{ item.name }}</h2>
+          <span class="matricule-tag">
+            <i class="bi bi-hash"></i>
+            {{ item.matricule }}
+          </span>
+        </div>
+      </div>
+    </div>
 
+    <!-- RIGHT CONTENT: GENERAL INFO & DOCUMENTS -->
+    <div class="detail-main-content">
+      
+      <!-- GENERAL INFO CARD -->
+      <div class="content-card info-section">
+        <div class="card-header-premium">
+          <i class="bi bi-person-lines-fill"></i>
+          <h3>Informations générales</h3>
+        </div>
+        
+        <div class="info-tiles-grid">
+          <div class="info-tile">
+            <div class="tile-icon-wrapper">
+              <i class="bi bi-telephone"></i>
+            </div>
+            <div class="tile-details">
+              <span class="tile-label">Téléphone</span>
+              <strong class="tile-value">{{ item.phone || '--' }}</strong>
+            </div>
+          </div>
+
+          <div class="info-tile">
+            <div class="tile-icon-wrapper">
+              <i class="bi bi-envelope"></i>
+            </div>
+            <div class="tile-details">
+              <span class="tile-label">Email</span>
+              <strong class="tile-value">{{ item.email || '--' }}</strong>
+            </div>
+          </div>
+
+          <div class="info-tile">
+            <div class="tile-icon-wrapper">
+              <i class="bi bi-geo-alt"></i>
+            </div>
+            <div class="tile-details">
+              <span class="tile-label">Adresse</span>
+              <strong class="tile-value">{{ item.address || '--' }}</strong>
+            </div>
+          </div>
+
+          <div class="info-tile">
+            <div class="tile-icon-wrapper">
+              <i class="bi bi-card-text"></i>
+            </div>
+            <div class="tile-details">
+              <span class="tile-label">Matricule</span>
+              <strong class="tile-value">{{ item.matricule || '--' }}</strong>
+            </div>
+          </div>
+
+          <div class="info-tile">
+            <div class="tile-icon-wrapper">
+              <i class="bi bi-info-circle"></i>
+            </div>
+            <div class="tile-details">
+              <span class="tile-label">Statut du membre</span>
+              <strong class="tile-value">{{ statusLabel(item.status) }}</strong>
+            </div>
+          </div>
+
+          <div class="info-tile">
+            <div class="tile-icon-wrapper">
+              <i class="bi bi-calendar-event"></i>
+            </div>
+            <div class="tile-details">
+              <span class="tile-label">Date de création</span>
+              <strong class="tile-value">
+                {{ item.created_at ? (item.created_at | date:'dd MMMM yyyy') : '--' }}
+              </strong>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DOCUMENTS CARD SECTION -->
+      <div class="content-card documents-section">
+        <div class="card-header-premium flex-header">
+          <div class="header-title-group">
+            <i class="bi bi-folder2-open"></i>
+            <h3>Documents d'identité</h3>
+          </div>
+          <span class="documents-count-badge">
+            @if (hasDocuments()) {
+              {{ documents().length }} {{ documents().length > 1 ? 'Documents' : 'Document' }}
+            } @else {
+              Aucun document
+            }
+          </span>
+        </div>
+
+        <div class="card-body-premium">
+          @if (hasDocuments()) {
+            <app-document-table [documents]="documents()"></app-document-table>
+          } @else {
+            <div class="empty-state-wrapper">
+              <app-empty-state 
+                title="Aucun document disponible" 
+                description="Il n'y a pas encore de document d'identité téléversé pour cet adhérent.">
+              </app-empty-state>
+            </div>
+          }
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
 }
 
 

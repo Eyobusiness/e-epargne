@@ -32,12 +32,14 @@
     @if (hasFilteredResults()) {
 
       <app-adherent-table
-      [adherents]="paginatedAdherents()"
-      (edit)="openEditModal($event)"
-      (delete)="openDeleteDialog($event)"
-      (detail)="viewDetail($event)"
-      (wallet)="openWallet($event)">
-    </app-adherent-table>
+        [adherents]="paginatedAdherents()"
+        (edit)="openEditModal($event)"
+        (delete)="openDeleteDialog($event)"
+        (detail)="viewDetail($event)"
+        (wallet)="openWallet($event)"
+        (activate)="activateAdherent($event)"
+        (deactivate)="deactivateAdherent($event)">
+      </app-adherent-table>
 
       @if (hasMultiplePages()) {
 

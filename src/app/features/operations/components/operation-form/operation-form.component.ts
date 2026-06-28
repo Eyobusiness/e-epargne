@@ -89,7 +89,7 @@ export class OperationFormComponent {
 
       this.form.patchValue({
         description: data.description ?? '',
-        moyen_operation: data.moyen_operation || '',
+        moyen_operation: ['CASH', 'ORANGE MONEY', 'MTN MONEY', 'WAVE'].includes(data.moyen_operation) ? data.moyen_operation : '',
         montant: data.montant,
         adherent_id: data.adherent_id ?? '',
         cotisation_adherent_id:

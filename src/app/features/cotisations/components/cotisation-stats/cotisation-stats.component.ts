@@ -27,6 +27,6 @@ export class CotisationStatsComponent {
   });
 
   readonly totalInactives = computed(() => {
-    return this.cotisations().filter((item) => item.status === '0').length;
+    return this.cotisations().filter((item) => !isSubscriptionActive(item.status)).length;
   });
 }

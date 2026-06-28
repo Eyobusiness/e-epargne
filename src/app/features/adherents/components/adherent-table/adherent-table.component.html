@@ -43,6 +43,17 @@
             <button class="btn-action btn-edit" title="Modifier" (click)="onEdit(item)">
               <i class="bi bi-pencil-square"></i>
             </button>
+
+            @if (isActive(item.status)) {
+              <button class="btn-action btn-deactivate" title="Désactiver" (click)="onDeactivate(item)">
+                <i class="bi bi-toggle-on"></i>
+              </button>
+            } @else {
+              <button class="btn-action btn-activate" title="Activer" (click)="onActivate(item)">
+                <i class="bi bi-toggle-off"></i>
+              </button>
+            }
+
             <button class="btn-action btn-delete" title="Supprimer" (click)="onDelete(item)">
               <i class="bi bi-trash3"></i>
             </button>

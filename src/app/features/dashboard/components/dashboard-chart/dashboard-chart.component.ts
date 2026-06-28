@@ -7,9 +7,11 @@ import {
   OnDestroy,
   input,
   signal,
+  inject,
+  PLATFORM_ID,
 } from '@angular/core';
 
-import { CommonModule } from '@angular/common';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 
 import {
   Chart,
@@ -42,6 +44,7 @@ Chart.register(
   styleUrls: ['./dashboard-chart.component.css'],
 })
 export class DashboardChartComponent implements AfterViewInit, OnChanges, OnDestroy {
+  private readonly platformId = inject(PLATFORM_ID);
   readonly stats = input<any>();
 
   @ViewChild('chartCanvas')
@@ -79,6 +82,7 @@ export class DashboardChartComponent implements AfterViewInit, OnChanges, OnDest
   }
 
   private renderChart(): void {
+    if (!isPlatformBrowser(this.platformId)) return;
     if (!this.chartCanvas) return;
 
     const depot = this.stats()?.monthlyTotalsByType?.DEPOT ?? {};

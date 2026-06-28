@@ -116,8 +116,10 @@ export class AdherentsComponent implements OnInit {
   loadAdherents(): void {
     this.isPageLoading.set(true);
 
+    const statusParam = this.filters().status || '200,300';
+
     this.adherentService
-      .getAll(1, 100, this.filters().search)
+      .getAll(1, 100, this.filters().search, statusParam)
       .pipe(finalize(() => this.isPageLoading.set(false)))
       .subscribe({
         next: (response) => {
@@ -268,5 +270,53 @@ export class AdherentsComponent implements OnInit {
     if (this.currentPage() > this.totalPages()) {
       this.currentPage.set(this.totalPages());
     }
+  }
+
+  activateAdherent(adherent: Adherent): void {
+    if (this.isPageLoading() || !adherent.id) {
+      return;
+    }
+
+    this.isPageLoading.set(true);
+
+    this.adherentService
+      .activate(adherent.id, adherent)
+      .pipe(finalize(() => this.isPageLoading.set(false)))
+      .subscribe({
+        next: () => {
+          this.toastService.show('Adhérent activé', 'success');
+          this.loadAdherents();
+        },
+        error: (err) => {
+          this.toastService.show(
+            extractApiErrorMessage(err) || "Erreur d'activation de l'adhérent",
+            'error',
+          );
+        },
+      });
+  }
+
+  deactivateAdherent(adherent: Adherent): void {
+    if (this.isPageLoading() || !adherent.id) {
+      return;
+    }
+
+    this.isPageLoading.set(true);
+
+    this.adherentService
+      .deactivate(adherent.id, adherent)
+      .pipe(finalize(() => this.isPageLoading.set(false)))
+      .subscribe({
+        next: () => {
+          this.toastService.show('Adhérent désactivé', 'success');
+          this.loadAdherents();
+        },
+        error: (err) => {
+          this.toastService.show(
+            extractApiErrorMessage(err) || "Erreur de désactivation de l'adhérent",
+            'error',
+          );
+        },
+      });
   }
 }

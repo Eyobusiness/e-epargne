@@ -1,68 +1,59 @@
 .table-card {
   background: #ffffff;
-  border-radius: 20px;
-  border: 1px solid #e2e8f0;
-  box-shadow: 0 8px 30px rgba(15, 23, 42, 0.08);
+  border-radius: 24px;
+  border: 1px solid #f1f5f9;
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.02), 0 8px 20px -6px rgba(0, 0, 0, 0.02);
   overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.table-card:hover {
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
 }
 
 /* HEADER */
-
 .table-header {
   display: flex;
   align-items: center;
   gap: .75rem;
-
   padding: 1.25rem 1.5rem;
-
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 1px solid #f1f5f9;
 }
 
 .table-header h3 {
   margin: 0;
-
-  font-size: 1.05rem;
+  font-size: 1.15rem;
   font-weight: 700;
-
-  color: #0f172a;
+  color: #1a345c;
 }
 
 .count {
   margin-left: auto;
-
-  padding: .45rem .9rem;
-
+  padding: .45rem 1rem;
   border-radius: 999px;
-
-  background: #eff6ff;
+  background: rgba(37, 99, 235, 0.08);
   color: #2563eb;
-
   font-size: .8rem;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 /* EXPORTS */
-
 .btn-excel,
 .btn-pdf {
   display: inline-flex;
   align-items: center;
   gap: .5rem;
-
-  padding: .75rem 1rem;
-
+  padding: .65rem 1rem;
   border: none;
   border-radius: 12px;
-
   font-size: .85rem;
   font-weight: 600;
-
   cursor: pointer;
-  transition: all .3s ease;
+  transition: all 0.25s ease;
 }
 
 .btn-excel {
-  background: rgba(22,163,74,.12);
+  background: rgba(22, 163, 74, 0.08);
   color: #16a34a;
 }
 
@@ -70,29 +61,29 @@
   background: #16a34a;
   color: #fff;
   transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(22, 163, 74, 0.2);
 }
 
 .btn-pdf {
-  background: rgba(220,38,38,.12);
-  color: #dc2626;
+  background: rgba(239, 68, 68, 0.08);
+  color: #ef4444;
 }
 
 .btn-pdf:hover {
-  background: #dc2626;
+  background: #ef4444;
   color: #fff;
   transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
 }
 
 .export-actions {
   margin-left: auto;
-
   display: flex;
   align-items: center;
   gap: .75rem;
 }
 
 /* TABLE */
-
 .table-responsive {
   overflow-x: auto;
 }
@@ -103,32 +94,29 @@
 }
 
 .table thead {
-  background: #f9fafb;
+  background: #f8fafc;
 }
 
 .table thead th {
-  background-color: #f9fafb !important;
+  background-color: #f8fafc !important;
   padding: 16px;
-
   font-size: 13px;
   font-weight: 700;
-
-  color: #374151;
-
-  border-bottom: 1px solid #e5e7eb;
+  color: #475569;
+  border-bottom: 1px solid #e2e8f0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .table tbody td {
-  padding: 1rem;
-
-  font-size: .9rem;
+  padding: 1.1rem 1rem;
+  font-size: .95rem;
   color: #334155;
-
   border-bottom: 1px solid #f1f5f9;
 }
 
 .table tbody tr {
-  transition: all .25s ease;
+  transition: all 0.2s ease;
 }
 
 .table tbody tr:hover {
@@ -140,21 +128,19 @@
 }
 
 /* GROUPE */
-
 .group-name {
   font-weight: 600;
   color: #0f172a;
 }
 
 /* MONTANTS */
-
 .text-success {
-  color: #16a34a;
+  color: #10b981;
   font-weight: 700;
 }
 
 .text-danger {
-  color: #dc2626;
+  color: #ef4444;
   font-weight: 700;
 }
 
@@ -167,7 +153,6 @@
 }
 
 /* PROGRESS */
-
 .progress-wrapper {
   display: flex;
   align-items: center;
@@ -177,9 +162,7 @@
 .progress {
   width: 130px;
   height: 8px;
-
   background: #e2e8f0;
-
   border-radius: 999px;
   overflow: hidden;
 }
@@ -187,35 +170,24 @@
 .progress-bar {
   height: 100%;
   border-radius: 999px;
-
-  background: linear-gradient(
-    90deg,
-    #2563eb,
-    #60a5fa
-  );
+  background: linear-gradient(90deg, #3b82f6, #60a5fa);
 }
 
 .progress-wrapper span {
   min-width: 45px;
-
   font-size: .85rem;
   font-weight: 700;
-
   color: #2563eb;
 }
 
 /* EMPTY */
-
 .empty-state {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-
   gap: 1rem;
-
   padding: 3rem;
-
   color: #94a3b8;
   font-weight: 500;
 }
@@ -226,11 +198,10 @@
 }
 
 /* RESPONSIVE */
-
 @media (max-width: 768px) {
-
   .table-header {
     flex-wrap: wrap;
+    gap: 12px;
   }
 
   .count {
@@ -239,7 +210,7 @@
 
   .btn-excel,
   .btn-pdf {
-    padding: .65rem .85rem;
+    padding: .5rem .85rem;
   }
 
   .table thead th,
@@ -252,3 +223,4 @@
     width: 80px;
   }
 }
+

@@ -26,7 +26,9 @@
       <app-cotisation-table
         [cotisations]="cotisations()"
         (edit)="openEditModal($event)"
-        (delete)="openDeleteDialog($event)">
+        (delete)="openDeleteDialog($event)"
+        (activate)="activateCotisation($event)"
+        (deactivate)="deactivateCotisation($event)">
       </app-cotisation-table>
 
       @if (hasMultiplePages()) {

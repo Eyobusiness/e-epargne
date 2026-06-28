@@ -43,4 +43,30 @@ export class CotisationService {
       `${this.apiUrl}/${id}`,
     );
   }
+
+  activate(id: string, cotisation: Cotisation): Observable<any> {
+    const payload = {
+      id: cotisation.id,
+      label: (cotisation as any).label || 'Monthly contribution',
+      montant: cotisation.montant,
+      adherent_id: cotisation.adherent_id,
+      status: '200',
+      date_debut: cotisation.date_debut?.split('T')[0] ?? cotisation.date_debut,
+      date_fin: cotisation.date_fin?.split('T')[0] ?? cotisation.date_fin,
+    };
+    return this.http.put<any>(`${this.apiUrl}/${id}/activate`, payload);
+  }
+
+  deactivate(id: string, cotisation: Cotisation): Observable<any> {
+    const payload = {
+      id: cotisation.id,
+      label: (cotisation as any).label || 'Monthly contribution',
+      montant: cotisation.montant,
+      adherent_id: cotisation.adherent_id,
+      status: '300',
+      date_debut: cotisation.date_debut?.split('T')[0] ?? cotisation.date_debut,
+      date_fin: cotisation.date_fin?.split('T')[0] ?? cotisation.date_fin,
+    };
+    return this.http.put<any>(`${this.apiUrl}/${id}/deactivate`, payload);
+  }
 }

@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
 
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 
 import { finalize } from 'rxjs';
 
@@ -31,8 +32,11 @@ export class ChangePasswordComponent {
   private readonly SessionService = inject(SessionService);
 
   private readonly toastService = inject(ToastService);
+  private readonly router = inject(Router);
 
   readonly isLoading = signal(false);
+  readonly showOldPassword = signal(false);
+  readonly showPassword = signal(false);
 
   readonly currentUser = this.SessionService.currentUser;
 
@@ -54,6 +58,24 @@ export class ChangePasswordComponent {
     oldpassword: ['', Validators.required],
     password: ['', Validators.required],
   });
+
+  constructor() {
+    const navigation = this.router.getCurrentNavigation();
+    const state = navigation?.extras.state as { email?: string; tempPassword?: string } | undefined;
+
+    if (state?.email) {
+      this.form.patchValue({ email: state.email });
+    }
+    if (state?.tempPassword) {
+      this.form.patchValue({ oldpassword: state.tempPassword });
+    }
+
+    // Prefill from current user if logged in and not already set by state
+    const user = this.SessionService.currentUser();
+    if (user?.email && !this.form.controls.email.value) {
+      this.form.patchValue({ email: user.email });
+    }
+  }
 
   submit(): void {
     if (this.form.invalid || this.isLoading()) {

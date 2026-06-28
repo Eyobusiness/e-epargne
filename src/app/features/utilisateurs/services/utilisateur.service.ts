@@ -71,4 +71,28 @@ export class UtilisateurService {
   delete(id: string): Observable<any> {
     return this.http.delete<any>(`${this.apiUrl}/${id}`);
   }
+
+  activate(id: string, user: User): Observable<any> {
+    const payload = {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      phone: user.phone,
+      code: user.code,
+      status: '200',
+    };
+    return this.http.put<any>(`${this.apiUrl}/${id}/activate`, payload);
+  }
+
+  deactivate(id: string, user: User): Observable<any> {
+    const payload = {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      phone: user.phone,
+      code: user.code,
+      status: '300',
+    };
+    return this.http.put<any>(`${this.apiUrl}/${id}/deactivate`, payload);
+  }
 }

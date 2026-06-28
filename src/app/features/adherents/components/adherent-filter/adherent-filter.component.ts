@@ -17,8 +17,8 @@ export interface AdherentFilter {
 export class AdherentFilterComponent {
   readonly filterChange = output<AdherentFilter>();
 
-  readonly search = signal('');
   readonly status = signal('');
+  readonly search = signal('');
 
   applyFilters(): void {
     this.filterChange.emit({

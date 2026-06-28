@@ -149,7 +149,7 @@
     <button
       type="submit"
       class="btn btn-primary"
-      [disabled]="isLoading()">
+      [disabled]="form.invalid || isLoading()">
 
       <i class="bi bi-cash-stack"></i>
 

@@ -56,4 +56,30 @@ export class AdherentService {
       `${this.apiUrl}/${id}`,
     );
   }
+
+  activate(id: string, member: Adherent): Observable<any> {
+    const payload = {
+      id: member.id,
+      matricule: member.matricule || '',
+      name: member.name,
+      email: member.email,
+      phone: member.phone,
+      address: member.address || '',
+      status: '200',
+    };
+    return this.http.put<any>(`${this.apiUrl}/${id}/activate`, payload);
+  }
+
+  deactivate(id: string, member: Adherent): Observable<any> {
+    const payload = {
+      id: member.id,
+      matricule: member.matricule || '',
+      name: member.name,
+      email: member.email,
+      phone: member.phone,
+      address: member.address || '',
+      status: '300',
+    };
+    return this.http.put<any>(`${this.apiUrl}/${id}/deactivate`, payload);
+  }
 }

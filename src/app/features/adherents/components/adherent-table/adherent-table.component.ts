@@ -18,6 +18,8 @@ export class AdherentTableComponent {
   readonly delete = output<Adherent>();
   readonly detail = output<Adherent>();
   readonly wallet = output<Adherent>();
+  readonly activate = output<Adherent>();
+  readonly deactivate = output<Adherent>();
 
   onEdit(item: Adherent): void {
     this.edit.emit(item);
@@ -25,6 +27,14 @@ export class AdherentTableComponent {
 
   onDelete(item: Adherent): void {
     this.delete.emit(item);
+  }
+
+  onActivate(item: Adherent): void {
+    this.activate.emit(item);
+  }
+
+  onDeactivate(item: Adherent): void {
+    this.deactivate.emit(item);
   }
 
   onDetail(item: Adherent): void {

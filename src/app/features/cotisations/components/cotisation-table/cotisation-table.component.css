@@ -83,3 +83,22 @@ tbody tr:hover {
   align-items: center;
   gap: 10px;
 }
+
+.btn-deactivate {
+  --action-bg: rgba(239, 68, 68, 0.12);
+  --action-color: #ef4444;
+}
+
+.btn-deactivate:hover {
+  background: rgba(239, 68, 68, 0.2);
+}
+
+.btn-activate {
+  --action-bg: rgba(16, 185, 129, 0.12);
+  --action-color: #10b981;
+}
+
+.btn-activate:hover {
+  background: rgba(16, 185, 129, 0.2);
+}
+

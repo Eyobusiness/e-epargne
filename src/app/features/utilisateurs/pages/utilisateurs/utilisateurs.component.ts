@@ -71,7 +71,7 @@ export class UtilisateursComponent implements OnInit {
 
   readonly currentPage = signal(1);
 
-  readonly itemsPerPage = 5;
+  readonly itemsPerPage = 10;
 
   readonly filter = signal<UtilisateurFilter>({
     status: '',
@@ -96,16 +96,14 @@ export class UtilisateursComponent implements OnInit {
     });
   });
 
-  readonly totalItems = computed(() => this.filteredUtilisateurs().length);
+  readonly totalItems = signal(0);
 
   readonly totalPages = computed(() =>
     Math.max(1, Math.ceil(this.totalItems() / this.itemsPerPage)),
   );
 
   readonly paginatedUtilisateurs = computed(() => {
-    const start = (this.currentPage() - 1) * this.itemsPerPage;
-
-    return this.filteredUtilisateurs().slice(start, start + this.itemsPerPage);
+    return this.filteredUtilisateurs();
   });
 
   readonly hasMultiplePages = computed(() => this.totalItems() > this.itemsPerPage);
@@ -142,6 +140,7 @@ export class UtilisateursComponent implements OnInit {
       .subscribe({
         next: (response) => {
           this.utilisateurs.set(response.data.items ?? []);
+          this.totalItems.set(response.meta?.total ?? response.data?.items?.length ?? 0);
         },
 
         error: (error) => {
@@ -214,6 +213,7 @@ export class UtilisateursComponent implements OnInit {
     if (selected?.id) {
       // Mode modification : nettoyer le payload en excluant le password vide
       const updatePayload = { ...payload };
+      delete updatePayload.status;
       if (!updatePayload.password || updatePayload.password.trim() === '') {
         delete updatePayload.password;
       }
@@ -239,8 +239,10 @@ export class UtilisateursComponent implements OnInit {
       return;
     }
 
+    const { status, ...createPayload } = payload;
+
     this.service
-      .create(payload)
+      .create(createPayload)
       .pipe(finalize(() => this.isLoading.set(false)))
       .subscribe({
         next: () => {
@@ -324,5 +326,51 @@ export class UtilisateursComponent implements OnInit {
     }
 
     this.router.navigate(['/utilisateur', item.id]);
+  }
+
+  activateUser(user: User): void {
+    if (this.isPageLoading() || !user.id) {
+      return;
+    }
+
+    this.isPageLoading.set(true);
+
+    this.service
+      .activate(user.id, user)
+      .pipe(finalize(() => this.isPageLoading.set(false)))
+      .subscribe({
+        next: () => {
+          this.toastService.show('Utilisateur activé', 'success');
+          this.loadUtilisateurs();
+        },
+        error: (error) => {
+          const errorMessage = this.extractErrorMessage(error);
+          console.error('Erreur activation utilisateur:', error);
+          this.toastService.show(errorMessage || 'Erreur activation utilisateur', 'error');
+        },
+      });
+  }
+
+  deactivateUser(user: User): void {
+    if (this.isPageLoading() || !user.id) {
+      return;
+    }
+
+    this.isPageLoading.set(true);
+
+    this.service
+      .deactivate(user.id, user)
+      .pipe(finalize(() => this.isPageLoading.set(false)))
+      .subscribe({
+        next: () => {
+          this.toastService.show('Utilisateur désactivé', 'success');
+          this.loadUtilisateurs();
+        },
+        error: (error) => {
+          const errorMessage = this.extractErrorMessage(error);
+          console.error('Erreur désactivation utilisateur:', error);
+          this.toastService.show(errorMessage || 'Erreur désactivation utilisateur', 'error');
+        },
+      });
   }
 }

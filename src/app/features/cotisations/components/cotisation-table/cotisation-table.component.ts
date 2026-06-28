@@ -18,6 +18,8 @@ export class CotisationTableComponent {
   readonly cotisations = input<Cotisation[]>([]);
   readonly edit = output<Cotisation>();
   readonly delete = output<Cotisation>();
+  readonly activate = output<Cotisation>();
+  readonly deactivate = output<Cotisation>();
 
   getPeriodiciteLabel(periodicite: string): string {
     switch (periodicite) {
@@ -44,6 +46,14 @@ export class CotisationTableComponent {
 
   onDelete(item: Cotisation): void {
     this.delete.emit(item);
+  }
+
+  onActivate(item: Cotisation): void {
+    this.activate.emit(item);
+  }
+
+  onDeactivate(item: Cotisation): void {
+    this.deactivate.emit(item);
   }
 
   trackById(index: number, item: Cotisation): string {

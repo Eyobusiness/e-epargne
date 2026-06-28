@@ -21,6 +21,7 @@ export class LoginComponent {
   private readonly toastService = inject(ToastService);
 
   readonly isLoading = signal(false);
+  readonly showPassword = signal(false);
 
   readonly form = this.fb.nonNullable.group({
     username: ['', [Validators.required, Validators.email]],

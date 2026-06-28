@@ -10,7 +10,7 @@
 
         <th>Email</th>
 
-        <th>Telephone</th>
+        <th>Téléphone</th>
 
         <th>Profil</th>
 
@@ -93,6 +93,26 @@
               <i class="bi bi-pencil-square"></i>
 
             </button>
+
+            @if (item.status === '200') {
+              <button
+                title="Désactiver"
+                class="btn-action btn-deactivate"
+                (click)="onDeactivate(item)">
+
+                <i class="bi bi-toggle-on"></i>
+
+              </button>
+            } @else {
+              <button
+                title="Activer"
+                class="btn-action btn-activate"
+                (click)="onActivate(item)">
+
+                <i class="bi bi-toggle-off"></i>
+
+              </button>
+            }
 
             <button
               title="Supprimer"

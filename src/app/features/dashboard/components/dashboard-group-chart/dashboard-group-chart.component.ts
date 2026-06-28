@@ -7,8 +7,10 @@ import {
   OnDestroy,
   input,
   signal,
+  inject,
+  PLATFORM_ID,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import {
   Chart,
   DoughnutController,
@@ -33,6 +35,7 @@ Chart.register(
   styleUrls: ['./dashboard-group-chart.component.css'],
 })
 export class DashboardGroupChartComponent implements AfterViewInit, OnChanges, OnDestroy {
+  private readonly platformId = inject(PLATFORM_ID);
   readonly items = input<ClassementGroupe[]>([]);
 
   @ViewChild('chartCanvas')
@@ -54,6 +57,7 @@ export class DashboardGroupChartComponent implements AfterViewInit, OnChanges, O
   }
 
   private renderChart(): void {
+    if (!isPlatformBrowser(this.platformId)) return;
     if (!this.chartCanvas) return;
 
     const dataItems = this.items();

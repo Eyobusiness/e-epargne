@@ -253,4 +253,52 @@ export class CotisationsComponent implements OnInit {
         },
       });
   }
+
+  activateCotisation(cotisation: Cotisation): void {
+    if (this.isPageLoading() || !cotisation.id) {
+      return;
+    }
+
+    this.isPageLoading.set(true);
+
+    this.cotisationService
+      .activate(cotisation.id, cotisation)
+      .pipe(finalize(() => this.isPageLoading.set(false)))
+      .subscribe({
+        next: () => {
+          this.toastService.show('Cotisation activée', 'success');
+          this.loadCotisations();
+        },
+        error: (err) => {
+          this.toastService.show(
+            extractApiErrorMessage(err) || 'Erreur activation cotisation',
+            'error',
+          );
+        },
+      });
+  }
+
+  deactivateCotisation(cotisation: Cotisation): void {
+    if (this.isPageLoading() || !cotisation.id) {
+      return;
+    }
+
+    this.isPageLoading.set(true);
+
+    this.cotisationService
+      .deactivate(cotisation.id, cotisation)
+      .pipe(finalize(() => this.isPageLoading.set(false)))
+      .subscribe({
+        next: () => {
+          this.toastService.show('Cotisation désactivée', 'success');
+          this.loadCotisations();
+        },
+        error: (err) => {
+          this.toastService.show(
+            extractApiErrorMessage(err) || 'Erreur désactivation cotisation',
+            'error',
+          );
+        },
+      });
+  }
 }

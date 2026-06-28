@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, computed, inject, signal } from '@angular/core';
+import { Component, OnInit, computed, effect, inject, signal } from '@angular/core';
 
 import { finalize } from 'rxjs';
 
@@ -18,6 +18,7 @@ import { AppModalComponent } from '../../../../shared/ui/app-modal/app-modal.com
 import { AppPageHeaderComponent } from '../../../../shared/ui/app-page-header/app-page-header.component';
 import { AppConfirmDialogComponent } from '../../../../shared/ui/app-confirm-dialog/app-confirm-dialog.component';
 import { AppEmptyStateComponent } from '../../../../shared/ui/app-empty-state/app-empty-state.component';
+import { AppPaginationComponent } from '../../../../shared/ui/app-pagination/app-pagination.component';
 
 import { ToastService } from '../../../../core/services/toast.service';
 
@@ -30,6 +31,7 @@ import { ToastService } from '../../../../core/services/toast.service';
     AppPageHeaderComponent,
     AppConfirmDialogComponent,
     AppEmptyStateComponent,
+    AppPaginationComponent,
 
     ProfileTableComponent,
     ProfileFormComponent,
@@ -62,11 +64,35 @@ export class ProfilesComponent implements OnInit {
 
   readonly isDeleteOpen = signal(false);
 
+  readonly currentPage = signal(1);
+
+  readonly itemsPerPage = 5;
+
+  readonly totalPages = computed(() =>
+    Math.max(1, Math.ceil(this.filteredProfiles().length / this.itemsPerPage))
+  );
+
+  readonly paginatedProfiles = computed(() => {
+    const start = (this.currentPage() - 1) * this.itemsPerPage;
+    return this.filteredProfiles().slice(start, start + this.itemsPerPage);
+  });
+
+  readonly hasMultiplePages = computed(() => this.filteredProfiles().length > this.itemsPerPage);
+
   readonly filteredProfiles = computed(() => {
     const keyword = this.search().toLowerCase();
 
     return this.profiles().filter((profile) => profile.libelle?.toLowerCase().includes(keyword));
   });
+
+  constructor() {
+    effect(() => {
+      const total = this.totalPages();
+      if (this.currentPage() > total) {
+        this.currentPage.set(total);
+      }
+    }, { allowSignalWrites: true });
+  }
 
   ngOnInit(): void {
     this.loadProfiles();
@@ -110,6 +136,14 @@ export class ProfilesComponent implements OnInit {
 
   filter(value: string): void {
     this.search.set(value);
+    this.currentPage.set(1);
+  }
+
+  changePage(page: number): void {
+    if (page < 1 || page > this.totalPages()) {
+      return;
+    }
+    this.currentPage.set(page);
   }
 
   openCreateModal(): void {

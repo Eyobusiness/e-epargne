@@ -18,10 +18,18 @@
 @if(filteredProfiles().length){
 
   <app-profile-table
-    [profiles]="filteredProfiles()"
+    [profiles]="paginatedProfiles()"
     (edit)="openEditModal($event)"
     (delete)="openDeleteDialog($event)">
   </app-profile-table>
+
+  @if (hasMultiplePages()) {
+    <app-pagination
+      [currentPage]="currentPage()"
+      [totalPages]="totalPages()"
+      (pageChange)="changePage($event)">
+    </app-pagination>
+  }
 
 } @else {
 

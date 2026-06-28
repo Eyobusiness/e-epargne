@@ -44,7 +44,7 @@ export function getSubscriptionStatusLabel(status?: string): string {
     return 'Actif';
   }
 
-  if (status === '0') {
+  if (status === '0' || status === '300') {
     return 'Inactif';
   }
 

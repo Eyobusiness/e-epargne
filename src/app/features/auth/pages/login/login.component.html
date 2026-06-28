@@ -158,11 +158,20 @@
           <div class="input-wrap" [class.has-error]="passwordControl.invalid && passwordControl.touched">
             <input
               id="password"
-              type="password"
+              [type]="showPassword() ? 'text' : 'password'"
               placeholder="••••••••"
               formControlName="password"
               autocomplete="current-password"
-              class="field-input">
+              class="field-input password-input">
+            <button 
+              type="button" 
+              class="password-toggle-btn" 
+              (click)="showPassword.set(!showPassword())"
+              [title]="showPassword() ? 'Masquer' : 'Afficher'"
+              aria-label="Toggle password visibility"
+            >
+              <i class="bi" [class.bi-eye-fill]="!showPassword()" [class.bi-eye-slash-fill]="showPassword()"></i>
+            </button>
           </div>
           @if (passwordControl.invalid && passwordControl.touched) {
             <p class="field-error"><i class="bi bi-exclamation-circle-fill"></i> Le mot de passe est obligatoire.</p>

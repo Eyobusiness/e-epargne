@@ -40,7 +40,9 @@
         (edit)="openEditModal($event)"
         (delete)="
           openDeleteDialog($event)
-        ">
+        "
+        (activate)="activateUser($event)"
+        (deactivate)="deactivateUser($event)">
       </app-utilisateur-table>
 
       @if (hasMultiplePages()) {
