@@ -13,13 +13,14 @@ import { finalize } from 'rxjs';
 import { AuthService } from '../../../../../core/services/auth.service';
 
 import { ToastService } from '../../../../../core/services/toast.service';
+import { AvatarBgPipe } from '../../../../../shared/pipes/avatar-bg.pipe';
 
 @Component({
   selector: 'app-change-password',
 
   standalone: true,
 
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, AvatarBgPipe],
 
   templateUrl: './change-password.component.html',
 

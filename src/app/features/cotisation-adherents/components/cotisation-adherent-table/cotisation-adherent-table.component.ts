@@ -4,11 +4,12 @@ import { CommonModule } from '@angular/common';
 import { Component, input, output } from '@angular/core';
 
 import { CotisationAdherent } from '../../models/cotisation-adherent.model';
+import { AvatarBgPipe } from '../../../../shared/pipes/avatar-bg.pipe';
 
 @Component({
   selector: 'app-cotisation-adherent-table',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, AvatarBgPipe],
   templateUrl: './cotisation-adherent-table.component.html',
   styleUrls: ['./cotisation-adherent-table.component.css'],
 })

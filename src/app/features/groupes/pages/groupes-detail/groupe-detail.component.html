@@ -22,7 +22,7 @@
 
       <div class="group-info">
 
-        <div class="group-avatar">
+        <div class="group-avatar" [style.background]="item.name | avatarBg">
 
           {{
             item.name.charAt(0)

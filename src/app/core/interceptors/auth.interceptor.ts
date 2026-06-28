@@ -1,11 +1,10 @@
-// core/interceptors/auth.interceptor.ts
-
-import { HttpInterceptorFn, HttpResponse } from '@angular/common/http';
+import { HttpErrorResponse, HttpInterceptorFn, HttpResponse } from '@angular/common/http';
 import { inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { of } from 'rxjs';
+import { of, catchError, throwError } from 'rxjs';
 
 import { TokenService } from '../services/token.service';
+import { SessionService } from '../services/session.service';
 import { environment } from '../../../environments/environment';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
@@ -28,17 +27,23 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   }
 
   const tokenService = inject(TokenService);
+  const sessionService = inject(SessionService);
   const token = tokenService.getToken();
 
-  if (!token) {
-    return next(req);
-  }
+  const authReq = token
+    ? req.clone({
+        setHeaders: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+    : req;
 
-  const cloned = req.clone({
-    setHeaders: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-
-  return next(cloned);
+  return next(authReq).pipe(
+    catchError((error) => {
+      if (error instanceof HttpErrorResponse && error.status === 401) {
+        sessionService.logout();
+      }
+      return throwError(() => error);
+    })
+  );
 };

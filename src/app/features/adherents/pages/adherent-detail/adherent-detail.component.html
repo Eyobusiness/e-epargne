@@ -21,7 +21,7 @@
     <div class="detail-sidebar">
       <div class="profile-hero-card">
         <div class="avatar-container">
-          <div class="profile-avatar">
+          <div class="profile-avatar" [style.background]="item.name | avatarBg">
             {{ item.name.charAt(0) }}
           </div>
           <span 

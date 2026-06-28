@@ -3,11 +3,12 @@ import { Component, input, output } from '@angular/core';
 
 import { Adherent } from '../../models/adherent.model';
 import { getMemberStatusLabel, isMemberActive } from '../../utils/member-api.utils';
+import { AvatarBgPipe } from '../../../../shared/pipes/avatar-bg.pipe';
 
 @Component({
   selector: 'app-adherent-table',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, AvatarBgPipe],
   templateUrl: './adherent-table.component.html',
   styleUrls: ['./adherent-table.component.css'],
 })

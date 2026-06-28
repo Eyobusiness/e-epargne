@@ -89,7 +89,7 @@
         aria-label="Ouvrir le menu profil"
         [attr.aria-expanded]="isProfileMenuOpen()"
         (click)="toggleProfileMenu()">
-        <div class="profile-avatar d-inline-flex align-items-center justify-content-center rounded-circle text-white fw-bold">
+        <div class="profile-avatar d-inline-flex align-items-center justify-content-center rounded-circle text-white fw-bold" [style.background]="displayName() | avatarBg">
           {{ initials() }}
         </div>
 
@@ -111,7 +111,7 @@
 
         <!-- En-tête profil centré -->
         <div class="dropdown-user-header">
-          <div class="dropdown-user-avatar">
+          <div class="dropdown-user-avatar" [style.background]="displayName() | avatarBg">
             {{ initials() }}
           </div>
           <strong class="dropdown-user-name">{{ displayName() }}</strong>

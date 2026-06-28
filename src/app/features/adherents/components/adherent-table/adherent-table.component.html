@@ -18,7 +18,7 @@
           <td>{{ $index + 1 }}</td>
           <td>
             <div class="user-cell">
-              <div class="avatar">{{ item.name.charAt(0) }}</div>
+              <div class="avatar" [style.background]="item.name | avatarBg">{{ item.name.charAt(0) }}</div>
               <div class="user-info">
                 <span class="user-name">{{ item.name }}</span>
               </div>

@@ -6,11 +6,12 @@ import {
   getSubscriptionStatusLabel,
   isSubscriptionActive,
 } from '../../utils/subscription-api.utils';
+import { AvatarBgPipe } from '../../../../shared/pipes/avatar-bg.pipe';
 
 @Component({
   selector: 'app-cotisation-table',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, AvatarBgPipe],
   templateUrl: './cotisation-table.component.html',
   styleUrls: ['./cotisation-table.component.css'],
 })

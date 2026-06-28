@@ -31,6 +31,7 @@ import { AppEmptyStateComponent } from '../../../../shared/ui/app-empty-state/ap
 
 import { ToastService } from '../../../../core/services/toast.service';
 import { FormatMontantPipe } from '../../../../shared/pipes/pipe.component';
+import { AvatarBgPipe } from '../../../../shared/pipes/avatar-bg.pipe';
 
 @Component({
   selector: 'app-groupe-detail',
@@ -44,6 +45,7 @@ import { FormatMontantPipe } from '../../../../shared/pipes/pipe.component';
     AppConfirmDialogComponent,
     AppEmptyStateComponent,
     FormatMontantPipe,
+    AvatarBgPipe,
   ],
   templateUrl: './groupe-detail.component.html',
   styleUrls: ['./groupe-detail.component.css'],

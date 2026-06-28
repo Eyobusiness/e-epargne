@@ -1,15 +1,17 @@
 // components/groupe-members/groupe-members.component.ts
+// components/groupe-members/groupe-members.component.ts
 
 import { CommonModule } from '@angular/common';
 import { Component, input, output } from '@angular/core';
 
 import { AffectationAdherent } from '../../models/affectation-adherent.model';
 import { getGroupStatusLabel, isGroupActive } from '../../utils/group-status.utils';
+import { AvatarBgPipe } from '../../../../shared/pipes/avatar-bg.pipe';
 
 @Component({
   selector: 'app-groupe-members',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, AvatarBgPipe],
   templateUrl: './groupe-members.component.html',
   styleUrls: ['./groupe-members.component.css'],
 })

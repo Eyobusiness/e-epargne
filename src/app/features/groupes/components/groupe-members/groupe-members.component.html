@@ -33,7 +33,7 @@
 
             <div class="member-cell">
 
-              <div class="avatar">
+              <div class="avatar" [style.background]="(item.adherent?.name || '?') | avatarBg">
 
                 {{
                   item.adherent?.name

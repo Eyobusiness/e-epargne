@@ -5,11 +5,12 @@ import { Component, input, output } from '@angular/core';
 
 import { AffectationAdherent } from '../../models/affectation-adherent.model';
 import { getGroupStatusLabel, isGroupActive } from '../../utils/group-status.utils';
+import { AvatarBgPipe } from '../../../../shared/pipes/avatar-bg.pipe';
 
 @Component({
   selector: 'app-affectation-adherent-table',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, AvatarBgPipe],
   templateUrl: './affectation-adherent-table.component.html',
   styleUrls: ['./affectation-adherent-table.component.css'],
 })

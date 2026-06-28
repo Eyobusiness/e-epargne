@@ -8,6 +8,7 @@ import { AdherentService } from '../../services/adherent.service';
 import { DocumentTableComponent } from '../../components/document-table/document-table.component';
 import { AppEmptyStateComponent } from '../../../../shared/ui/app-empty-state/app-empty-state.component';
 import { ToastService } from '../../../../core/services/toast.service';
+import { AvatarBgPipe } from '../../../../shared/pipes/avatar-bg.pipe';
 import {
   extractApiErrorMessage,
   getMemberStatusLabel,
@@ -16,7 +17,7 @@ import {
 @Component({
   selector: 'app-adherent-detail',
   standalone: true, 
-  imports: [CommonModule, RouterLink, AppEmptyStateComponent, DocumentTableComponent], 
+  imports: [CommonModule, RouterLink, AppEmptyStateComponent, DocumentTableComponent, AvatarBgPipe], 
   templateUrl: './adherent-detail.component.html',
   styleUrls: ['./adherent-detail.component.css'],
 })

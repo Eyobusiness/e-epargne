@@ -4,14 +4,16 @@ import {
   EventEmitter,
   HostListener,
   Output,
+  PLATFORM_ID,
   computed,
   inject,
   signal,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 
 import { SessionService } from '../../../core/services/session.service';
+import { AvatarBgPipe } from '../../pipes/avatar-bg.pipe';
 
 interface NotificationItem {
   id: string;
@@ -24,7 +26,7 @@ interface NotificationItem {
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, AvatarBgPipe],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css'],
 })
@@ -32,6 +34,7 @@ export class HeaderComponent {
   private readonly elementRef = inject(ElementRef<HTMLElement>);
   private readonly sessionService = inject(SessionService);
   private readonly router = inject(Router);
+  private readonly platformId = inject(PLATFORM_ID);
 
   @Output()
   toggleSidebar = new EventEmitter<void>();
@@ -52,6 +55,25 @@ export class HeaderComponent {
   );
 
   readonly hasUnread = computed(() => this.unreadCount() > 0);
+
+  constructor() {
+    this.initializeTheme();
+  }
+
+  private initializeTheme(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      const theme = localStorage.getItem('theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const isDark = theme === 'dark' || (!theme && prefersDark);
+      
+      this.isDarkMode.set(isDark);
+      if (isDark) {
+        document.body.classList.add('dark-mode');
+      } else {
+        document.body.classList.remove('dark-mode');
+      }
+    }
+  }
 
   onToggleSidebar(): void {
     this.toggleSidebar.emit();
@@ -92,7 +114,15 @@ export class HeaderComponent {
 
   toggleDarkMode(): void {
     this.isDarkMode.update((value) => !value);
-    document.body.classList.toggle('dark-mode');
+    const isDark = this.isDarkMode();
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      if (isDark) {
+        document.body.classList.add('dark-mode');
+      } else {
+        document.body.classList.remove('dark-mode');
+      }
+    }
   }
 
   @HostListener('document:click', ['$event'])

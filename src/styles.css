@@ -58,3 +58,168 @@
   }
 }
 
+/* =====================================================
+DARK MODE SYSTEM
+===================================================== */
+body.dark-mode {
+  --background-color: #0b0f19;
+  --card-background: #151b26;
+  --white-color: #151b26;
+  --border-color: #232c3f;
+  --text-primary: #f3f4f6;
+  --text-secondary: #9ca3af;
+  --text-light: #6b7280;
+  --light-gray-color: #1e293b;
+  --sidebar-color: #080d16;
+  
+  background-color: var(--background-color) !important;
+  color: var(--text-primary) !important;
+}
+
+/* Global Overrides for Hardcoded Backgrounds & Borders in Dark Mode */
+body.dark-mode .table-wrapper,
+body.dark-mode .custom-table,
+body.dark-mode .card,
+body.dark-mode .premium-card,
+body.dark-mode .detail-card,
+body.dark-mode .content-card,
+body.dark-mode .members-section,
+body.dark-mode .form-container,
+body.dark-mode .profile-sidebar,
+body.dark-mode .detail-sidebar,
+body.dark-mode .notifications-panel,
+body.dark-mode .dropdown-menu,
+body.dark-mode .dropdown-item,
+body.dark-mode .app-table,
+body.dark-mode .modal-body,
+body.dark-mode .modal-header,
+body.dark-mode .modal-footer {
+  background: var(--card-background) !important;
+  background-color: var(--card-background) !important;
+  border-color: var(--border-color) !important;
+  color: var(--text-primary) !important;
+}
+
+body.dark-mode th {
+  background-color: #121824 !important;
+  color: var(--text-primary) !important;
+  border-bottom-color: var(--border-color) !important;
+}
+
+body.dark-mode td {
+  color: var(--text-primary) !important;
+  border-bottom-color: var(--border-color) !important;
+}
+
+body.dark-mode tbody tr:hover {
+  background-color: #1c2333 !important;
+}
+
+/* Forms & Inputs */
+body.dark-mode input,
+body.dark-mode select,
+body.dark-mode textarea,
+body.dark-mode .field-input,
+body.dark-mode .form-control,
+body.dark-mode .input-wrap,
+body.dark-mode .form-select,
+body.dark-mode .app-input input,
+body.dark-mode .app-select select,
+body.dark-mode .app-textarea textarea {
+  background-color: #1e293b !important;
+  color: var(--text-primary) !important;
+  border-color: var(--border-color) !important;
+}
+
+body.dark-mode input::placeholder,
+body.dark-mode textarea::placeholder {
+  color: #6b7280 !important;
+}
+
+/* Headers, Footers, and UI components */
+body.dark-mode .header {
+  background: #111723 !important;
+  border-bottom-color: var(--border-color) !important;
+}
+
+body.dark-mode .footer {
+  background: #111723 !important;
+  border-top-color: var(--border-color) !important;
+}
+
+body.dark-mode .profile-box {
+  background: #1e293b !important;
+  border-color: var(--border-color) !important;
+  color: var(--text-primary) !important;
+}
+
+body.dark-mode .profile-box:hover {
+  background: var(--secondary-color) !important;
+  color: white !important;
+}
+
+body.dark-mode .btn-light,
+body.dark-mode .header-action {
+  background: #1e293b !important;
+  border-color: var(--border-color) !important;
+  color: #f3f4f6 !important;
+}
+
+body.dark-mode .btn-light:hover,
+body.dark-mode .header-action:hover,
+body.dark-mode .header-action.active {
+  background: var(--secondary-color) !important;
+  color: white !important;
+}
+
+body.dark-mode .info-tile {
+  background-color: #1c2333 !important;
+  border-color: var(--border-color) !important;
+}
+
+body.dark-mode .tile-icon-wrapper {
+  background-color: #1e293b !important;
+  color: var(--secondary-color) !important;
+}
+
+body.dark-mode .tile-value {
+  color: var(--text-primary) !important;
+}
+
+body.dark-mode .tile-label {
+  color: var(--text-secondary) !important;
+}
+
+body.dark-mode .stat-card {
+  background-color: #1c2333 !important;
+  border-color: var(--border-color) !important;
+}
+
+body.dark-mode h1,
+body.dark-mode h2,
+body.dark-mode h3,
+body.dark-mode h4,
+body.dark-mode h5,
+body.dark-mode h6,
+body.dark-mode .dropdown-user-name,
+body.dark-mode .brand-copy strong,
+body.dark-mode .user-name,
+body.dark-mode .group-name,
+body.dark-mode .member-name {
+  color: var(--text-primary) !important;
+}
+
+/* Modals */
+body.dark-mode .modal-content,
+body.dark-mode .app-modal,
+body.dark-mode .app-confirm-dialog,
+body.dark-mode .modal-dialog-custom {
+  background-color: var(--card-background) !important;
+  border-color: var(--border-color) !important;
+}
+
+body.dark-mode .empty-state {
+  background-color: var(--card-background) !important;
+}
+
+

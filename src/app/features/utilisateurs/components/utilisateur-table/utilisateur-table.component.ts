@@ -2,11 +2,12 @@ import { CommonModule } from '@angular/common';
 import { Component, computed, effect, input, output, signal } from '@angular/core';
 
 import { User } from '../../models/utilisateur.model';
+import { AvatarBgPipe } from '../../../../shared/pipes/avatar-bg.pipe';
 
 @Component({
   selector: 'app-utilisateur-table',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, AvatarBgPipe],
   templateUrl: './utilisateur-table.component.html',
   styleUrls: ['./utilisateur-table.component.css'],
 })
