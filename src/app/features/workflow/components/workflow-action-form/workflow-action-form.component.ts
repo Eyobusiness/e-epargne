@@ -22,6 +22,7 @@ export class WorkflowActionFormComponent {
   readonly states = input<WorkflowState[]>([]);
   readonly profiles = input<Profile[]>([]);
   readonly endpoints = input<Parametre[]>([]);
+  readonly actionsList = input<WorkflowAction[]>([]);
   readonly isLoading = input(false);
   readonly submitForm = output<WorkflowAction>();
   readonly cancel = output<void>();
@@ -41,6 +42,37 @@ export class WorkflowActionFormComponent {
   readonly filteredStates = computed(() => this.states());
 
   constructor() {
+    this.form.controls.idWorkflow.valueChanges.subscribe((wfId) => {
+      const selectedWf = this.workflows().find((w) => w.id === wfId);
+      if (selectedWf) {
+        this.form.patchValue({ endpoint: selectedWf.endpoint || '' });
+      }
+    });
+
+    this.form.valueChanges.subscribe(() => {
+      const wfId = this.form.controls.idWorkflow.value;
+      const stepId = this.form.controls.stepId.value;
+
+      if (wfId && stepId && !this.action()?.id) {
+        const existingAction = this.actionsList().find(
+          (a) => a.idWorkflow === wfId && a.stepId === stepId
+        );
+        if (existingAction) {
+          this.form.patchValue({
+            beforeStep: existingAction.beforeStep ?? '',
+            stateOrder: existingAction.stateOrder ?? '',
+            notification: existingAction.notification ?? '',
+            nextField: existingAction.nextField ?? '',
+            profileIds: existingAction.profileIds?.length
+              ? existingAction.profileIds
+              : existingAction.profileId
+                ? [existingAction.profileId]
+                : [],
+          }, { emitEvent: false });
+        }
+      }
+    });
+
     effect(() => {
       const action = this.action();
 
@@ -61,9 +93,9 @@ export class WorkflowActionFormComponent {
       }
 
       this.form.patchValue({
-        endpoint: action.endpoint,
-        stepId: action.stepId,
-        idWorkflow: action.idWorkflow,
+        endpoint: action.endpoint ?? '',
+        stepId: action.stepId ?? '',
+        idWorkflow: action.idWorkflow ?? '',
         beforeStep: action.beforeStep ?? '',
         stateOrder: action.stateOrder ?? '',
         notification: action.notification ?? '',
@@ -75,6 +107,13 @@ export class WorkflowActionFormComponent {
             ? [action.profileId]
             : [],
       });
+
+      if (action.idWorkflow && !action.endpoint) {
+        const selectedWf = this.workflows().find((w) => w.id === action.idWorkflow);
+        if (selectedWf) {
+          this.form.patchValue({ endpoint: selectedWf.endpoint || '' });
+        }
+      }
     });
   }
 

@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { catchError, finalize, forkJoin, of } from 'rxjs';
 
 import { WorkflowService } from '../../services/workflow.service';
@@ -9,7 +9,6 @@ import { WorkflowAction } from '../../models/workflow-action.model';
 import { AppPageHeaderComponent } from '../../../../shared/ui/app-page-header/app-page-header.component';
 import { WorkflowTableComponent } from '../../components/workflow-table/workflow-table.component';
 import { WorkflowStatesComponent } from '../../components/workflow-states/workflow-states.component';
-import { WorkflowActionsComponent } from '../../components/workflow-actions/workflow-actions.component';
 import { WorkflowActionFormComponent } from '../../components/workflow-action-form/workflow-action-form.component';
 import { AppModalComponent } from '@shared/ui/app-modal/app-modal.component';
 import { AppConfirmDialogComponent } from '../../../../shared/ui/app-confirm-dialog/app-confirm-dialog.component';
@@ -21,7 +20,7 @@ import { ParametreService } from '../../../parametres/services/parametre.service
 import { Parametre } from '../../../parametres/models/parametre.models';
 import { ToastService } from '../../../../core/services/toast.service';
 
-type WorkflowTab = 'workflow' | 'state' | 'action';
+type WorkflowTab = 'workflow' | 'state';
 
 @Component({
   selector: 'app-workflow-page',
@@ -30,7 +29,6 @@ type WorkflowTab = 'workflow' | 'state' | 'action';
     AppPageHeaderComponent,
     WorkflowTableComponent,
     WorkflowStatesComponent,
-    WorkflowActionsComponent,
     WorkflowActionFormComponent,
     AppModalComponent,
     AppConfirmDialogComponent,
@@ -47,12 +45,21 @@ export class WorkflowPageComponent implements OnInit {
   private readonly toastService = inject(ToastService);
 
   readonly activeTab = signal<WorkflowTab>('workflow');
+  readonly filterWorkflowId = signal<string | null>(null);
   readonly workflows = signal<Workflow[]>([]);
   readonly states = signal<WorkflowState[]>([]);
   readonly actions = signal<WorkflowAction[]>([]);
   readonly hasLoadedActions = signal(false);
   readonly profiles = signal<Profile[]>([]);
   readonly endpoints = signal<Parametre[]>([]);
+
+  readonly filteredActions = computed(() => {
+    const filterId = this.filterWorkflowId();
+    if (!filterId) {
+      return this.actions();
+    }
+    return this.actions().filter((action) => action.idWorkflow === filterId);
+  });
 
   readonly isWorkflowLoading = signal(false);
   readonly isStateLoading = signal(false);
@@ -85,16 +92,14 @@ export class WorkflowPageComponent implements OnInit {
 
   setTab(tab: WorkflowTab): void {
     this.activeTab.set(tab);
-
-    if (tab === 'action' && !this.hasLoadedActions()) {
-      this.loadActions();
-    }
+    this.filterWorkflowId.set(null);
   }
 
   loadWorkflows(): void {
     this.workflowService.getWorkflows().subscribe({
       next: (data) => {
         this.workflows.set(data);
+        this.loadActions(data);
       },
       error: (error) => {
         this.workflows.set([]);
@@ -141,13 +146,29 @@ export class WorkflowPageComponent implements OnInit {
   }
 
   openActionModal(): void {
-    this.selectedAction.set(null);
+    const filterId = this.filterWorkflowId();
+    if (filterId) {
+      this.selectedAction.set({
+        idWorkflow: filterId,
+        endpoint: '',
+        stepId: '',
+        parent: 'TONTINEAPP',
+        profileIds: []
+      });
+    } else {
+      this.selectedAction.set(null);
+    }
     this.isActionModalOpen.set(true);
   }
 
   openEditActionModal(action: WorkflowAction): void {
     this.selectedAction.set(action);
     this.isActionModalOpen.set(true);
+  }
+
+  configureWorkflow(workflow: Workflow): void {
+    this.filterWorkflowId.set(workflow.id ?? null);
+    this.openActionModal();
   }
 
   closeActionModal(force = false): void {

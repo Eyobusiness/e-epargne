@@ -102,7 +102,7 @@
 
     <!-- ETAT -->
 
-    <div class="col-md-6">
+    <div class="col-md-12">
 
       <label
         for="etat"
@@ -139,56 +139,7 @@
 
     </div>
 
-    <!-- ENDPOINT -->
 
-    <div class="col-md-6">
-
-      <label
-        for="endpoint"
-        class="form-label">
-
-        Endpoint
-
-      </label>
-
-      <select
-        id="endpoint"
-        class="form-select"
-        formControlName="endpoint">
-
-        <option value="">
-          Sélectionner
-        </option>
-
-        @for (
-          endpoint of endpoints();
-          track endpoint.id
-        ) {
-
-          <option
-            [value]="endpoint.valeur">
-
-            {{ endpoint.libelle }}
-
-          </option>
-
-        }
-
-        @if (endpoints().length === 0) {
-
-          <option
-            value=""
-            disabled>
-
-            Aucun endpoint disponible
-
-          </option>
-
-        }
-
-      </select>
-
-    </div>
 
     <!-- ETAT PRECEDENT -->
 

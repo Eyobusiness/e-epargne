@@ -64,44 +64,47 @@ export class ProfileFormComponent {
   save(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
-
       return;
     }
 
-    const selectedMenus = this.menus()
-      .filter((menu) => menu.checked)
-      .map((menu) => ({
-        id: Number(menu.order),
-      }));
+    const profileMenuRequest: any[] = [];
 
-    if (selectedMenus.length === 0) {
+    this.menus().forEach((menu) => {
+      const checkedSubMenus = menu.sousMenus?.filter((sub) => sub.checked) ?? [];
+
+      if (menu.checked || checkedSubMenus.length > 0) {
+        profileMenuRequest.push({
+          id_menu: menu.id,
+          permission: menu.selectedPermission ?? '1',
+          sous_menu: checkedSubMenus.map((sub) => ({
+            sous_menu_id: sub.id,
+            permission: menu.selectedPermission ?? '1',
+          })),
+        });
+      }
+    });
+
+    if (profileMenuRequest.length === 0) {
       alert('Veuillez sélectionner au moins un menu');
-
       return;
     }
 
     const formValue = this.form.getRawValue();
+    const selected = this.profile();
 
     const payload = {
-      id: 0,
-
+      id: selected?.id || undefined,
       profileRequest: {
-        id: 0,
-
+        id: selected?.id || undefined,
         libelle: formValue.libelle,
-
-        code: formValue.code,
-
+        code: formValue.code || formValue.libelle.toUpperCase(),
         permission: formValue.permission,
-
         code_store: 'TONTINEAPP',
       },
-
-      profileMenuRequest: selectedMenus,
+      profileMenuRequest: profileMenuRequest,
     };
 
     console.log('Payload profil :', JSON.stringify(payload, null, 2));
-
     this.submitForm.emit(payload);
   }
 

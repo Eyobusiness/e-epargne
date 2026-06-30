@@ -69,7 +69,9 @@
 
               <input
                 type="checkbox"
-                class="form-check-input">
+                class="form-check-input"
+                [(ngModel)]="sub.checked"
+                (change)="onChange()">
 
               <span>
                 {{ sub.name }}

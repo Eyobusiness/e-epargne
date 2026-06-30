@@ -167,7 +167,8 @@
 }
 
 .btn-edit,
-.btn-delete {
+.btn-delete,
+.btn-config {
   width: 38px;
   height: 38px;
 
@@ -189,6 +190,11 @@
 .btn-delete {
   background: #ffe5e5;
   color: #dc3545;
+}
+
+.btn-config {
+  background: #e8f9f0;
+  color: #198754;
 }
 
 .empty-state {

@@ -31,6 +31,8 @@ export class WorkflowTableComponent {
 
   readonly remove = output<string>();
 
+  readonly configure = output<Workflow>();
+
   readonly search = signal('');
 
   readonly currentPage = signal(1);
@@ -136,6 +138,12 @@ export class WorkflowTableComponent {
   onDelete(id: string): void {
 
     this.remove.emit(id);
+
+  }
+
+  onConfigure(workflow: Workflow): void {
+
+    this.configure.emit(workflow);
 
   }
 

@@ -14,6 +14,8 @@ export interface SubMenu {
   status?: string;
 
   permission?: string;
+
+  checked?: boolean;
 }
 
 export interface Menu {

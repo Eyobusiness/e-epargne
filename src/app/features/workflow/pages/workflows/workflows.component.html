@@ -18,12 +18,6 @@
       (click)="setTab('state')">
       Etats
     </button>
-
-    <button
-      [class.active]="activeTab() === 'action'"
-      (click)="setTab('action')">
-      Actions
-    </button>
   </div>
 
   @if (activeTab() === 'workflow') {
@@ -31,7 +25,8 @@
       [workflows]="workflows()"
       (create)="openWorkflowModal()"
       (edit)="openEditWorkflowModal($event)"
-      (remove)="openDeleteWorkflowDialog($event)">
+      (remove)="openDeleteWorkflowDialog($event)"
+      (configure)="configureWorkflow($event)">
     </app-workflow-table>
   }
 
@@ -44,17 +39,7 @@
     </app-workflow-states>
   }
 
-  @if (activeTab() === 'action') {
-    <app-workflow-actions
-      [actions]="actions()"
-      [workflows]="workflows()"
-      [states]="states()"
-      [profiles]="profiles()"
-      (create)="openActionModal()"
-      (edit)="openEditActionModal($event)"
-      (remove)="openDeleteActionDialog($event)">
-    </app-workflow-actions>
-  }
+
 </div>
 
 <app-modal
@@ -69,6 +54,7 @@
     [states]="states()"
     [profiles]="profiles()"
     [endpoints]="endpoints()"
+    [actionsList]="actions()"
     [isLoading]="isActionLoading()"
     (submitForm)="saveAction($event)"
     (cancel)="closeActionModal()">

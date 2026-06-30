@@ -120,10 +120,12 @@ export class ProfilesComponent implements OnInit {
         this.menus.set(
           menus.map((menu: any) => ({
             ...menu,
-
             checked: false,
-
             selectedPermission: menu.permission ?? '1',
+            sousMenus: menu.sousMenus?.map((sub: any) => ({
+              ...sub,
+              checked: false
+            })) ?? []
           })),
         );
       },
@@ -231,6 +233,11 @@ export class ProfilesComponent implements OnInit {
       menus.map((menu) => ({
         ...menu,
         checked: false,
+        selectedPermission: '1',
+        sousMenus: menu.sousMenus?.map((sub) => ({
+          ...sub,
+          checked: false
+        })) ?? []
       })),
     );
   }
@@ -239,11 +246,27 @@ export class ProfilesComponent implements OnInit {
     const assignedMenus = profile.profilMenus ?? [];
 
     this.menus.update((menus) =>
-      menus.map((menu) => ({
-        ...menu,
+      menus.map((menu) => {
+        const assignedMenu = assignedMenus.find((p) => p.id_menu === menu.id);
+        const hasAssigned = !!assignedMenu;
 
-        checked: assignedMenus.some((p) => p.id_menu === menu.id),
-      })),
+        const mappedSubMenus = menu.sousMenus?.map((sub) => {
+          const hasSubAssigned = assignedMenu?.sous_menu?.some(
+            (s: any) => s.sous_menu_id === sub.id
+          );
+          return {
+            ...sub,
+            checked: !!hasSubAssigned
+          };
+        }) ?? [];
+
+        return {
+          ...menu,
+          checked: hasAssigned,
+          selectedPermission: assignedMenu?.permission ?? menu.permission ?? '1',
+          sousMenus: mappedSubMenus
+        };
+      })
     );
   }
 }
