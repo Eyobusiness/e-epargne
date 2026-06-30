@@ -210,23 +210,37 @@
 /* RESPONSIVE */
 @media (max-width: 768px) {
   .table-header {
-    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: flex-start;
     gap: 12px;
+  }
+
+  .export-actions {
+    margin-left: 0;
+    width: 100%;
+    justify-content: flex-start;
+    flex-wrap: wrap;
   }
 
   .count {
     margin-left: 0;
+    width: 100%;
+    text-align: center;
+    margin-bottom: 6px;
   }
 
   .btn-excel,
   .btn-pdf {
     padding: .5rem .85rem;
+    flex: 1;
+    justify-content: center;
   }
 
   .table thead th,
   .table tbody td {
     padding: .75rem;
     font-size: .85rem;
+    white-space: nowrap;
   }
 
   .progress {

@@ -71,8 +71,12 @@
 
 .dashboard-content-grid {
   display: grid;
-  grid-template-columns: 2fr 1fr;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
   gap: 24px;
+}
+
+.dashboard-content-grid > div {
+  min-width: 0;
 }
 
 .dashboard-card {
@@ -215,7 +219,7 @@
 
 @media (max-width: 1200px) {
   .dashboard-content-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
@@ -251,4 +255,21 @@
   font-size: 0.95rem;
   color: #64748b;
   font-weight: 500;
+}
+
+@media (max-width: 576px) {
+  .activity-item {
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: flex-start;
+  }
+
+  .activity-content {
+    min-width: 120px;
+  }
+
+  .activity-item small {
+    width: 100%;
+    margin-left: 64px;
+  }
 }

@@ -287,7 +287,11 @@ export class RapportService {
 
             nombreMembres: groupe.nombreAdherents,
 
+            totalPrevu: groupe.totalPrevu,
+
             totalCotise: groupe.totalCotise,
+
+            resteACotiser: groupe.resteACotiser,
 
             tauxRealisation: groupe.tauxRealisation,
           }));

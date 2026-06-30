@@ -118,7 +118,11 @@
 
             <th>Membres</th>
 
-            <th>Montant cotisé</th>
+            <th class="text-end">Prévu</th>
+
+            <th class="text-end">Cotisé</th>
+
+            <th class="text-end">Reste</th>
 
             <th>Taux</th>
 
@@ -164,9 +168,21 @@
 
               </td>
 
-              <td>
+              <td class="text-end text-secondary fw-bold">
+
+                {{ (item.totalPrevu ?? 0) | formatMontant }}
+
+              </td>
+
+              <td class="text-end text-success fw-bold">
 
                 {{ item.totalCotise | formatMontant }}
+
+              </td>
+
+              <td class="text-end text-danger fw-bold">
+
+                {{ (item.resteACotiser ?? 0) | formatMontant }}
 
               </td>
 

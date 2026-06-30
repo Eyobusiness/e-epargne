@@ -8,7 +8,11 @@ export interface ClassementGroupe {
 
   nombreMembres: number;
 
+  totalPrevu?: number;
+
   totalCotise: number;
+
+  resteACotiser?: number;
 
   tauxRealisation: number;
 }
