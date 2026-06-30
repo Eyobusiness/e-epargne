@@ -3,6 +3,7 @@ import { provideRouter } from '@angular/router';
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { withInterceptors } from '@angular/common/http';
 import { authInterceptor } from '../app/core/interceptors/auth.interceptor';
+import { hmacInterceptor } from '../app/core/interceptors/hmac.interceptor';
 
 
 import { routes } from './app.routes';
@@ -16,7 +17,10 @@ export const appConfig: ApplicationConfig = {
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes),
 
-    provideHttpClient(withFetch(), withInterceptors([authInterceptor])),
+    provideHttpClient(
+      withFetch(),
+      withInterceptors([authInterceptor, hmacInterceptor])
+    ),
 
     provideClientHydration(withEventReplay()),
 

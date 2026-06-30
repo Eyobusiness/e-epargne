@@ -12,12 +12,17 @@
          title="Cliquer pour ouvrir dans un nouvel onglet"
       >
         <div class="preview-container">
-          @if (isImage(item.extension)) {
-            <img [src]="getFileUrl(item)" [alt]="item.type" class="preview-image">
+          @if (isImage(item.extension) && !hasImageError(item)) {
+            <img [src]="getFileUrl(item)" [alt]="item.type" class="preview-image" (error)="onImageError(item)">
           } @else if (item.extension?.toLowerCase() === 'pdf') {
             <div class="pdf-preview-box">
               <i class="bi bi-file-earmark-pdf-fill"></i>
               <span>Document PDF</span>
+            </div>
+          } @else if (isImage(item.extension) && hasImageError(item)) {
+            <div class="file-placeholder-box image-error">
+              <i class="bi bi-file-earmark-image"></i>
+              <span>Image</span>
             </div>
           } @else {
             <div class="file-placeholder-box">

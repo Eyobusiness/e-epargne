@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, input } from '@angular/core';
+import { Component, inject, input, signal } from '@angular/core';
 
 import { DocumentIdentite } from '../../models/document.model';
 import { DocumentService } from '../../services/document.service';
@@ -15,6 +15,7 @@ export class DocumentTableComponent {
   private readonly documentService = inject(DocumentService);
 
   readonly documents = input<DocumentIdentite[]>([]);
+  readonly imageLoadErrors = signal<Record<string, boolean>>({});
 
   trackById(_index: number, item: DocumentIdentite): string {
     return item.id ?? String(_index);
@@ -30,6 +31,19 @@ export class DocumentTableComponent {
     }
 
     return ['png', 'jpg', 'jpeg', 'webp'].includes(extension.toLowerCase());
+  }
+
+  onImageError(item: DocumentIdentite): void {
+    const key = item.id || item.type || 'unknown';
+    this.imageLoadErrors.update(errors => ({
+      ...errors,
+      [key]: true
+    }));
+  }
+
+  hasImageError(item: DocumentIdentite): boolean {
+    const key = item.id || item.type || 'unknown';
+    return !!this.imageLoadErrors()[key];
   }
 }
 

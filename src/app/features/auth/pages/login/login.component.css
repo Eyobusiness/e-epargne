@@ -791,3 +791,62 @@
   color: #1a345c;
 }
 
+/* =====================================================
+   DARK MODE OVERRIDES
+   ===================================================== */
+:host-context(body.dark-mode) .login-card {
+  background: rgba(21, 27, 38, 0.95);
+  border: 1px solid #232c3f;
+  box-shadow: 0 32px 80px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+:host-context(body.dark-mode) .login-title {
+  color: #f3f4f6;
+}
+
+:host-context(body.dark-mode) .login-subtitle {
+  color: #9ca3af;
+}
+
+:host-context(body.dark-mode) .field-label {
+  color: #cbd5e1;
+}
+
+:host-context(body.dark-mode) .field-label i {
+  color: #818cf8;
+}
+
+:host-context(body.dark-mode) .field-input {
+  background: #1e293b;
+  color: #f3f4f6;
+  border-color: #232c3f;
+}
+
+:host-context(body.dark-mode) .field-input::placeholder {
+  color: #475569;
+}
+
+:host-context(body.dark-mode) .field-input:focus {
+  border-color: #818cf8;
+  background: #1e293b;
+  box-shadow: 0 0 0 4px rgba(129, 140, 248, 0.15);
+}
+
+:host-context(body.dark-mode) .forgot-link {
+  color: #818cf8;
+}
+
+:host-context(body.dark-mode) .forgot-link:hover {
+  color: #a5b4fc;
+}
+
+:host-context(body.dark-mode) .password-toggle-btn:hover {
+  color: #818cf8;
+}
+
+:host-context(body.dark-mode) .btn-login {
+  background: linear-gradient(135deg, #1e1b4b 0%, #1e293b 50%, #312e81 100%);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.4);
+}
+
+

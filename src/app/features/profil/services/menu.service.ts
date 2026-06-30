@@ -16,9 +16,11 @@ export class MenuService {
   private readonly apiUrl =
     `${environment.apiUrl}/profiles/menus`;
 
-  getAll(): Observable<any> {
+  getAll(limit = 100): Observable<any> {
     return this.http.get(
-      `${this.apiUrl}/all`
+      `${this.apiUrl}/all`, {
+        params: { limit: String(limit) }
+      }
     );
   }
 }

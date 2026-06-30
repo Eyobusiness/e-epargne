@@ -203,9 +203,27 @@ export class ProfilesComponent implements OnInit {
   }
 
   delete(): void {
-    this.closeDeleteDialog();
+    const profile = this.selected();
+    if (!profile || !profile.id) {
+      this.closeDeleteDialog();
+      return;
+    }
 
-    this.toastService.show('Suppression non disponible sur API', 'warning');
+    this.isDeleteLoading.set(true);
+    this.profileService.delete(profile.id)
+      .pipe(finalize(() => {
+        this.isDeleteLoading.set(false);
+        this.closeDeleteDialog();
+      }))
+      .subscribe({
+        next: () => {
+          this.loadProfiles();
+          this.toastService.show('Profil supprimé avec succès', 'success');
+        },
+        error: (err) => {
+          this.toastService.show('Erreur lors de la suppression', 'error');
+        }
+      });
   }
 
   private resetMenus(): void {

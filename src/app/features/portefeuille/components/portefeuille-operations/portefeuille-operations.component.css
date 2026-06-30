@@ -303,3 +303,63 @@
   box-shadow:
     0 0 10px rgba(239, 68, 68, .5);
 }
+
+/* =====================================================
+   DARK MODE OVERRIDES
+   ===================================================== */
+:host-context(body.dark-mode) .operations-card {
+  background: #151b26;
+  border-color: #232c3f;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+:host-context(body.dark-mode) .card-header h2 {
+  color: #f3f4f6;
+}
+
+:host-context(body.dark-mode) .card-header span {
+  background: rgba(37, 99, 235, 0.15);
+  color: #60a5fa;
+}
+
+:host-context(body.dark-mode) .form-label {
+  color: #cbd5e1;
+}
+
+:host-context(body.dark-mode) .form-control,
+:host-context(body.dark-mode) .form-select {
+  background-color: #1e293b !important;
+  color: #f3f4f6 !important;
+  border-color: #232c3f !important;
+}
+
+:host-context(body.dark-mode) .btn-secondary {
+  background-color: #1e293b;
+  border-color: #232c3f;
+  color: #f3f4f6;
+}
+
+:host-context(body.dark-mode) .btn-secondary:hover {
+  background-color: #334155;
+  color: #ffffff;
+}
+
+:host-context(body.dark-mode) .custom-table thead {
+  background: #121824;
+}
+
+:host-context(body.dark-mode) .custom-table th {
+  background-color: #121824 !important;
+  color: #cbd5e1 !important;
+  border-bottom-color: #232c3f !important;
+}
+
+:host-context(body.dark-mode) .custom-table td {
+  color: #9ca3af !important;
+  border-bottom-color: #232c3f !important;
+}
+
+:host-context(body.dark-mode) .custom-table tbody tr:hover {
+  background: #1c2333 !important;
+}
+

@@ -35,3 +35,42 @@
   }
 
 }
+
+/* =====================================================
+   DARK MODE OVERRIDES
+   ===================================================== */
+:host-context(body.dark-mode) .card-section {
+  background: #151b26;
+  border-color: #232c3f;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+:host-context(body.dark-mode) .card-section h5 {
+  color: #f3f4f6;
+}
+
+:host-context(body.dark-mode) .form-label {
+  color: #cbd5e1;
+}
+
+:host-context(body.dark-mode) .form-control {
+  background-color: #1e293b !important;
+  color: #f3f4f6 !important;
+  border-color: #232c3f !important;
+}
+
+:host-context(body.dark-mode) .form-control:focus {
+  border-color: #818cf8 !important;
+  box-shadow: 0 0 0 4px rgba(129, 140, 248, 0.15) !important;
+}
+
+:host-context(body.dark-mode) .btn-light {
+  background-color: #1e293b;
+  border-color: #232c3f;
+  color: #f3f4f6;
+}
+
+:host-context(body.dark-mode) .btn-light:hover {
+  background-color: #334155;
+  color: #ffffff;
+}

@@ -63,8 +63,7 @@ export class HeaderComponent {
   private initializeTheme(): void {
     if (isPlatformBrowser(this.platformId)) {
       const theme = localStorage.getItem('theme');
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      const isDark = theme === 'dark' || (!theme && prefersDark);
+      const isDark = theme === 'dark';
       
       this.isDarkMode.set(isDark);
       if (isDark) {

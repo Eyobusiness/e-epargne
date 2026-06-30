@@ -151,9 +151,6 @@ export class DepenseFormComponent {
           ? toIsoDateDepense(raw.document_validite)
           : existing.validite,
       };
-    } else if (!this.isEditMode()) {
-      this.form.get('document_type')?.markAsTouched();
-      return;
     }
 
     const payload: DepensePayload = {
@@ -179,9 +176,5 @@ export class DepenseFormComponent {
     const control = this.form.get(field);
 
     return !!(control && control.invalid && (control.touched || control.dirty));
-  }
-
-  hasDocumentError(): boolean {
-    return !this.isEditMode() && !this.selectedFile() && !this.existingDocument();
   }
 }

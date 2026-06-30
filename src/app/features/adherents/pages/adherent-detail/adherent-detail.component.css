@@ -364,4 +364,100 @@
   }
 }
 
+/* =====================================================
+   DARK MODE OVERRIDES
+   ===================================================== */
+:host-context(body.dark-mode) .detail-page-container {
+  color: #f3f4f6;
+}
+
+:host-context(body.dark-mode) .btn-back {
+  background: #151b26;
+  color: #9ca3af;
+  border-color: #232c3f;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+:host-context(body.dark-mode) .btn-back:hover {
+  background: #1e293b;
+  color: #f3f4f6;
+  border-color: #334155;
+}
+
+:host-context(body.dark-mode) .profile-hero-card {
+  background: #151b26;
+  border-color: #232c3f;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+:host-context(body.dark-mode) .profile-avatar {
+  border-color: #151b26;
+  box-shadow: 0 8px 24px rgba(79, 70, 229, 0.4);
+}
+
+:host-context(body.dark-mode) .profile-info h2 {
+  color: #f3f4f6;
+}
+
+:host-context(body.dark-mode) .matricule-tag {
+  background: #1e293b;
+  color: #9ca3af;
+  border-color: #232c3f;
+}
+
+:host-context(body.dark-mode) .content-card {
+  background: #151b26;
+  border-color: #232c3f;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+:host-context(body.dark-mode) .card-header-premium {
+  background: linear-gradient(to bottom, #151b26, #111723);
+  border-bottom-color: #232c3f;
+}
+
+:host-context(body.dark-mode) .card-header-premium i {
+  color: #818cf8;
+}
+
+:host-context(body.dark-mode) .card-header-premium h3 {
+  color: #f3f4f6;
+}
+
+:host-context(body.dark-mode) .documents-count-badge {
+  background: rgba(37, 99, 235, 0.15);
+  color: #60a5fa;
+  border-color: rgba(37, 99, 235, 0.25);
+}
+
+:host-context(body.dark-mode) .info-tile {
+  background: #1c2333;
+  border-color: #232c3f;
+}
+
+:host-context(body.dark-mode) .info-tile:hover {
+  background: #151b26;
+  border-color: #334155;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+:host-context(body.dark-mode) .tile-icon-wrapper {
+  background: rgba(129, 140, 248, 0.1);
+  color: #818cf8;
+}
+
+:host-context(body.dark-mode) .info-tile:hover .tile-icon-wrapper {
+  background: #818cf8;
+  color: #151b26;
+}
+
+:host-context(body.dark-mode) .tile-label {
+  color: #9ca3af;
+}
+
+:host-context(body.dark-mode) .tile-value {
+  color: #f3f4f6;
+}
+
+
 

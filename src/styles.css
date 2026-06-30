@@ -72,6 +72,18 @@ body.dark-mode {
   --light-gray-color: #1e293b;
   --sidebar-color: #080d16;
   
+  /* Redefine gray scale in dark mode */
+  --gray-50: #121824;
+  --gray-100: #1c2333;
+  --gray-200: #232c3f;
+  --gray-300: #334155;
+  --gray-400: #475569;
+  --gray-500: #64748b;
+  --gray-600: #94a3b8;
+  --gray-700: #cbd5e1;
+  --gray-800: #f1f5f9;
+  --gray-900: #f8fafc;
+  
   background-color: var(--background-color) !important;
   color: var(--text-primary) !important;
 }
@@ -93,14 +105,22 @@ body.dark-mode .dropdown-item,
 body.dark-mode .app-table,
 body.dark-mode .modal-body,
 body.dark-mode .modal-header,
-body.dark-mode .modal-footer {
+body.dark-mode .modal-footer,
+body.dark-mode .table-controls,
+body.dark-mode .table-card,
+body.dark-mode .card-form,
+body.dark-mode .modal-container,
+body.dark-mode .confirm-dialog,
+body.dark-mode .dashboard-card,
+body.dark-mode .dashboard-date {
   background: var(--card-background) !important;
   background-color: var(--card-background) !important;
   border-color: var(--border-color) !important;
   color: var(--text-primary) !important;
 }
 
-body.dark-mode th {
+body.dark-mode th,
+body.dark-mode thead {
   background-color: #121824 !important;
   color: var(--text-primary) !important;
   border-bottom-color: var(--border-color) !important;
@@ -125,15 +145,57 @@ body.dark-mode .input-wrap,
 body.dark-mode .form-select,
 body.dark-mode .app-input input,
 body.dark-mode .app-select select,
-body.dark-mode .app-textarea textarea {
+body.dark-mode .app-textarea textarea,
+body.dark-mode .filter-select,
+body.dark-mode .search-input,
+body.dark-mode .field__textarea {
   background-color: #1e293b !important;
   color: var(--text-primary) !important;
   border-color: var(--border-color) !important;
 }
 
+/* Form Filters custom overrides due to !important light styles */
+body.dark-mode .filter-container input,
+body.dark-mode .filter-container select,
+body.dark-mode .filter-container textarea,
+body.dark-mode .filter-container .form-control,
+body.dark-mode .filter-container .form-select {
+  background-color: #1e293b !important;
+  color: var(--text-primary) !important;
+  border-color: var(--border-color) !important;
+}
+
+body.dark-mode .filter-container label,
+body.dark-mode .filter-container .form-label,
+body.dark-mode .filter-container .filter-label {
+  color: var(--text-primary) !important;
+}
+
+body.dark-mode .filter-container .btn-secondary,
+body.dark-mode .filter-container .btn-outline-secondary,
+body.dark-mode .filter-container .btn-outline,
+body.dark-mode .filter-actions .btn-reset {
+  background-color: #1e293b !important;
+  border-color: var(--border-color) !important;
+  color: #f3f4f6 !important;
+}
+
+body.dark-mode .filter-container .btn-secondary:hover,
+body.dark-mode .filter-container .btn-outline-secondary:hover,
+body.dark-mode .filter-container .btn-outline:hover,
+body.dark-mode .filter-actions .btn-reset:hover {
+  background-color: #334155 !important;
+  color: #ffffff !important;
+}
+
 body.dark-mode input::placeholder,
 body.dark-mode textarea::placeholder {
   color: #6b7280 !important;
+}
+
+body.dark-mode label,
+body.dark-mode .field__label {
+  color: var(--text-primary) !important;
 }
 
 /* Headers, Footers, and UI components */
@@ -159,7 +221,8 @@ body.dark-mode .profile-box:hover {
 }
 
 body.dark-mode .btn-light,
-body.dark-mode .header-action {
+body.dark-mode .header-action,
+body.dark-mode .menu-btn {
   background: #1e293b !important;
   border-color: var(--border-color) !important;
   color: #f3f4f6 !important;
@@ -167,9 +230,19 @@ body.dark-mode .header-action {
 
 body.dark-mode .btn-light:hover,
 body.dark-mode .header-action:hover,
-body.dark-mode .header-action.active {
+body.dark-mode .header-action.active,
+body.dark-mode .menu-btn:hover {
   background: var(--secondary-color) !important;
   color: white !important;
+}
+
+body.dark-mode .btn-secondary {
+  background-color: #1e293b !important;
+  color: #f3f4f6 !important;
+}
+
+body.dark-mode .btn-secondary:hover:not(:disabled) {
+  background-color: #334155 !important;
 }
 
 body.dark-mode .info-tile {
@@ -205,7 +278,15 @@ body.dark-mode .dropdown-user-name,
 body.dark-mode .brand-copy strong,
 body.dark-mode .user-name,
 body.dark-mode .group-name,
-body.dark-mode .member-name {
+body.dark-mode .member-name,
+body.dark-mode .table-header h3,
+body.dark-mode .section-title,
+body.dark-mode .activity-content strong,
+body.dark-mode .overview-item strong,
+body.dark-mode .dashboard-date-value,
+body.dark-mode .dashboard-card-header h3,
+body.dark-mode .modal-header-content h2,
+body.dark-mode .confirm-dialog h2 {
   color: var(--text-primary) !important;
 }
 
@@ -213,7 +294,9 @@ body.dark-mode .member-name {
 body.dark-mode .modal-content,
 body.dark-mode .app-modal,
 body.dark-mode .app-confirm-dialog,
-body.dark-mode .modal-dialog-custom {
+body.dark-mode .modal-dialog-custom,
+body.dark-mode .modal-container,
+body.dark-mode .confirm-dialog {
   background-color: var(--card-background) !important;
   border-color: var(--border-color) !important;
 }
@@ -221,5 +304,166 @@ body.dark-mode .modal-dialog-custom {
 body.dark-mode .empty-state {
   background-color: var(--card-background) !important;
 }
+
+/* Table Edit & Delete Actions Buttons */
+body.dark-mode .btn-icon.edit {
+  background-color: rgba(59, 130, 246, 0.15) !important;
+  color: #60a5fa !important;
+}
+
+body.dark-mode .btn-icon.delete {
+  background-color: rgba(239, 68, 68, 0.15) !important;
+  color: #f87171 !important;
+}
+
+/* Pagination component */
+body.dark-mode .pagination-btn {
+  background: var(--card-background) !important;
+  color: var(--text-primary) !important;
+}
+
+body.dark-mode .pagination-btn:hover:not(:disabled) {
+  background: var(--light-gray-color) !important;
+}
+
+body.dark-mode .pagination-btn.active {
+  background: var(--secondary-color) !important;
+  color: white !important;
+}
+
+/* ng-select dropdown support */
+body.dark-mode .ng-select-container {
+  background-color: #1e293b !important;
+  border-color: var(--border-color) !important;
+  color: var(--text-primary) !important;
+}
+
+body.dark-mode .ng-select-container .ng-value-container .ng-placeholder {
+  color: var(--text-light) !important;
+}
+
+body.dark-mode .ng-select-container .ng-value-container .ng-value {
+  color: var(--text-primary) !important;
+}
+
+body.dark-mode .ng-dropdown-panel {
+  background-color: var(--card-background) !important;
+  border-color: var(--border-color) !important;
+}
+
+body.dark-mode .ng-dropdown-panel .ng-dropdown-panel-items .ng-option {
+  background-color: var(--card-background) !important;
+  color: var(--text-primary) !important;
+}
+
+body.dark-mode .ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-marked {
+  background-color: #1e293b !important;
+  color: var(--text-primary) !important;
+}
+
+body.dark-mode .ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-selected {
+  background-color: var(--secondary-color) !important;
+  color: white !important;
+}
+
+body.dark-mode .ng-arrow-wrapper .ng-arrow {
+  border-color: var(--text-secondary) transparent transparent !important;
+}
+
+body.dark-mode .ng-select.ng-select-opened .ng-arrow-wrapper .ng-arrow {
+  border-color: transparent transparent var(--text-secondary) !important;
+}
+
+body.dark-mode .activity-item:hover {
+  background: #1c2333 !important;
+  border-color: var(--border-color) !important;
+}
+
+body.dark-mode .cancel-btn {
+  background: #1c2333 !important;
+  color: var(--text-primary) !important;
+}
+
+body.dark-mode .cancel-btn:hover {
+  background: #232c3f !important;
+}
+
+/* Custom components dark mode adjustments */
+body.dark-mode .chart-card,
+body.dark-mode .chart-loading,
+body.dark-mode .table-card,
+body.dark-mode .loading-state,
+body.dark-mode .page-header,
+body.dark-mode .tabs-card,
+body.dark-mode .btn-action,
+body.dark-mode .btn-edit,
+body.dark-mode .btn-delete,
+body.dark-mode .page-btn,
+body.dark-mode .page-info,
+body.dark-mode .tab-btn {
+  background: var(--card-background) !important;
+  background-color: var(--card-background) !important;
+  border-color: var(--border-color) !important;
+  color: var(--text-primary) !important;
+}
+
+body.dark-mode .chart-header h3,
+body.dark-mode .table-header h3,
+body.dark-mode .page-header h2,
+body.dark-mode .page-header h3 {
+  color: var(--text-primary) !important;
+}
+
+body.dark-mode .chart-header span,
+body.dark-mode .workflow-tabs button,
+body.dark-mode .plafond-tabs button {
+  background: var(--light-gray-color) !important;
+  border-color: var(--border-color) !important;
+  color: var(--text-secondary) !important;
+}
+
+body.dark-mode .workflow-tabs button.active,
+body.dark-mode .plafond-tabs button.active {
+  background: var(--secondary-color) !important;
+  color: #ffffff !important;
+  border-bottom-color: var(--secondary-color) !important;
+}
+
+body.dark-mode .tab-btn.active {
+  background: var(--primary-color) !important;
+  color: #ffffff !important;
+}
+
+body.dark-mode .search-box input {
+  background-color: #1e293b !important;
+  color: var(--text-primary) !important;
+  border-color: var(--border-color) !important;
+}
+
+body.dark-mode .table th,
+body.dark-mode th {
+  background: #121824 !important;
+  background-color: #121824 !important;
+  color: var(--text-primary) !important;
+  border-color: var(--border-color) !important;
+}
+
+body.dark-mode .table td,
+body.dark-mode td {
+  background: transparent !important;
+  background-color: transparent !important;
+  border-color: var(--border-color) !important;
+  color: var(--text-secondary) !important;
+}
+
+/* Table headers styling for better contrast and visibility in light mode */
+body:not(.dark-mode) .table thead th,
+body:not(.dark-mode) .custom-table thead th,
+body:not(.dark-mode) table thead th {
+  background-color: #f1f5f9 !important;
+  color: #374151 !important;
+  border-bottom: 2px solid #cbd5e1 !important;
+}
+
 
 

@@ -141,11 +141,11 @@ padding: 8px;
 }
 
 .table thead {
-  background: #f9fafb;
+  background: #f1f5f9;
 }
 
 .table thead th {
-  background-color: #f9fafb !important;
+  background-color: #f1f5f9 !important;
   padding: 16px;
 
   font-size: 13px;
@@ -153,7 +153,17 @@ padding: 8px;
 
   color: #374151;
 
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 2px solid #cbd5e1;
+}
+
+:host-context(body.dark-mode) .table thead {
+  background: #121824;
+}
+
+:host-context(body.dark-mode) .table thead th {
+  background-color: #121824 !important;
+  color: #f3f4f6 !important;
+  border-bottom: 2px solid #232c3f !important;
 }
 
 .table tbody td {

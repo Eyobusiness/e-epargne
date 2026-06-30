@@ -36,19 +36,11 @@ export const MENU_ITEMS: NavItem[] = [
         icon: 'bi bi-list-ul',
         route: '/groupes',
       },
-      // {
-      //   label: 'Affectations',
-      //   icon: 'bi bi-link-45deg',
-      //   route: '/groupes/affectations',
-      // },
+      
     ],
   },
 
-  // {
-  //   label: 'Portefeuille',
-  //   icon: 'bi bi-wallet2',
-  //   route: '/portefeuille',
-  // },
+  
   {
     label: 'Operations',
     icon: 'bi bi-arrow-repeat',
