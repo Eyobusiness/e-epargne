@@ -18,10 +18,21 @@ export class AppPageHeaderComponent {
 
   readonly icon = input<string>('bi bi-plus');
 
+  readonly secondaryButtonText = input<string>('');
+
+  readonly secondaryIcon = input<string>('bi bi-gear');
+
   @Output()
   readonly action = new EventEmitter<void>();
 
+  @Output()
+  readonly secondaryAction = new EventEmitter<void>();
+
   onAction(): void {
     this.action.emit();
+  }
+
+  onSecondaryAction(): void {
+    this.secondaryAction.emit();
   }
 }

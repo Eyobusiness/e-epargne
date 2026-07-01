@@ -124,7 +124,8 @@ export class ProfilesComponent implements OnInit {
             selectedPermission: menu.permission ?? '1',
             sousMenus: menu.sousMenus?.map((sub: any) => ({
               ...sub,
-              checked: false
+              checked: false,
+              selectedPermission: sub.permission ?? '1'
             })) ?? []
           })),
         );
@@ -236,7 +237,8 @@ export class ProfilesComponent implements OnInit {
         selectedPermission: '1',
         sousMenus: menu.sousMenus?.map((sub) => ({
           ...sub,
-          checked: false
+          checked: false,
+          selectedPermission: '1'
         })) ?? []
       })),
     );
@@ -251,12 +253,14 @@ export class ProfilesComponent implements OnInit {
         const hasAssigned = !!assignedMenu;
 
         const mappedSubMenus = menu.sousMenus?.map((sub) => {
-          const hasSubAssigned = assignedMenu?.sous_menu?.some(
+          const assignedSubMenu = assignedMenu?.sous_menu?.find(
             (s: any) => s.sous_menu_id === sub.id
           );
+          const hasSubAssigned = !!assignedSubMenu;
           return {
             ...sub,
-            checked: !!hasSubAssigned
+            checked: hasSubAssigned,
+            selectedPermission: assignedSubMenu?.permission ?? sub.permission ?? '1'
           };
         }) ?? [];
 

@@ -78,7 +78,7 @@ export class ProfileFormComponent {
           permission: menu.selectedPermission ?? '1',
           sous_menu: checkedSubMenus.map((sub) => ({
             sous_menu_id: sub.id,
-            permission: menu.selectedPermission ?? '1',
+            permission: sub.selectedPermission ?? '1',
           })),
         });
       }

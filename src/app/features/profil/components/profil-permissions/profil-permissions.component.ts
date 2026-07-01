@@ -11,8 +11,8 @@ import { Component, input, output } from '@angular/core';
 export class ProfilPermissionsComponent {
   // Liste des niveaux possibles
   readonly levels = [
-    { label: 'Lecture', value: '1' },
-    { label: 'Création', value: '1,2' },
+    { label: 'Création', value: '1' },
+    { label: 'Lecture', value: '1,2' },
     { label: 'Modification', value: '1,2,3' },
     { label: 'Suppression', value: '1,2,3,4' },
     { label: 'Accès Total', value: '1,2,3,4' },

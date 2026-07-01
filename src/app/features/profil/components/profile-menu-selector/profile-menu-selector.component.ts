@@ -18,11 +18,11 @@ export class ProfileMenuSelectorComponent {
 
   readonly permissionLevels = [
     {
-      label: 'Lecture',
+      label: 'Création',
       value: '1',
     },
     {
-      label: 'Création',
+      label: 'Lecture',
       value: '1,2',
     },
     {

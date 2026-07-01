@@ -279,4 +279,8 @@ export class GroupesComponent implements OnInit {
 
     this.router.navigate(['/groupes', groupe.id]);
   }
+
+  navigateToCommissions(): void {
+    this.router.navigate(['/groupes/commissions']);
+  }
 }

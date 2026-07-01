@@ -1,0 +1,96 @@
+<form class="commission-form" novalidate (ngSubmit)="onSubmit()">
+  <div class="form-grid">
+    <app-select
+      label="Groupe de cotisation"
+      placeholder="Choisir un groupe de cotisation"
+      [options]="groupOptions()"
+      [ngModel]="form().groupe_cotisation_id"
+      (ngModelChange)="updateField('groupe_cotisation_id', $event)"
+      (blurred)="markAsTouched('groupe_cotisation_id')"
+      [error]="getError('groupe_cotisation_id')"
+      name="groupe_cotisation_id">
+    </app-select>
+
+    @if (selectedGroup()) {
+      <div class="limits-info-box">
+        <div class="limits-header">
+          <i class="bi bi-info-circle-fill text-primary"></i>
+          <span class="fw-semibold text-primary">Limites du groupe sélectionné</span>
+        </div>
+        <div class="limits-body">
+          <div class="limit-item">
+            <span class="limit-label">Montant Minimum</span>
+            <span class="limit-value">{{ selectedGroup()?.montant_min | number:'1.0-0' }} FCFA</span>
+          </div>
+          <div class="limit-item">
+            <span class="limit-label">Montant Maximum</span>
+            <span class="limit-value">{{ selectedGroup()?.montant_max | number:'1.0-0' }} FCFA</span>
+          </div>
+        </div>
+      </div>
+    }
+
+    <div class="form-row-2">
+      <app-select
+        label="Type d'opération"
+        placeholder="Type d'opération"
+        [options]="operationOptions()"
+        [ngModel]="form().type_operation"
+        (ngModelChange)="updateField('type_operation', $event)"
+        (blurred)="markAsTouched('type_operation')"
+        [error]="getError('type_operation')"
+        name="type_operation">
+      </app-select>
+
+      <app-select
+        label="Mode de commission"
+        placeholder="Mode de commission"
+        [options]="modeOptions()"
+        [ngModel]="form().mode_commission"
+        (ngModelChange)="updateField('mode_commission', $event)"
+        (blurred)="markAsTouched('mode_commission')"
+        [error]="getError('mode_commission')"
+        name="mode_commission">
+      </app-select>
+    </div>
+
+    <div class="form-row-2">
+      <app-input
+        type="number"
+        label="Valeur de la commission"
+        [placeholder]="form().mode_commission === 'PERCENT' ? 'Ex: 2.5' : 'Ex: 1000'"
+        [ngModel]="form().valeur"
+        (ngModelChange)="updateField('valeur', $event)"
+        (blurred)="markAsTouched('valeur')"
+        [error]="getError('valeur')"
+        name="valeur">
+      </app-input>
+
+      <app-input
+        label="Libellé"
+        placeholder="Ex: Retrait standard"
+        [ngModel]="form().libelle"
+        (ngModelChange)="updateField('libelle', $event)"
+        (blurred)="markAsTouched('libelle')"
+        [error]="getError('libelle')"
+        name="libelle">
+      </app-input>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <app-button
+      type="button"
+      label="Annuler"
+      variant="secondary"
+      [disabled]="isLoading()"
+      (clicked)="onCancel()">
+    </app-button>
+
+    <app-button
+      type="submit"
+      label="Enregistrer"
+      [loading]="isLoading()">
+    </app-button>
+  </div>
+</form>

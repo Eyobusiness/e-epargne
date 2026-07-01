@@ -1,0 +1,57 @@
+<div class="commissions-page">
+  <div class="page-header-wrapper">
+    <app-page-header
+      title="Configuration des Commissions"
+      description="Gérez les commissions appliquées aux dépôts et retraits par groupe de cotisation"
+      buttonText="Nouvelle Commission"
+      icon="bi bi-plus-lg"
+      (action)="openCreateModal()">
+    </app-page-header>
+  </div>
+
+  <app-commission-filter
+    [groupes]="groupes()"
+    (filterChange)="onFilterChange($event)">
+  </app-commission-filter>
+
+  @if (isPageLoading()) {
+    <div class="loading-state">
+      <div class="loading-spinner"></div>
+      <p>Chargement des données...</p>
+    </div>
+  } @else {
+    <app-commission-table
+      [commissions]="filteredCommissions()"
+      [groupes]="groupes()"
+      (edit)="openEditModal($event)"
+      (delete)="openDeleteDialog($event)"
+      (toggleStatus)="toggleCommissionStatus($event)">
+    </app-commission-table>
+  }
+</div>
+
+<!-- Commission Form Modal -->
+<app-modal
+  [isOpen]="isModalOpen()"
+  [title]="selectedCommission() ? 'Modifier Commission' : 'Nouvelle Commission'"
+  [description]="selectedCommission() ? 'Mettre à jour la configuration de la commission' : 'Créer une nouvelle configuration de commission'"
+  width="700px"
+  (close)="closeModal()">
+  <app-commission-form
+    [commission]="selectedCommission()"
+    [groupes]="groupes()"
+    [isLoading]="isLoading()"
+    (submitForm)="saveCommission($event)"
+    (cancel)="closeModal()">
+  </app-commission-form>
+</app-modal>
+
+<!-- Delete Confirmation Dialog -->
+<app-confirm-dialog
+  [isOpen]="isDeleteOpen()"
+  [isLoading]="isDeleteLoading()"
+  title="Supprimer la Commission"
+  message="Voulez-vous vraiment supprimer cette configuration de commission ? Cette action est irréversible."
+  (confirm)="deleteCommission()"
+  (cancel)="closeDeleteDialog()">
+</app-confirm-dialog>

@@ -41,6 +41,10 @@
       readonly dashboard = signal<DashboardStats | null>(null);
       readonly recentOperations = signal<any[]>([]);
       readonly classement = signal<ClassementGroupe[]>([]);
+      
+      dateHeure = '';
+
+
 
       readonly currentPeriod = new Intl.DateTimeFormat('fr-FR', {
         month: 'long',
@@ -55,6 +59,24 @@
         this.loadRecentOperations();
 
         this.loadClassement();
+
+        this.mettreAJourDateHeure();
+
+  setInterval(() => {
+    this.mettreAJourDateHeure();
+  }, 1000);
+}
+
+mettreAJourDateHeure(): void {
+  this.dateHeure = new Date().toLocaleString('fr-FR', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+  });
       }
 
       // loadStats(): void {

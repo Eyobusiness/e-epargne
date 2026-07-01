@@ -16,6 +16,8 @@ export interface SubMenu {
   permission?: string;
 
   checked?: boolean;
+
+  selectedPermission?: string;
 }
 
 export interface Menu {

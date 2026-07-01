@@ -5,7 +5,10 @@
   description="Gestion des groupes de cotisation"
   buttonText="Nouveau groupe"
   icon="bi bi-plus-lg"
-  (action)="openCreateModal()">
+  secondaryButtonText="Commissions"
+  secondaryIcon="bi bi-percent"
+  (action)="openCreateModal()"
+  (secondaryAction)="navigateToCommissions()">
 </app-page-header>
 
 <div class="page-content">

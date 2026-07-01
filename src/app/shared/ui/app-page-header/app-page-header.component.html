@@ -12,21 +12,40 @@
 
   </div>
 
-  @if (buttonText()) {
+  <div class="page-header-actions">
+    @if (secondaryButtonText()) {
 
-    <button
-      type="button"
-      class="page-header-btn btn-accent"
-      (click)="onAction()">
+      <button
+        type="button"
+        class="page-header-btn btn-secondary"
+        (click)="onSecondaryAction()">
 
-      <i [class]="icon()"></i>
+        <i [class]="secondaryIcon()"></i>
 
-      <span>
-        {{ buttonText() }}
-      </span>
+        <span>
+          {{ secondaryButtonText() }}
+        </span>
 
-    </button>
+      </button>
 
-  }
+    }
+
+    @if (buttonText()) {
+
+      <button
+        type="button"
+        class="page-header-btn btn-accent"
+        (click)="onAction()">
+
+        <i [class]="icon()"></i>
+
+        <span>
+          {{ buttonText() }}
+        </span>
+
+      </button>
+
+    }
+  </div>
 
 </div>

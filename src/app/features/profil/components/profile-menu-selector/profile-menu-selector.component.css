@@ -43,20 +43,36 @@
 
 .submenu-container {
   display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
+  flex-direction: column;
+  gap: 12px;
   margin-top: 14px;
   padding-top: 14px;
   border-top: 1px dashed #e2e8f0;
 }
 
-.submenu-item {
-  display: inline-flex;
+.submenu-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 6px 12px;
+  background: #ffffff;
+  border: 1px dashed #e2e8f0;
+  border-radius: 8px;
+}
+
+.submenu-left {
+  display: flex;
   align-items: center;
   gap: 8px;
   font-size: 0.88rem;
   color: #475569;
   cursor: pointer;
+  margin-bottom: 0;
+}
+
+.submenu-right {
+  min-width: 150px;
 }
 
 /* =====================================================
@@ -81,7 +97,12 @@
   border-top-color: #232c3f;
 }
 
-:host-context(body.dark-mode) .submenu-item {
+:host-context(body.dark-mode) .submenu-row {
+  background: #151b26;
+  border-color: #232c3f;
+}
+
+:host-context(body.dark-mode) .submenu-left {
   color: #cbd5e1;
 }
 

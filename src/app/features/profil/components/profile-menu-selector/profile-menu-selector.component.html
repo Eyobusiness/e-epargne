@@ -64,20 +64,31 @@
             track sub.id
           ) {
 
-            <label
-              class="submenu-item">
+            <div class="submenu-row">
+              <label class="submenu-left">
+                <input
+                  type="checkbox"
+                  class="form-check-input"
+                  [(ngModel)]="sub.checked"
+                  (change)="onChange()">
+                <span>
+                  {{ sub.name }}
+                </span>
+              </label>
 
-              <input
-                type="checkbox"
-                class="form-check-input"
-                [(ngModel)]="sub.checked"
-                (change)="onChange()">
-
-              <span>
-                {{ sub.name }}
-              </span>
-
-            </label>
+              @if (sub.checked) {
+                <div class="submenu-right">
+                  <select title="permission du sous-menu"
+                    class="form-select form-select-sm"
+                    [(ngModel)]="sub.selectedPermission"
+                    (change)="onChange()">
+                    @for (item of permissionLevels; track item.value) {
+                      <option [value]="item.value">{{ item.label }}</option>
+                    }
+                  </select>
+                </div>
+              }
+            </div>
 
           }
 
