@@ -268,6 +268,21 @@ body.dark-mode .stat-card {
   border-color: var(--border-color) !important;
 }
 
+body.dark-mode .stat-card h2,
+body.dark-mode .stat-card h3,
+body.dark-mode .stat-card h4,
+body.dark-mode .stat-card h5,
+body.dark-mode .stat-card .stat-content h5 {
+  color: var(--text-primary) !important;
+}
+
+body.dark-mode .stat-card span,
+body.dark-mode .stat-card .stat-content span,
+body.dark-mode .stat-card p,
+body.dark-mode .stat-card .stat-content p {
+  color: var(--text-secondary) !important;
+}
+
 body.dark-mode h1,
 body.dark-mode h2,
 body.dark-mode h3,

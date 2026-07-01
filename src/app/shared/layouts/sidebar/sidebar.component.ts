@@ -146,6 +146,9 @@ export class SidebarComponent implements OnInit {
   }
 
   isItemActive(item: NavItem): boolean {
+    if (item.children && item.children.length > 0) {
+      return false;
+    }
     return this.currentUrl() === item.route || this.currentUrl().startsWith(`${item.route}/`);
   }
 

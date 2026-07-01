@@ -65,11 +65,15 @@ export class RapportService {
         const depensesFiltrees = depenses.filter((item: any) =>
           isInDateRange(item.date_depense, filter.startDate, filter.endDate),
         );
+        const totalDepotAnnule = operationsFiltrees
+          .filter((item: any) => item.type_operation === 'DEPOT' && item.status === '300')
+          .reduce((sum: number, item: any) => sum + (item.montant ?? 0), 0);
 
-        const totalDepotPrevu = cotisationsFiltrees.reduce(
+        const rawDepotPrevu = cotisationsFiltrees.reduce(
           (sum: number, item: any) => sum + (item.montant ?? 0),
           0,
         );
+        const totalDepotPrevu = Math.max(0, rawDepotPrevu - totalDepotAnnule);
 
         const totalDepotPaye = operationsFiltrees
           .filter((item: any) => item.type_operation === 'DEPOT' && item.status === '200')
@@ -77,10 +81,6 @@ export class RapportService {
 
         const totalDepotEnAttente = operationsFiltrees
           .filter((item: any) => item.type_operation === 'DEPOT' && item.status === '100')
-          .reduce((sum: number, item: any) => sum + (item.montant ?? 0), 0);
-
-        const totalDepotAnnule = operationsFiltrees
-          .filter((item: any) => item.type_operation === 'DEPOT' && item.status === '300')
           .reduce((sum: number, item: any) => sum + (item.montant ?? 0), 0);
 
         const totalRetrait = operationsFiltrees
@@ -112,7 +112,10 @@ export class RapportService {
 
         const soldeDisponible = totalDepotPaye - totalRetrait;
 
-        const totalCommission = 0;
+        const totalCommission = operationsFiltrees.reduce(
+          (sum: number, item: any) => sum + (item.montant_commission ?? 0),
+          0,
+        );
 
         return {
           totalDepotPrevu,
@@ -175,7 +178,19 @@ export class RapportService {
             0,
           );
 
-          const montantPrevu = cotisation.montant ?? 0;
+          const operationsAnnulees = operations.filter(
+            (operation: any) =>
+              operation.cotisation_adherent_id === cotisation.id &&
+              operation.type_operation === 'DEPOT' &&
+              operation.status === '300',
+          );
+
+          const montantAnnule = operationsAnnulees.reduce(
+            (sum: number, operation: any) => sum + (operation.montant ?? 0),
+            0,
+          );
+
+          const montantPrevu = Math.max(0, (cotisation.montant ?? 0) - montantAnnule);
 
           const montantReste = calculateRemaining(montantPrevu, montantPaye);
 

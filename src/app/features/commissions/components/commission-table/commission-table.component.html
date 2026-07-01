@@ -1,21 +1,9 @@
 <div class="table-card">
-  <div class="table-toolbar">
-    <div class="search-box">
-      <i class="bi bi-search"></i>
-      <input
-        type="text"
-        placeholder="Rechercher une commission..."
-        [ngModel]="search()"
-        (ngModelChange)="onSearch($event)">
-    </div>
-  </div>
-
   <div class="table-responsive">
     <table class="table align-middle">
       <thead>
         <tr>
           <th>Libellé</th>
-          <th>Groupe de Cotisation</th>
           <th>Opération</th>
           <th>Mode</th>
           <th>Valeur</th>
@@ -28,10 +16,7 @@
         @for (item of paginatedItems(); track item.id || $index) {
           <tr>
             <td>
-              <span class="fw-bold text-primary">{{ item.libelle }}</span>
-            </td>
-            <td>
-              <span class="group-name">{{ getGroupName(item.groupe_cotisation_id) }}</span>
+              <span class="fw-bold text-primary">{{ item.libelle || 'Sans libellé' }}</span>
             </td>
             <td>
               <span class="operation-badge" [class.badge-depot]="item.type_operation === 'DEPOT'" [class.badge-retrait]="item.type_operation === 'RETRAIT'">
@@ -50,8 +35,16 @@
             </td>
             <td>
               <div class="limits-display text-muted small">
-                <div>Min: <span class="fw-medium text-dark">{{ item.montant_min | number:'1.0-0' }} FCFA</span></div>
-                <div>Max: <span class="fw-medium text-dark">{{ item.montant_max | number:'1.0-0' }} FCFA</span></div>
+                @if (item.montant_min !== null && item.montant_min !== undefined) {
+                  <div>Min: <span class="fw-medium text-dark">{{ item.montant_min | number:'1.0-0' }} FCFA</span></div>
+                } @else {
+                  <div>Min: <span class="text-muted font-italic">-</span></div>
+                }
+                @if (item.montant_max !== null && item.montant_max !== undefined) {
+                  <div>Max: <span class="fw-medium text-dark">{{ item.montant_max | number:'1.0-0' }} FCFA</span></div>
+                } @else {
+                  <div>Max: <span class="text-muted font-italic">-</span></div>
+                }
               </div>
             </td>
             <td>
@@ -61,7 +54,7 @@
                 class="status-toggle-btn"
                 [class.active]="item.status === '200'"
                 (click)="toggleStatus.emit(item)">
-                <span class="status-dot"></span>
+                <i [class]="item.status === '200' ? 'bi bi-toggle-on' : 'bi bi-toggle-off'"></i>
                 {{ item.status === '200' ? 'Actif' : 'Inactif' }}
               </button>
             </td>
@@ -79,7 +72,7 @@
         }
         @if (filteredItems().length === 0) {
           <tr>
-            <td colspan="8">
+            <td colspan="7">
               <div class="empty-state-row">
                 <i class="bi bi-info-circle"></i>
                 Aucune commission trouvée

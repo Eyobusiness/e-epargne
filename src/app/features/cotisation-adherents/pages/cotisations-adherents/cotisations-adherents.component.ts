@@ -58,6 +58,7 @@ export class CotisationsAdherentsComponent implements OnInit {
   private readonly toastService = inject(ToastService);
 
   readonly cotisations = signal<CotisationAdherent[]>([]);
+  readonly statsCotisations = signal<CotisationAdherent[]>([]);
   readonly adherents = signal<Adherent[]>([]);
   readonly cotisationsList = signal<Cotisation[]>([]);
   readonly selected = signal<CotisationAdherent | null>(null);
@@ -125,6 +126,24 @@ export class CotisationsAdherentsComponent implements OnInit {
             extractApiErrorMessage(err) || 'Erreur chargement paiements',
             'error',
           );
+        },
+      });
+
+    this.service
+      .getAll({
+        page: 1,
+        limit: 100000,
+        startDate: filter.startDate || undefined,
+        endDate: filter.endDate || undefined,
+        adherentId: filter.adherentId || undefined,
+        status: filter.status || undefined,
+      })
+      .subscribe({
+        next: (response) => {
+          this.statsCotisations.set(response?.data?.items ?? []);
+        },
+        error: () => {
+          this.statsCotisations.set([]);
         },
       });
   }

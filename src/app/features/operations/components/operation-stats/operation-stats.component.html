@@ -1,21 +1,23 @@
 @if (isLoading()) {
-  <div class="stats-grid stats-grid--4">
-    @for (item of [1, 2, 3, 4]; track item) {
+  <div class="stats-grid stats-grid--5">
+    @for (item of [1, 2, 3, 4, 5]; track item) {
       <div class="stat-card skeleton-card"></div>
     }
   </div>
 } @else {
-  <div class="stats-grid stats-grid--4">
-    <div class="stat-card stat-card--green">
-      <div class="stat-icon stat-icon--green">
+  <div class="stats-grid stats-grid--5">
+    <!-- Montant total à payer -->
+    <div class="stat-card stat-card--blue">
+      <div class="stat-icon stat-icon--blue">
         <i class="bi bi-cash-stack"></i>
       </div>
       <div class="stat-content">
-        <span>Montant total</span>
-        <h5>{{ totalMontant() | formatMontant }} FCFA</h5>
+        <span>Total à payer</span>
+        <h5>{{ totalMontantAPayer() | formatMontant }} FCFA</h5>
       </div>
     </div>
 
+    <!-- Montant en attente (dépôt) -->
     <div class="stat-card stat-card--orange">
       <div class="stat-icon stat-icon--orange">
         <i class="bi bi-hourglass-split"></i>
@@ -26,19 +28,32 @@
       </div>
     </div>
 
-    <div class="stat-card stat-card--emerald">
-      <div class="stat-icon stat-icon--emerald">
-        <i class="bi bi-check-circle"></i>
+    <!-- Dépôt payé -->
+    <div class="stat-card stat-card--green">
+      <div class="stat-icon stat-icon--green">
+        <i class="bi bi-arrow-down-circle"></i>
       </div>
       <div class="stat-content">
-        <span>Montant payé</span>
-        <h5>{{ montantPaye() | formatMontant }} FCFA</h5>
+        <span>Dépôt payé</span>
+        <h5>{{ montantDepotPaye() | formatMontant }} FCFA</h5>
       </div>
     </div>
 
+    <!-- Retrait payé -->
     <div class="stat-card stat-card--red">
-      <div class="stat-icon stat-icon--emerald">
-        <i class="bi bi-check-circle"></i>
+      <div class="stat-icon stat-icon--red">
+        <i class="bi bi-arrow-up-circle"></i>
+      </div>
+      <div class="stat-content">
+        <span>Retrait payé</span>
+        <h5>{{ montantRetraitPaye() | formatMontant }} FCFA</h5>
+      </div>
+    </div>
+
+    <!-- Montant Annulé -->
+    <div class="stat-card stat-card--red" style="--stat-accent: #94a3b8; --stat-soft: rgba(148, 163, 184, 0.12);">
+      <div class="stat-icon" style="background: rgba(148, 163, 184, 0.15); color: #64748b;">
+        <i class="bi bi-x-circle"></i>
       </div>
       <div class="stat-content">
         <span>Montant Annulé</span>

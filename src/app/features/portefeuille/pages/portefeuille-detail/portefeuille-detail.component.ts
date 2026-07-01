@@ -50,6 +50,7 @@ export class PortefeuilleDetailComponent implements OnInit {
   readonly portefeuille = signal<Portefeuille | null>(null);
 
   readonly operations = signal<Operation[]>([]);
+  readonly statsOperations = signal<Operation[]>([]);
 
   readonly isLoading = signal(false);
 
@@ -210,6 +211,25 @@ export class PortefeuilleDetailComponent implements OnInit {
 
         error: () => {
           this.operations.set([]);
+        },
+      });
+
+    this.operationService
+      .getAll({
+        adherentId,
+        startDate: '2026-01-01',
+        endDate: '2026-12-31',
+        status: '',
+        type: '',
+        page: 1,
+        limit: 100000,
+      })
+      .subscribe({
+        next: (response) => {
+          this.statsOperations.set(response?.data?.items ?? []);
+        },
+        error: () => {
+          this.statsOperations.set([]);
         },
       });
   }

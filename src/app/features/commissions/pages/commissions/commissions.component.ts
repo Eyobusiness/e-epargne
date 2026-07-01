@@ -3,8 +3,6 @@ import { CommonModule } from '@angular/common';
 import { finalize } from 'rxjs';
 import { CommissionConfig } from '../../models/commission.model';
 import { CommissionService } from '../../services/commission.service';
-import { Groupe } from '../../../groupes/models/groupe.model';
-import { GroupeService } from '../../../groupes/services/groupe.service';
 import { ToastService } from '../../../../core/services/toast.service';
 
 import { AppPageHeaderComponent } from '../../../../shared/ui/app-page-header/app-page-header.component';
@@ -31,11 +29,9 @@ import { CommissionFilterComponent, CommissionFilter } from '../../components/co
 })
 export class CommissionsComponent implements OnInit {
   private readonly commissionService = inject(CommissionService);
-  private readonly groupeService = inject(GroupeService);
   private readonly toastService = inject(ToastService);
 
   readonly commissions = signal<CommissionConfig[]>([]);
-  readonly groupes = signal<Groupe[]>([]);
 
   readonly isLoading = signal(false);
   readonly isPageLoading = signal(false);
@@ -50,7 +46,6 @@ export class CommissionsComponent implements OnInit {
   readonly filters = signal<CommissionFilter>({
     search: '',
     type_operation: '',
-    groupe_cotisation_id: '',
     status: '200', // Active by default
   });
 
@@ -64,19 +59,14 @@ export class CommissionsComponent implements OnInit {
       const matchesType =
         !f.type_operation || item.type_operation === f.type_operation;
 
-      const matchesGroup =
-        !f.groupe_cotisation_id ||
-        item.groupe_cotisation_id === f.groupe_cotisation_id;
-
       const matchesStatus = !f.status || item.status === f.status;
 
-      return matchesSearch && matchesType && matchesGroup && matchesStatus;
+      return matchesSearch && matchesType && matchesStatus;
     });
   });
 
   ngOnInit(): void {
     this.loadCommissions();
-    this.loadGroupes();
   }
 
   loadCommissions(): void {
@@ -94,15 +84,6 @@ export class CommissionsComponent implements OnInit {
           );
         },
       });
-  }
-
-  loadGroupes(): void {
-    this.groupeService.getAll('200').subscribe({
-      next: (response) => {
-        this.groupes.set(response.data?.items ?? []);
-      },
-      error: () => this.groupes.set([]),
-    });
   }
 
   onFilterChange(newFilters: CommissionFilter): void {

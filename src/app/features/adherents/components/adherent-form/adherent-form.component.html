@@ -118,16 +118,8 @@
 
     @if(form.controls.autoMatricule.value){
 
-      <div class="generated-matricule">
-
-        <span>
-          Matricule généré :
-        </span>
-
-        <strong>
-          {{ generatedMatricule() }}
-        </strong>
-
+      <div class="generated-matricule-info mt-2 text-muted small">
+        <i class="bi bi-info-circle"></i> Le matricule sera généré automatiquement par le serveur.
       </div>
 
     } @else {
@@ -141,7 +133,7 @@
         <input
           type="text"
           formControlName="matricule"
-          placeholder="AD-26-00001">
+          placeholder="Saisir le matricule">
 
       </div>
 

@@ -42,7 +42,7 @@
       readonly recentOperations = signal<any[]>([]);
       readonly classement = signal<ClassementGroupe[]>([]);
       
-      dateHeure = '';
+      readonly dateHeure = signal('');
 
 
 
@@ -68,7 +68,7 @@
 }
 
 mettreAJourDateHeure(): void {
-  this.dateHeure = new Date().toLocaleString('fr-FR', {
+  this.dateHeure.set(new Date().toLocaleString('fr-FR', {
     weekday: 'long',
     year: 'numeric',
     month: 'long',
@@ -76,7 +76,7 @@ mettreAJourDateHeure(): void {
     hour: '2-digit',
     minute: '2-digit',
     second: '2-digit',
-  });
+  }));
       }
 
       // loadStats(): void {
@@ -127,11 +127,13 @@ mettreAJourDateHeure(): void {
                     .filter((o) => o.type_operation === 'RETRAIT' && o.status === '200')
                     .reduce((sum, o) => sum + o.montant, 0);
 
+                  const totalDepot = stats.totalDepot ?? 0;
                   const Solde = totalDepotPaye - totalRetrait;
 
                   this.dashboard.set({
                     ...stats,
 
+                    totalDepot,
                     totalDepotPaye,
                     totalDepotEnAttente,
                     totalDepotAnnule,

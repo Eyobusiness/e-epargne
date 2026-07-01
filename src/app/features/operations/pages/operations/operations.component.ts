@@ -51,6 +51,7 @@ export class OperationsComponent implements OnInit {
   private readonly toastService = inject(ToastService);
 
   readonly operations = signal<Operation[]>([]);
+  readonly statsOperations = signal<Operation[]>([]);
   readonly adherents = signal<any[]>([]);
 
   readonly selected = signal<Operation | null>(null);
@@ -121,6 +122,25 @@ export class OperationsComponent implements OnInit {
           this.totalItems.set(0);
 
           this.toastService.show('Erreur chargement opérations', 'error');
+        },
+      });
+
+    this.service
+      .getAll({
+        page: 1,
+        limit: 100000,
+        adherentId: filter.adherentId || undefined,
+        status: filter.status || undefined,
+        type: filter.type || undefined,
+        startDate: filter.startDate || undefined,
+        endDate: filter.endDate || undefined,
+      })
+      .subscribe({
+        next: (response) => {
+          this.statsOperations.set(response?.data?.items ?? []);
+        },
+        error: () => {
+          this.statsOperations.set([]);
         },
       });
   }

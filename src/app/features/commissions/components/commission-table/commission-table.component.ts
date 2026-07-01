@@ -2,7 +2,6 @@ import { Component, EventEmitter, Output, input, signal, computed } from '@angul
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CommissionConfig } from '../../models/commission.model';
-import { Groupe } from '../../../groupes/models/groupe.model';
 
 @Component({
   selector: 'app-commission-table',
@@ -13,7 +12,6 @@ import { Groupe } from '../../../groupes/models/groupe.model';
 })
 export class CommissionTableComponent {
   readonly commissions = input<CommissionConfig[]>([]);
-  readonly groupes = input<Groupe[]>([]);
   @Output() readonly edit = new EventEmitter<CommissionConfig>();
   @Output() readonly delete = new EventEmitter<CommissionConfig>();
   @Output() readonly toggleStatus = new EventEmitter<CommissionConfig>();
@@ -27,24 +25,17 @@ export class CommissionTableComponent {
     this.currentPage.set(1);
   }
 
-  getGroupName(groupId: string): string {
-    const group = this.groupes().find((g) => g.id === groupId);
-    return group ? group.name : 'Groupe inconnu';
-  }
-
   readonly filteredItems = computed(() => {
     const term = this.search().trim().toLowerCase();
     if (!term) {
       return this.commissions();
     }
     return this.commissions().filter((item) => {
-      const groupName = this.getGroupName(item.groupe_cotisation_id).toLowerCase();
       return (
         (item.libelle ?? '').toLowerCase().includes(term) ||
         (item.type_operation ?? '').toLowerCase().includes(term) ||
-        groupName.includes(term) ||
         (item.mode_commission ?? '').toLowerCase().includes(term) ||
-        item.valeur.toString().includes(term)
+        (item.valeur !== null && item.valeur !== undefined ? item.valeur.toString().includes(term) : false)
       );
     });
   });

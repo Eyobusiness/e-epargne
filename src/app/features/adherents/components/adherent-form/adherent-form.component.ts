@@ -8,7 +8,6 @@ import { Adherent, CreateMemberPayload, UpdateMemberPayload } from '../../models
 import { MemberDocumentPayload } from '../../models/document.model';
 
 import { getFileExtension, readFileAsBase64 } from '../../utils/member-api.utils';
-import { AdherentService } from '../../services/adherent.service';
 
 export interface AdherentFormSubmit {
   payload: CreateMemberPayload | UpdateMemberPayload;
@@ -37,7 +36,6 @@ interface DocumentUploadItem {
 })
 export class AdherentFormComponent {
   private readonly fb = new FormBuilder();
-  private readonly adherentService = new AdherentService();
 
   readonly adherent = input<Adherent | null>(null);
 
@@ -50,10 +48,6 @@ export class AdherentFormComponent {
   readonly documentTypes = ['CNI', 'PASSEPORT', 'PERMIS', 'CARTE_CONSULAIRE'];
 
   readonly documents = signal<DocumentUploadItem[]>([]);
-
-  readonly generatedMatricule = signal('');
-
-  readonly matriculeCounter = signal(1);
 
   readonly form = this.fb.nonNullable.group({
     name: ['', [Validators.required, Validators.minLength(2)]],
@@ -90,8 +84,6 @@ export class AdherentFormComponent {
 
         this.documents.set([]);
 
-        this.loadNextMatricule();
-
         return;
       }
 
@@ -107,8 +99,6 @@ export class AdherentFormComponent {
 
       this.documents.set([]);
     });
-
-    this.loadNextMatricule();
   }
 
 
@@ -126,55 +116,7 @@ export class AdherentFormComponent {
     this.cancel.emit();
   }
 
-  private generateMatricule(): void {
-    const year = new Date().getFullYear().toString().slice(-2);
 
-    const sequence = this.matriculeCounter().toString().padStart(5, '0');
-
-    this.generatedMatricule.set(`AD-${year}-${sequence}`);
-  }
-
-  private loadNextMatricule(): void {
-    this.adherentService.getAll(1, 1000).subscribe({
-      next: (response) => {
-        const members = response.data?.items ?? [];
-
-        const currentYear = new Date().getFullYear().toString().slice(-2);
-
-        let maxNumber = 0;
-
-        members.forEach((member) => {
-          const matricule = member.matricule ?? '';
-
-          const parts = matricule.split('-');
-
-          if (parts.length !== 3) {
-            return;
-          }
-
-          if (parts[1] !== currentYear) {
-            return;
-          }
-
-          const number = Number(parts[2]);
-
-          if (number > maxNumber) {
-            maxNumber = number;
-          }
-        });
-
-        this.matriculeCounter.set(maxNumber + 1);
-
-        this.generateMatricule();
-      },
-
-      error: () => {
-        this.matriculeCounter.set(1);
-
-        this.generateMatricule();
-      },
-    });
-  }
 
   onDragOver(event: DragEvent): void {
     event.preventDefault();
@@ -283,7 +225,7 @@ export class AdherentFormComponent {
 
     const documents = await this.buildDocumentsPayload();
 
-    const matricule = raw.autoMatricule ? this.generatedMatricule() : raw.matricule;
+    const matricule = raw.autoMatricule ? '' : raw.matricule;
 
     if (this.isEditMode()) {
       const payload: UpdateMemberPayload = {

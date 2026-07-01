@@ -15,25 +15,33 @@ export class OperationStatsComponent {
   readonly operations = input<Operation[]>([]);
   readonly isLoading = input<boolean>(false);
 
-  readonly totalMontant = computed(() =>
-    this.operations().reduce((acc, item) => acc + (item.montant || 0), 0),
+  readonly totalMontantAPayer = computed(() =>
+    this.operations()
+      .filter((item) => item.type_operation === 'DEPOT' && item.status !== '300')
+      .reduce((acc, item) => acc + (item.montant || 0), 0),
   );
 
   readonly montantAttente = computed(() =>
     this.operations()
-      .filter((item) => item.status === '100')
+      .filter((item) => item.type_operation === 'DEPOT' && item.status === '100')
       .reduce((acc, item) => acc + (item.montant || 0), 0),
   );
 
-  readonly montantPaye = computed(() =>
+  readonly montantDepotPaye = computed(() =>
     this.operations()
-      .filter((item) => item.status === '200')
+      .filter((item) => item.type_operation === 'DEPOT' && item.status === '200')
+      .reduce((acc, item) => acc + (item.montant || 0), 0),
+  );
+
+  readonly montantRetraitPaye = computed(() =>
+    this.operations()
+      .filter((item) => item.type_operation === 'RETRAIT' && item.status === '200')
       .reduce((acc, item) => acc + (item.montant || 0), 0),
   );
 
   readonly montantAnnule = computed(() =>
     this.operations()
-      .filter((item) => item.status === '300')
+      .filter((item) => item.type_operation === 'DEPOT' && item.status === '300')
       .reduce((acc, item) => acc + (item.montant || 0), 0),
   );
 }

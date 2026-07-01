@@ -49,10 +49,11 @@ export class AffectationAdherentFormComponent {
   constructor() {
     effect(() => {
       const affectation = this.affectation();
+      const groups = this.groupes();
 
       if (!affectation) {
         this.form.reset({
-          groupe_id: '',
+          groupe_id: groups.length === 1 ? (groups[0].id ?? '') : '',
           adherent_ids: [] as string[],
         });
 
@@ -60,7 +61,7 @@ export class AffectationAdherentFormComponent {
       }
 
       this.form.patchValue({
-        groupe_id: affectation.groupe_id,
+        groupe_id: affectation.groupe_id || (groups.length === 1 ? (groups[0].id ?? '') : ''),
         adherent_ids: affectation.adherent_id ? [affectation.adherent_id] : [],
       });
     });

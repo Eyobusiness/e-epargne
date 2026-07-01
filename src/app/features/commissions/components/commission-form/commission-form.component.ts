@@ -2,12 +2,11 @@ import { Component, EventEmitter, Output, effect, input, signal, computed } from
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CommissionConfig } from '../../models/commission.model';
-import { Groupe } from '../../../groupes/models/groupe.model';
 import { AppInputComponent } from '../../../../shared/ui/app-input/app-input.component';
 import { AppButtonComponent } from '../../../../shared/ui/app-button/app-button.component';
 import { AppSelectComponent, SelectOption } from '../../../../shared/ui/app-select/app-select.component';
 
-type CommissionField = 'groupe_cotisation_id' | 'type_operation' | 'mode_commission' | 'valeur' | 'libelle';
+type CommissionField = 'type_operation' | 'mode_commission' | 'valeur' | 'libelle' | 'montant_min' | 'montant_max';
 
 @Component({
   selector: 'app-commission-form',
@@ -24,7 +23,6 @@ type CommissionField = 'groupe_cotisation_id' | 'type_operation' | 'mode_commiss
 })
 export class CommissionFormComponent {
   readonly commission = input<CommissionConfig | null>(null);
-  readonly groupes = input<Groupe[]>([]);
   readonly isLoading = input<boolean>(false);
 
   @Output() readonly submitForm = new EventEmitter<any>();
@@ -36,11 +34,12 @@ export class CommissionFormComponent {
   readonly hasSubmitted = signal(false);
 
   private readonly formFields: CommissionField[] = [
-    'groupe_cotisation_id',
     'type_operation',
     'mode_commission',
     'valeur',
     'libelle',
+    'montant_min',
+    'montant_max',
   ];
 
   // Options for selects
@@ -54,23 +53,23 @@ export class CommissionFormComponent {
     { label: 'Montant Fixe (FCFA)', value: 'FIXED' },
   ]);
 
-  readonly groupOptions = computed<SelectOption[]>(() => {
-    return this.groupes().map((g) => ({
-      label: g.name,
-      value: g.id || '',
-    }));
-  });
+  readonly showIntervalInput = signal(false);
 
-  // Watch for group selection to display limits
-  readonly selectedGroup = computed(() => {
-    const groupId = this.form().groupe_cotisation_id;
-    return this.groupes().find((g) => g.id === groupId) || null;
+  readonly isIntervalVisible = computed(() => {
+    return this.form().mode_commission === 'PERCENT' || this.showIntervalInput();
   });
 
   constructor() {
     effect(() => {
       const value = this.commission();
       this.form.set(value ? this.createFormValue(value) : this.createFormValue());
+      
+      const hasValueInterval = value && (
+        (value.montant_min !== null && value.montant_min !== undefined) ||
+        (value.montant_max !== null && value.montant_max !== undefined)
+      );
+      this.showIntervalInput.set(!!hasValueInterval);
+      
       this.resetValidationState();
     });
   }
@@ -78,11 +77,23 @@ export class CommissionFormComponent {
   updateField(field: CommissionField, value: any): void {
     this.form.update((current) => ({
       ...current,
-      [field]: field === 'valeur' ? (value === '' ? '' : Number(value)) : value,
+      [field]: (field === 'valeur' || field === 'montant_min' || field === 'montant_max')
+        ? (value === '' || value === null || value === undefined ? null : Number(value))
+        : value,
     }));
+
+    if (field === 'mode_commission') {
+      this.validateField('montant_min');
+      this.validateField('montant_max');
+    }
 
     if (this.touched()[field] || this.hasSubmitted()) {
       this.validateField(field);
+    }
+
+    if (field === 'montant_min' || field === 'montant_max') {
+      this.validateField('montant_min');
+      this.validateField('montant_max');
     }
   }
 
@@ -96,13 +107,25 @@ export class CommissionFormComponent {
 
   validateField(field: CommissionField): void {
     const currentErrors = { ...this.errors() };
-    const value = this.form()[field];
-    const message = this.getFieldError(field, value);
-    if (message) {
-      currentErrors[field] = message;
-    } else {
-      delete currentErrors[field];
+    
+    const checkAndSet = (f: CommissionField) => {
+      const val = this.form()[f];
+      const msg = this.getFieldError(f, val);
+      if (msg) {
+        currentErrors[f] = msg;
+      } else {
+        delete currentErrors[f];
+      }
+    };
+
+    checkAndSet(field);
+
+    if (field === 'montant_min') {
+      checkAndSet('montant_max');
+    } else if (field === 'montant_max') {
+      checkAndSet('montant_min');
     }
+
     this.errors.set(currentErrors);
   }
 
@@ -149,13 +172,23 @@ export class CommissionFormComponent {
     this.cancel.emit();
   }
 
+  toggleInterval(event: any): void {
+    const checked = event.target.checked;
+    this.showIntervalInput.set(checked);
+    if (!checked) {
+      this.updateField('montant_min', null);
+      this.updateField('montant_max', null);
+    }
+  }
+
   private createFormValue(value?: CommissionConfig | null): any {
     return {
-      groupe_cotisation_id: value?.groupe_cotisation_id ?? '',
       type_operation: value?.type_operation ?? 'DEPOT',
       mode_commission: value?.mode_commission ?? 'PERCENT',
       valeur: value?.valeur ?? null,
       libelle: value?.libelle ?? '',
+      montant_min: value?.montant_min ?? null,
+      montant_max: value?.montant_max ?? null,
     };
   }
 
@@ -167,11 +200,12 @@ export class CommissionFormComponent {
 
   private markAllAsTouched(): void {
     this.touched.set({
-      groupe_cotisation_id: true,
       type_operation: true,
       mode_commission: true,
       valeur: true,
       libelle: true,
+      montant_min: true,
+      montant_max: true,
     });
   }
 
@@ -189,7 +223,47 @@ export class CommissionFormComponent {
       return null;
     }
 
-    if (field === 'libelle' || field === 'groupe_cotisation_id' || field === 'type_operation' || field === 'mode_commission') {
+    if (field === 'montant_min') {
+      if (!this.isIntervalVisible()) {
+        return null;
+      }
+      const mode = this.form().mode_commission;
+      if (mode === 'PERCENT') {
+        if (value === null || value === undefined || value === '') {
+          return 'Montant minimum obligatoire';
+        }
+      }
+      if (value !== null && value !== undefined && value !== '') {
+        if (isNaN(Number(value)) || Number(value) < 0) {
+          return 'Le montant doit être positif';
+        }
+      }
+      return null;
+    }
+
+    if (field === 'montant_max') {
+      if (!this.isIntervalVisible()) {
+        return null;
+      }
+      const mode = this.form().mode_commission;
+      const minVal = this.form().montant_min;
+      if (mode === 'PERCENT') {
+        if (value === null || value === undefined || value === '') {
+          return 'Montant maximum obligatoire';
+        }
+      }
+      if (value !== null && value !== undefined && value !== '') {
+        if (isNaN(Number(value)) || Number(value) < 0) {
+          return 'Le montant doit être positif';
+        }
+        if (minVal !== null && minVal !== undefined && minVal !== '' && Number(value) < Number(minVal)) {
+          return 'Le montant maximum doit être supérieur ou égal au montant minimum';
+        }
+      }
+      return null;
+    }
+
+    if (field === 'type_operation' || field === 'mode_commission') {
       if (!value || !value.toString().trim()) {
         return 'Champ obligatoire';
       }
@@ -199,12 +273,26 @@ export class CommissionFormComponent {
   }
 
   private normalizePayload(payload: any): any {
-    return {
-      groupe_cotisation_id: payload.groupe_cotisation_id,
+    const res: any = {
       type_operation: payload.type_operation,
       mode_commission: payload.mode_commission,
       valeur: Number(payload.valeur),
-      libelle: payload.libelle.trim(),
     };
+    
+    if (payload.libelle?.trim()) {
+      res.libelle = payload.libelle.trim();
+    }
+    
+    const showInterval = this.isIntervalVisible();
+    
+    if (showInterval && payload.montant_min !== null && payload.montant_min !== undefined && payload.montant_min !== '') {
+      res.montant_min = Number(payload.montant_min);
+    }
+    
+    if (showInterval && payload.montant_max !== null && payload.montant_max !== undefined && payload.montant_max !== '') {
+      res.montant_max = Number(payload.montant_max);
+    }
+    
+    return res;
   }
 }

@@ -61,7 +61,6 @@
   font-weight: 700;
   color: var(--primary-color);
   background: rgba(26, 52, 92, 0.03);
-  text-transform: uppercase;
   letter-spacing: 0.5px;
   border-bottom: 1px solid var(--border-color);
 }
@@ -134,22 +133,15 @@
   cursor: pointer;
   transition: var(--transition);
 }
-
 .status-toggle-btn.active {
   border-color: #22c55e;
   background: rgba(34, 197, 94, 0.05);
   color: #22c55e;
 }
 
-.status-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #ef4444;
-}
-
-.status-toggle-btn.active .status-dot {
-  background: #22c55e;
+.status-toggle-btn i {
+  font-size: 16px;
+  line-height: 1;
 }
 
 .actions-cell {

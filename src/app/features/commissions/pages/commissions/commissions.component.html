@@ -2,7 +2,7 @@
   <div class="page-header-wrapper">
     <app-page-header
       title="Configuration des Commissions"
-      description="Gérez les commissions appliquées aux dépôts et retraits par groupe de cotisation"
+      description="Gérez les commissions appliquées aux dépôts et retraits"
       buttonText="Nouvelle Commission"
       icon="bi bi-plus-lg"
       (action)="openCreateModal()">
@@ -10,7 +10,6 @@
   </div>
 
   <app-commission-filter
-    [groupes]="groupes()"
     (filterChange)="onFilterChange($event)">
   </app-commission-filter>
 
@@ -22,7 +21,6 @@
   } @else {
     <app-commission-table
       [commissions]="filteredCommissions()"
-      [groupes]="groupes()"
       (edit)="openEditModal($event)"
       (delete)="openDeleteDialog($event)"
       (toggleStatus)="toggleCommissionStatus($event)">
@@ -39,7 +37,6 @@
   (close)="closeModal()">
   <app-commission-form
     [commission]="selectedCommission()"
-    [groupes]="groupes()"
     [isLoading]="isLoading()"
     (submitForm)="saveCommission($event)"
     (cancel)="closeModal()">

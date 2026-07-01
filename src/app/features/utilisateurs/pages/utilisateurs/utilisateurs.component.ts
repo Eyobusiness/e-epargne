@@ -54,6 +54,7 @@ export class UtilisateursComponent implements OnInit {
   private readonly toastService = inject(ToastService);
 
   readonly utilisateurs = signal<User[]>([]);
+  readonly statsUtilisateurs = signal<User[]>([]);
 
   readonly profils = signal<any[]>([]);
 
@@ -146,6 +147,22 @@ export class UtilisateursComponent implements OnInit {
         error: (error) => {
           console.error('Erreur chargement utilisateurs:', error);
           this.toastService.show('Erreur chargement utilisateurs', 'error');
+        },
+      });
+
+    this.service
+      .getAll({
+        page: 1,
+        limit: 100000,
+        search: currentFilter.search || undefined,
+        status: currentFilter.status || '200',
+      })
+      .subscribe({
+        next: (response) => {
+          this.statsUtilisateurs.set(response.data.items ?? []);
+        },
+        error: () => {
+          this.statsUtilisateurs.set([]);
         },
       });
   }

@@ -11,19 +11,21 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #6b7280;
+  color: var(--text-secondary, #6b7280);
   font-weight: 600;
 }
 
 .detail-top {
   display: flex;
   justify-content: flex-start;
+  align-items: center;
+  margin-bottom: 8px;
 }
 
 .group-header {
-  background: #fff;
+  background: var(--white-color, #fff);
   border-radius: 20px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--border-color, #e5e7eb);
   padding: 24px;
   display: flex;
   align-items: center;
@@ -59,18 +61,18 @@
 .group-content h2 {
   margin: 0;
   font-size: 28px;
-  color: #111827;
+  color: var(--text-primary, #111827);
 }
 
 .group-content p {
   margin: 0;
-  color: #6b7280;
+  color: var(--text-secondary, #6b7280);
 }
 
 .members-section {
-  background: #fff;
+  background: var(--white-color, #fff);
   border-radius: 20px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--border-color, #e5e7eb);
   padding: 24px;
 }
 
@@ -78,14 +80,15 @@
   margin-bottom: 20px;
 }
 
+.section-header h5,
 .section-header h3 {
   margin: 0;
   font-size: 22px;
-  color: #111827;
+  font-weight: 700;
+  color: var(--text-primary, #111827);
 }
 
 @media (max-width: 768px) {
-
   .group-header {
     flex-direction: column;
     align-items: flex-start;
@@ -95,16 +98,9 @@
     flex-direction: column;
     align-items: flex-start;
   }
-
 }
 
 /* ─── Bouton retour ─── */
-.detail-top {
-  display: flex;
-  align-items: center;
-  margin-bottom: 8px;
-}
-
 .detail-top .btn-secondary {
   display: inline-flex;
   align-items: center;
@@ -114,15 +110,17 @@
   border-radius: 10px;
   font-size: 14px;
   font-weight: 500;
-  color: var(--navy, #1A345C);
-  background: var(--navy-light, #e8edf5);
-  border: 1px solid var(--navy-mid, #c5d3e8);
   text-decoration: none;
-  transition: background 0.12s, transform 0.1s;
+  transition: background 0.12s, transform 0.1s, border-color 0.12s, color 0.12s;
+  
+  color: var(--btn-color, #1A345C);
+  background: var(--btn-bg, #e8edf5);
+  border: 1px solid var(--btn-border, #c5d3e8);
 }
 
 .detail-top .btn-secondary:hover {
-  background: var(--navy-mid, #c5d3e8);
+  background: var(--gray-100, #c5d3e8);
+  border-color: var(--gray-300, #b2c2db);
 }
 
 .detail-top .btn-secondary:active {

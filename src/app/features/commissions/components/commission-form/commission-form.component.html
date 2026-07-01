@@ -1,38 +1,8 @@
 <form class="commission-form" novalidate (ngSubmit)="onSubmit()">
   <div class="form-grid">
-    <app-select
-      label="Groupe de cotisation"
-      placeholder="Choisir un groupe de cotisation"
-      [options]="groupOptions()"
-      [ngModel]="form().groupe_cotisation_id"
-      (ngModelChange)="updateField('groupe_cotisation_id', $event)"
-      (blurred)="markAsTouched('groupe_cotisation_id')"
-      [error]="getError('groupe_cotisation_id')"
-      name="groupe_cotisation_id">
-    </app-select>
-
-    @if (selectedGroup()) {
-      <div class="limits-info-box">
-        <div class="limits-header">
-          <i class="bi bi-info-circle-fill text-primary"></i>
-          <span class="fw-semibold text-primary">Limites du groupe sélectionné</span>
-        </div>
-        <div class="limits-body">
-          <div class="limit-item">
-            <span class="limit-label">Montant Minimum</span>
-            <span class="limit-value">{{ selectedGroup()?.montant_min | number:'1.0-0' }} FCFA</span>
-          </div>
-          <div class="limit-item">
-            <span class="limit-label">Montant Maximum</span>
-            <span class="limit-value">{{ selectedGroup()?.montant_max | number:'1.0-0' }} FCFA</span>
-          </div>
-        </div>
-      </div>
-    }
-
     <div class="form-row-2">
       <app-select
-        label="Type d'opération"
+        label="Type d'opération *"
         placeholder="Type d'opération"
         [options]="operationOptions()"
         [ngModel]="form().type_operation"
@@ -43,7 +13,7 @@
       </app-select>
 
       <app-select
-        label="Mode de commission"
+        label="Mode de commission *"
         placeholder="Mode de commission"
         [options]="modeOptions()"
         [ngModel]="form().mode_commission"
@@ -57,7 +27,7 @@
     <div class="form-row-2">
       <app-input
         type="number"
-        label="Valeur de la commission"
+        label="Valeur de la commission *"
         [placeholder]="form().mode_commission === 'PERCENT' ? 'Ex: 2.5' : 'Ex: 1000'"
         [ngModel]="form().valeur"
         (ngModelChange)="updateField('valeur', $event)"
@@ -67,7 +37,7 @@
       </app-input>
 
       <app-input
-        label="Libellé"
+        label="Libellé (Optionnel)"
         placeholder="Ex: Retrait standard"
         [ngModel]="form().libelle"
         (ngModelChange)="updateField('libelle', $event)"
@@ -76,6 +46,47 @@
         name="libelle">
       </app-input>
     </div>
+
+    @if (form().mode_commission === 'FIXED') {
+      <div class="form-check form-switch my-1 px-4">
+        <input 
+          class="form-check-input" 
+          type="checkbox" 
+          role="switch"
+          id="toggleInterval"
+          [checked]="showIntervalInput()"
+          (change)="toggleInterval($event)">
+        <label class="form-check-label text-muted small" for="toggleInterval">
+          Définir des limites de montant pour cette commission fixe (Optionnel)
+        </label>
+      </div>
+    }
+
+    @if (isIntervalVisible()) {
+      <div class="form-row-2">
+        <app-input
+          type="number"
+          [label]="form().mode_commission === 'PERCENT' ? 'Montant minimum *' : 'Montant minimum (Optionnel)'"
+          placeholder="Ex: 5000"
+          [ngModel]="form().montant_min"
+          (ngModelChange)="updateField('montant_min', $event)"
+          (blurred)="markAsTouched('montant_min')"
+          [error]="getError('montant_min')"
+          name="montant_min">
+        </app-input>
+
+        <app-input
+          type="number"
+          [label]="form().mode_commission === 'PERCENT' ? 'Montant maximum *' : 'Montant maximum (Optionnel)'"
+          placeholder="Ex: 50000"
+          [ngModel]="form().montant_max"
+          (ngModelChange)="updateField('montant_max', $event)"
+          (blurred)="markAsTouched('montant_max')"
+          [error]="getError('montant_max')"
+          name="montant_max">
+        </app-input>
+      </div>
+    }
   </div>
 
   <div class="form-actions">

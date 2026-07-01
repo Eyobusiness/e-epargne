@@ -411,3 +411,57 @@ padding: 8px;
 .page-btn {
   min-width: 110px;
 }
+
+/* =====================================================
+   DARK MODE OVERRIDES
+   ===================================================== */
+:host-context(body.dark-mode) .table-card {
+  background: var(--card-background) !important;
+  border-color: var(--border-color) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2) !important;
+}
+
+:host-context(body.dark-mode) .table-header {
+  border-bottom-color: var(--border-color) !important;
+}
+
+:host-context(body.dark-mode) .table-header h3 {
+  color: var(--text-primary) !important;
+}
+
+:host-context(body.dark-mode) .table-toolbar {
+  border-bottom-color: var(--border-color) !important;
+}
+
+:host-context(body.dark-mode) .search-box input {
+  background: #121824 !important;
+  border-color: var(--border-color) !important;
+  color: var(--text-primary) !important;
+}
+
+:host-context(body.dark-mode) .table tbody td {
+  color: var(--text-secondary) !important;
+  border-bottom-color: var(--border-color) !important;
+}
+
+:host-context(body.dark-mode) .table tbody tr:hover {
+  background: #1c2333 !important;
+}
+
+:host-context(body.dark-mode) .member-info strong {
+  color: var(--text-primary) !important;
+}
+
+:host-context(body.dark-mode) .matricule {
+  background: #1c2333 !important;
+  color: var(--text-secondary) !important;
+}
+
+:host-context(body.dark-mode) .pagination-container {
+  border-top-color: var(--border-color) !important;
+}
+
+:host-context(body.dark-mode) .page-info {
+  color: var(--text-secondary) !important;
+}
+
