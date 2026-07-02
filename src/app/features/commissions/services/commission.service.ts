@@ -22,6 +22,12 @@ export class CommissionService {
       .pipe(map((response) => this.unwrapList(response)));
   }
 
+  getByType(type: string): Observable<CommissionConfig[]> {
+    return this.http
+      .get<CollectionResponse<CommissionConfig>>(`${this.apiUrl}/by-type/${type}`)
+      .pipe(map((response) => this.unwrapList(response)));
+  }
+
   getById(id: string): Observable<CommissionConfig> {
     return this.http
       .get<CollectionResponse<CommissionConfig>>(`${this.apiUrl}/${id}`)

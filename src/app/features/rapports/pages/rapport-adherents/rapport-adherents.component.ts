@@ -4,6 +4,7 @@ import { Component, OnInit, inject, signal } from '@angular/core';
 import { RapportFilterComponent } from '../../components/rapport-filter/rapport-filter.component';
 
 import { RapportService } from '../../services/rapport.service';
+import { ExportService } from '../../services/export.service';
 
 import { RapportFilter } from '../../models/rapport-filter.model';
 import { RapportAdherent } from '../../models/rapport-adherent.model';
@@ -34,6 +35,7 @@ import { RapportAdherentTableComponent } from '../../components/rapport-adherent
 })
 export class RapportAdherentsComponent implements OnInit {
   private readonly rapportService = inject(RapportService);
+  private readonly exportService = inject(ExportService);
 
   readonly activeTab = signal<'adherents' | 'groupes' | 'classement'>('adherents');
 
@@ -130,68 +132,31 @@ export class RapportAdherentsComponent implements OnInit {
   });
 
   exportExcel(): void {
+    switch (this.activeTab()) {
+      case 'adherents':
+        this.exportService.exportAdherentsExcel(this.adherents(), this.filter());
+        break;
+      case 'groupes':
+        this.exportService.exportGroupesExcel(this.groupes());
+        break;
+      case 'classement':
+        this.exportService.exportClassementExcel(this.classement());
+        break;
+    }
+  }
 
-  switch (this.activeTab()) {
-
-    case 'adherents':
-
-      console.log(
-        'Export Excel Adhérents',
-        this.adherents(),
-      );
-
-      break;
-
-    case 'groupes':
-
-      console.log(
-        'Export Excel Groupes',
-        this.groupes(),
-      );
-
-      break;
-
-    case 'classement':
-
-      console.log(
-        'Export Excel Classement',
-        this.classement(),
-      );
-
-      break;
+  exportPdf(): void {
+    switch (this.activeTab()) {
+      case 'adherents':
+        this.exportService.exportAdherentsPdf(this.adherents());
+        break;
+      case 'groupes':
+        this.exportService.exportGroupesPdf(this.groupes());
+        break;
+      case 'classement':
+        this.exportService.exportClassementPdf(this.classement());
+        break;
+    }
   }
 }
 
-exportPdf(): void {
-
-  switch (this.activeTab()) {
-
-    case 'adherents':
-
-      console.log(
-        'Export PDF Adhérents',
-        this.adherents(),
-      );
-
-      break;
-
-    case 'groupes':
-
-      console.log(
-        'Export PDF Groupes',
-        this.groupes(),
-      );
-
-      break;
-
-    case 'classement':
-
-      console.log(
-        'Export PDF Classement',
-        this.classement(),
-      );
-
-      break;
-  }
-}
-}

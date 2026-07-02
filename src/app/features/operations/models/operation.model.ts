@@ -19,6 +19,8 @@ export interface Operation {
 
   montant_commission?: number; // futur
 
+  montant_net?: number;
+
   type_operation: string;
 
   compte?: string;

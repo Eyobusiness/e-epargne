@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { RapportService } from '../../services/rapport.service';
+import { ExportService } from '../../services/export.service';
 
 import { RapportFilter } from '../../models/rapport-filter.model';
 import { RapportFinancier } from '../../models/rapport-financier.model';
@@ -23,6 +24,7 @@ import { AppPageHeaderComponent } from '../../../../shared/ui/app-page-header/ap
 })
 export class RapportFinancierComponent implements OnInit {
   private readonly rapportService = inject(RapportService);
+  private readonly exportService = inject(ExportService);
 
   readonly isLoading = signal(false);
 
@@ -69,10 +71,14 @@ export class RapportFinancierComponent implements OnInit {
   }
 
   exportExcel(): void {
-    console.log('Export Excel Rapport Financier');
+    if (this.rapport()) {
+      this.exportService.exportFinancierExcel(this.rapport()!);
+    }
   }
 
   exportPdf(): void {
-    console.log('Export PDF Rapport Financier');
+    if (this.rapport()) {
+      this.exportService.exportFinancierPdf(this.rapport()!);
+    }
   }
 }

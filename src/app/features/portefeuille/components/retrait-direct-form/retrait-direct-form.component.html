@@ -3,95 +3,115 @@
   (ngSubmit)="submit()"
   class="withdraw-form">
 
+  <!-- ── Solde disponible ── -->
   <div class="wallet-info">
-
-    <span>Solde disponible</span>
-
-    <strong>
-
-      {{ solde() | number }}
-
-      FCFA
-
+    <div class="wallet-label">
+      <i class="bi bi-wallet2"></i>
+      Solde disponible
+    </div>
+    <strong class="wallet-amount">
+      {{ solde() | number : '1.0-0' }} FCFA
     </strong>
-
   </div>
 
+  <!-- ── Montant ── -->
   <div class="form-group">
-
-    <label for="montant">
-      Montant à retirer
-    </label>
-
-    <input id="montant"
+    <label for="montant">Montant à retirer</label>
+    <input
+      id="montant"
       type="number"
-      formControlName="montant">
+      formControlName="montant"
+      placeholder="Ex: 25 000">
 
+    @if (form.controls.montant.invalid && form.controls.montant.touched) {
+      <small class="text-danger">Montant minimum : 100 FCFA</small>
+    }
+
+    @if (soldeInsuffisant() && !form.controls.montant.invalid) {
+      <small class="text-danger">
+        <i class="bi bi-exclamation-triangle-fill"></i>
+        Solde insuffisant — maximum : {{ solde() | number : '1.0-0' }} FCFA
+      </small>
+    }
   </div>
 
+  <!-- ── Aperçu commission / net ── -->
+  @if (montantVal() >= 100 && !soldeInsuffisant()) {
+    <div class="commission-details">
+
+      <div class="detail-row">
+        <span>
+          <i class="bi bi-percent"></i>
+          Commission :
+        </span>
+        <strong class="commission-val">
+          {{ commission() | number : '1.0-0' }} FCFA
+        </strong>
+      </div>
+
+      <div class="detail-row net">
+        <span>
+          <i class="bi bi-cash-stack"></i>
+          Net à remettre :
+        </span>
+        <strong>
+          {{ netAmount() | number : '1.0-0' }} FCFA
+        </strong>
+      </div>
+
+    </div>
+  }
+
+  <!-- ── Solde insuffisant (recap) ── -->
+  @if (soldeInsuffisant()) {
+    <div class="alert-insufficient">
+      <i class="bi bi-exclamation-triangle-fill"></i>
+      Le montant saisi dépasse le solde disponible ({{ solde() | number : '1.0-0' }} FCFA)
+    </div>
+  }
+
+  <!-- ── Moyen de paiement ── -->
   <div class="form-group">
-
-    <label for="moyen_p">
-      Moyen de retrait
-    </label>
-
-    <select id="moyen_p"
-      formControlName="moyen_operation">
-
-      <option value="CASH">
-        Espèces
-      </option>
-
-      <option value="WAVE">
-        Wave
-      </option>
-
-      <option value="ORANGE MONEY">
-        Orange Money
-      </option>
-
-      <option value="MTN MONEY">
-        MTN Money
-      </option>
-
-      <option value="MOOV MONEY">
-        Moov Money
-      </option>
-
+    <label for="moyen_p">Moyen de retrait</label>
+    <select id="moyen_p" formControlName="moyen_operation">
+      <option value="CASH">Espèces</option>
+      <option value="WAVE">Wave</option>
+      <option value="ORANGE MONEY">Orange Money</option>
+      <option value="MTN MONEY">MTN Money</option>
+      <option value="MOOV MONEY">Moov Money</option>
     </select>
-
   </div>
 
+  <!-- ── Motif ── -->
   <div class="form-group">
-
-    <label for="motif">
-      Motif
-    </label>
-
-    <textarea id="motif"
+    <label for="motif">Motif</label>
+    <textarea
+      id="motif"
       rows="3"
-      formControlName="motif">
+      formControlName="motif"
+      placeholder="Raison du retrait...">
     </textarea>
-
+    @if (form.controls.motif.invalid && form.controls.motif.touched) {
+      <small class="text-danger">Le motif est obligatoire</small>
+    }
   </div>
 
+  <!-- ── Actions ── -->
   <div class="actions">
 
     <button
       type="button"
       class="btn-cancel"
       (click)="cancel.emit()">
-
       Annuler
-
     </button>
 
     <button
       type="submit"
-      class=" btn btn-save spinner">
-
-      Valider
-
+      class="btn btn-save"
+      [disabled]="form.invalid || soldeInsuffisant()">
+      <i class="bi bi-cash-stack"></i>
+      Valider le retrait
     </button>
 
   </div>

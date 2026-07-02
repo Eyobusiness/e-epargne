@@ -23,6 +23,21 @@
   border-radius: 16px;
 }
 
+.wallet-label {
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+  color: #475569;
+  font-size: .9rem;
+  font-weight: 500;
+}
+
+.wallet-amount {
+  color: #2563eb;
+  font-size: 1.35rem;
+  font-weight: 700;
+}
+
 .wallet-info span {
   color: #475569;
   font-size: .9rem;
@@ -34,6 +49,7 @@
   font-size: 1.35rem;
   font-weight: 700;
 }
+
 
 /* CHAMPS */
 
@@ -216,3 +232,131 @@
     width: 100%;
   }
 }
+
+/* COMMISSION AND NET DISPLAY */
+.commission-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1rem;
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.95rem;
+}
+
+.detail-row span {
+  color: #64748b;
+  font-weight: 500;
+}
+
+.detail-row strong {
+  color: #334155;
+  font-weight: 600;
+}
+
+.detail-row.net {
+  border-top: 1px dashed #cbd5e1;
+  padding-top: 0.75rem;
+  margin-top: 0.25rem;
+  font-size: 1.05rem;
+}
+
+.detail-row.net span {
+  color: #1e293b;
+  font-weight: 600;
+}
+
+.detail-row.net strong {
+  color: #16a34a;
+  font-weight: 700;
+}
+
+/* ── Insuffisant ──────────────────────────────── */
+.commission-details.insufficient {
+  background: #fff5f5;
+  border-color: #fca5a5;
+}
+
+.alert-insufficient {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  color: #dc2626;
+  font-size: .88rem;
+  font-weight: 600;
+  padding-top: .5rem;
+  border-top: 1px dashed #fca5a5;
+  margin-top: .25rem;
+}
+
+/* ── Ligne max retrait ────────────────────────── */
+.detail-row.max strong {
+  color: #0369a1;
+}
+
+/* ── Preview chargement ───────────────────────── */
+.preview-loading {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  color: #64748b;
+  font-size: .88rem;
+}
+
+/* ── Erreur preview ───────────────────────────── */
+.preview-error {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  background: #fff5f5;
+  border: 1px solid #fca5a5;
+  border-radius: 10px;
+  padding: .75rem 1rem;
+  color: #dc2626;
+  font-size: .88rem;
+  font-weight: 600;
+}
+
+/* ── Spinner inline ───────────────────────────── */
+.spinner-sm {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255,255,255,.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin .7s linear infinite;
+  flex-shrink: 0;
+}
+
+.preview-loading .spinner-sm {
+  border-color: rgba(100,116,139,.3);
+  border-top-color: #64748b;
+}
+
+/* ── Alerte solde insuffisant (niveau formulaire) ── */
+.alert-insufficient {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  background: #fff5f5;
+  border: 1px solid #fca5a5;
+  border-radius: 12px;
+  padding: .9rem 1.1rem;
+  color: #dc2626;
+  font-size: .9rem;
+  font-weight: 600;
+}
+
+/* ── Commission value (orange) ── */
+.commission-val {
+  color: #d97706 !important;
+}
+

@@ -141,18 +141,24 @@
               <div class="withdraw-content">
 
                 <h5>
-                  {{ operation.montant | formatMontant }}
-                  FCFA
+                  {{ operation.montant | formatMontant }} FCFA
                 </h5>
 
                 <p>
                   {{ operation.motif || 'Aucun motif' }}
                 </p>
 
-                <small>
+                <div class="withdraw-details mt-2">
+                  <div class="text-muted small">
+                    Commission : <strong>{{ (operation.montant_commission !== undefined && operation.montant_commission !== null ? operation.montant_commission : 0) | formatMontant }} FCFA</strong>
+                  </div>
+                  <div class="text-success small">
+                    Net à remettre : <strong>{{ (operation.montant_net !== undefined && operation.montant_net !== null ? operation.montant_net : (operation.montant - (operation.montant_commission || 0))) | formatMontant }} FCFA</strong>
+                  </div>
+                </div>
 
-                  {{ operation.moyen_operation }}
-
+                <small class="text-muted d-block mt-1">
+                  Moyen : {{ operation.moyen_operation }}
                 </small>
 
               </div>
@@ -244,6 +250,7 @@
 
         <app-retrait-direct-form
           [solde]="portefeuille()?.montant ?? 0"
+          [adherentId]="portefeuille()?.adherent_id ?? ''"
           (save)="createDirectWithdraw($event)"
           (cancel)="closeDirectWithdrawModal()">
         </app-retrait-direct-form>
