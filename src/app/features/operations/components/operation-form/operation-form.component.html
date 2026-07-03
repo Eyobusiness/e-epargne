@@ -131,6 +131,58 @@
 
   </div>
 
+  @if (operation()?.type_operation === 'RETRAIT') {
+
+    <div class="retrait-summary">
+
+      <div class="retrait-summary__header">
+        <i class="bi bi-receipt-cutoff"></i>
+        <span>Récapitulatif du retrait</span>
+      </div>
+
+      <div class="retrait-summary__grid">
+
+        <div class="retrait-summary__item">
+          <span class="retrait-summary__label">Montant demandé</span>
+          <span class="retrait-summary__value">
+            {{ operation()?.montant | number:'1.0-0' }} FCFA
+          </span>
+        </div>
+
+        <div class="retrait-summary__item">
+          <span class="retrait-summary__label">Commission</span>
+          <span class="retrait-summary__value retrait-summary__value--commission">
+            - {{ operation()?.montant_commission | number:'1.0-0' }} FCFA
+          </span>
+        </div>
+
+        <div class="retrait-summary__item">
+          <span class="retrait-summary__label">Montant net</span>
+          <span class="retrait-summary__value">
+            {{ operation()?.montant_net | number:'1.0-0' }} FCFA
+          </span>
+        </div>
+
+        <div class="retrait-summary__item retrait-summary__item--highlight">
+          <span class="retrait-summary__label">Montant net à percevoir</span>
+          <span class="retrait-summary__value retrait-summary__value--main">
+            {{ operation()?.montant_net_a_percevoir | number:'1.0-0' }} FCFA
+          </span>
+        </div>
+
+        <div class="retrait-summary__item retrait-summary__item--solde">
+          <span class="retrait-summary__label">Solde disponible</span>
+          <span class="retrait-summary__value retrait-summary__value--solde">
+            {{ operation()?.solde | number:'1.0-0' }} FCFA
+          </span>
+        </div>
+
+      </div>
+
+    </div>
+
+  }
+
   <input
     type="hidden"
     formControlName="cotisation_adherent_id">

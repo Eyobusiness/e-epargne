@@ -8,15 +8,14 @@ import { RapportGroupe } from '../models/rapport-groupe.model';
 import { ClassementGroupe } from '../models/classement-groupe.model';
 import { RapportFinancier } from '../models/rapport-financier.model';
 import { RapportFinancierLigne } from '../models/rapport-financier-ligne.model';
+import { FormatMontantPipe } from '../../../shared/pipes/pipe.component';
 
-const APP_NAME = 'E-Épargne Tontine';
+const APP_NAME = 'E-Épargne';
 const PRIMARY_COLOR: [number, number, number] = [37, 99, 235];   // blue-600
 const HEADER_BG: [number, number, number] = [30, 58, 138];       // blue-900
 const HEADER_FG: [number, number, number] = [255, 255, 255];
 
-function formatMontant(value: number): string {
-  return new Intl.NumberFormat('fr-FR', { style: 'decimal', minimumFractionDigits: 0 }).format(value) + ' FCFA';
-}
+
 
 function formatPct(value: number): string {
   return value.toFixed(1) + ' %';
@@ -25,7 +24,8 @@ function formatPct(value: number): string {
 function buildPdfHeader(doc: jsPDF, title: string, subtitle?: string): void {
   // Background stripe
   doc.setFillColor(...PRIMARY_COLOR);
-  doc.rect(0, 0, 210, 22, 'F');
+  const pageWidth = doc.internal.pageSize.getWidth();
+doc.rect(0, 0, pageWidth, 22, 'F');
 
   doc.setFontSize(14);
   doc.setTextColor(255, 255, 255);
@@ -46,8 +46,7 @@ function buildPdfHeader(doc: jsPDF, title: string, subtitle?: string): void {
     day: '2-digit', month: 'long', year: 'numeric',
   });
   doc.setFontSize(8);
-  doc.text('Généré le : ' + now, 196, 10, { align: 'right' });
-
+  doc.text('Généré le : ' + now, pageWidth - 14, 10, { align: 'right' });
   doc.setTextColor(0, 0, 0);
 }
 
@@ -165,10 +164,10 @@ export class ExportService {
       item.nom,
       item.telephone,
       item.groupe,
-      formatMontant(item.montantPrevu),
-      formatMontant(item.montantPaye),
-      formatMontant(item.montantReste),
-      formatPct(item.tauxRealisation),
+      FormatMontantPipe.prototype.transform(item.montantPrevu) + 'F',
+      FormatMontantPipe.prototype.transform(item.montantPaye) + 'F',
+      FormatMontantPipe.prototype.transform(item.montantReste) + 'F',
+      formatPct(item.tauxRealisation) + '%',
     ]);
 
     autoTable(doc, {
@@ -194,10 +193,10 @@ export class ExportService {
       i + 1,
       item.groupe,
       item.nombreAdherents,
-      formatMontant(item.totalPrevu),
-      formatMontant(item.totalCotise),
-      formatMontant(item.resteACotiser),
-      formatPct(item.tauxRealisation),
+      FormatMontantPipe.prototype.transform(item.totalPrevu) + 'F',
+      FormatMontantPipe.prototype.transform(item.totalCotise) + 'F',
+      FormatMontantPipe.prototype.transform(item.resteACotiser) + 'F',
+      formatPct(item.tauxRealisation) + '%',
     ]);
 
     autoTable(doc, {
@@ -222,10 +221,10 @@ export class ExportService {
       `#${item.rang}`,
       item.groupe,
       item.nombreMembres,
-      formatMontant(item.totalPrevu ?? 0),
-      formatMontant(item.totalCotise),
-      formatMontant(item.resteACotiser ?? 0),
-      formatPct(item.tauxRealisation),
+      FormatMontantPipe.prototype.transform(item.totalPrevu ?? 0) + 'F',
+      FormatMontantPipe.prototype.transform(item.totalCotise) + 'F',
+      FormatMontantPipe.prototype.transform(item.resteACotiser ?? 0) + 'F',
+      formatPct(item.tauxRealisation) + '%',
     ]);
 
     autoTable(doc, {
@@ -260,19 +259,22 @@ export class ExportService {
       startY: y,
       head: [['Indicateur', 'Montant']],
       body: [
-        ['Total Dépôts Prévus',   formatMontant(rapport.totalDepotPrevu)],
-        ['Total Dépôts Payés',    formatMontant(rapport.totalDepotPaye)],
-        ['Dépôts En Attente',     formatMontant(rapport.totalDepotEnAttente)],
-        ['Dépôts Annulés',        formatMontant(rapport.totalDepotAnnule)],
-        ['Total Retraits',         formatMontant(rapport.totalRetrait)],
-        ['Total Dépenses',         formatMontant(rapport.totalDepense)],
-        ['Total Commissions',      formatMontant(rapport.totalCommission ?? 0)],
-        ['Solde Disponible',       formatMontant(rapport.soldeDisponible)],
+        ['Total Dépôts Prévus',   FormatMontantPipe.prototype.transform(rapport.totalDepotPrevu) + ' FCFA'],
+        ['Total Dépôts Payés',    FormatMontantPipe.prototype.transform(rapport.totalDepotPaye) + ' FCFA'],
+        ['Dépôts En Attente',     FormatMontantPipe.prototype.transform(rapport.totalDepotEnAttente) + ' FCFA'],
+        ['Dépôts Annulés',        FormatMontantPipe.prototype.transform(rapport.totalDepotAnnule) + ' FCFA'],
+        ['Total Retraits',         FormatMontantPipe.prototype.transform(rapport.totalRetrait) + ' FCFA'],
+        ['Total Dépenses',         FormatMontantPipe.prototype.transform(rapport.totalDepense) + ' FCFA'],
+        ['Total Commissions',      FormatMontantPipe.prototype.transform(rapport.totalCommission ?? 0) + ' FCFA'],
+        ['Solde Disponible',       FormatMontantPipe.prototype.transform(rapport.soldeDisponible) + ' FCFA'],
       ],
       styles: { fontSize: 9, cellPadding: 3 },
       headStyles: { fillColor: HEADER_BG, textColor: HEADER_FG, fontStyle: 'bold' },
       alternateRowStyles: { fillColor: [245, 248, 255] },
-      columnStyles: { 1: { halign: 'right', fontStyle: 'bold' } },
+      columnStyles: {
+         0: { cellWidth: 'auto' },
+         1: { cellWidth: 35, halign: 'right' }
+        }
     });
 
     // ── Détail opérations ──────────────────
@@ -300,7 +302,7 @@ export class ExportService {
           l.date ? new Date(l.date).toLocaleDateString('fr-FR') : '--',
           l.type,
           l.adherent,
-          formatMontant(l.montant),
+          FormatMontantPipe.prototype.transform(l.montant) + 'F',
           this._statutLabel(l.statut),
           l.moyenPaiement ?? '--',
         ]),

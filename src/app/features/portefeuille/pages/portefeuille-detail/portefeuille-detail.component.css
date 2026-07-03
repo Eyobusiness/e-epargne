@@ -96,7 +96,6 @@
 }
 
 .withdraw-modal {
-  width: 500px;
   max-width: 95vw;
 
   max-height: 90vh;
@@ -110,6 +109,9 @@
   box-shadow:
     0 25px 50px rgba(0, 0, 0, .15);
 }
+
+.withdraw-modal--wide   { width: 1500px; }
+.withdraw-modal--narrow { width:  500px; }
 
 /* HEADER MODAL */
 
@@ -396,4 +398,4 @@
 :host-context(body.dark-mode) .badge.bg-warning {
   background: rgba(245, 158, 11, 0.15);
   color: #fbbf24;
-}
+}

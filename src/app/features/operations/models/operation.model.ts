@@ -17,9 +17,13 @@ export interface Operation {
 
   status?: string;
 
-  montant_commission?: number; // futur
+  montant_commission?: number;
 
   montant_net?: number;
+
+  montant_net_a_percevoir?: number;
+
+  solde?: number;
 
   type_operation: string;
 

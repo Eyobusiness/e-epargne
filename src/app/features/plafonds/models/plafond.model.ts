@@ -27,4 +27,7 @@ export interface CollectorLimit {
   plafond?: Plafond;
   agent?: User | null;
   profil?: Profil | null;
+  collected_amount?: number;
+  current_amount?: number;
+  total_collecte?: number;
 }

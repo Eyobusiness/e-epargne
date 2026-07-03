@@ -44,7 +44,8 @@
       <app-affectation-table
         [affectations]="affectations()"
         (edit)="openEditAffectation($event)"
-        (delete)="openDeleteAffectationDialog($event)">
+        (delete)="openDeleteAffectationDialog($event)"
+        (resetLimit)="openResetLimitDialog($event)">
       </app-affectation-table>
     }
   }
@@ -86,7 +87,6 @@
     [affectation]="selectedAffectation()"
     [plafonds]="plafonds()"
     [agents]="agents()"
-    [profiles]="profiles()"
     [isLoading]="isLoading()"
     (submitForm)="saveAffectation($event)"
     (cancel)="closeAffectationModal()">
@@ -101,4 +101,14 @@
   message="Voulez-vous vraiment retirer ce plafond pour cet agent ou profil ?"
   (confirm)="deleteAffectation()"
   (cancel)="closeDeleteAffectationDialog()">
+</app-confirm-dialog>
+
+<!-- Deplafonner/Reset Limit Confirmation -->
+<app-confirm-dialog
+  [isOpen]="isResetLimitOpen()"
+  [isLoading]="isResetLoading()"
+  title="Déplafonner le Collecteur"
+  message="Voulez-vous vraiment déplafonner cet agent ? Son montant collecté sera remis à 0."
+  (confirm)="resetLimit()"
+  (cancel)="closeResetLimitDialog()">
 </app-confirm-dialog>

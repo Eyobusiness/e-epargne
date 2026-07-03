@@ -85,6 +85,10 @@ export class PlafondService {
     return this.http.delete<any>(`${this.collectorLimitsUrl}/${id}`);
   }
 
+  resetCollectorLimit(id: string): Observable<any> {
+    return this.http.put<any>(`${this.collectorLimitsUrl}/${id}/reset`, {});
+  }
+
   private unwrapList<T>(response: CollectionResponse<T>): T[] {
     if (Array.isArray(response)) {
       return response;

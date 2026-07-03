@@ -1,25 +1,5 @@
 <form class="affectation-form" novalidate (ngSubmit)="onSubmit()">
   <div class="form-grid">
-    <div class="target-type-selector">
-      <label class="form-label-custom">Type d'affectation</label>
-      <div class="toggle-buttons">
-        <button
-          type="button"
-          class="toggle-btn"
-          [class.active]="targetType() === 'agent'"
-          (click)="setTargetType('agent')">
-          <i class="bi bi-person"></i> Agent Collecteur
-        </button>
-        <button
-          type="button"
-          class="toggle-btn"
-          [class.active]="targetType() === 'profil'"
-          (click)="setTargetType('profil')">
-          <i class="bi bi-shield-lock"></i> Profil
-        </button>
-      </div>
-    </div>
-
     <app-select
       label="Plafond à appliquer"
       placeholder="Choisir un plafond"
@@ -30,29 +10,15 @@
       name="plafond_id">
     </app-select>
 
-    @if (targetType() === 'agent') {
-      <app-select
-        label="Agent Collecteur"
-        placeholder="Choisir un agent"
-        [options]="agentOptions()"
-        [ngModel]="selectedAgentId()"
-        (ngModelChange)="selectedAgentId.set($event)"
-        [error]="getError('agent_id')"
-        name="agent_id">
-      </app-select>
-    }
-
-    @if (targetType() === 'profil') {
-      <app-select
-        label="Profil Utilisateur"
-        placeholder="Choisir un profil"
-        [options]="profilOptions()"
-        [ngModel]="selectedProfilId()"
-        (ngModelChange)="selectedProfilId.set($event)"
-        [error]="getError('profilId')"
-        name="profil_id">
-      </app-select>
-    }
+    <app-select
+      label="Agent Collecteur"
+      placeholder="Choisir un agent"
+      [options]="agentOptions()"
+      [ngModel]="selectedAgentId()"
+      (ngModelChange)="selectedAgentId.set($event)"
+      [error]="getError('agent_id')"
+      name="agent_id">
+    </app-select>
   </div>
 
   <div class="form-actions">

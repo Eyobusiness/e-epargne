@@ -111,6 +111,8 @@
 
           <th>Statut</th>
 
+          <th></th>
+
         </tr>
 
       </thead>
@@ -184,6 +186,19 @@
                 }}
 
               </span>
+
+            </td>
+
+            <td class="td-actions">
+
+              <button
+                class="btn-print"
+                title="Imprimer le reçu"
+                (click)="printRecu(item)">
+
+                <i class="bi bi-printer-fill"></i>
+
+              </button>
 
             </td>
 

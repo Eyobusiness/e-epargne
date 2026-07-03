@@ -40,6 +40,7 @@ export class ChangePasswordComponent {
   readonly showPassword = signal(false);
 
   readonly currentUser = this.SessionService.currentUser;
+readonly profilLabel = this.SessionService.profilLabel;
 
   getInitials(): string {
     const user = this.currentUser();
@@ -61,7 +62,7 @@ export class ChangePasswordComponent {
   });
 
   constructor() {
-    const navigation = this.router.getCurrentNavigation();
+    const navigation = this.router.currentNavigation();
     const state = navigation?.extras.state as { email?: string; tempPassword?: string } | undefined;
 
     if (state?.email) {

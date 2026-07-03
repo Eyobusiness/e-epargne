@@ -18,6 +18,7 @@
           <th>Type Cible</th>
           <th>Plafond Associé</th>
           <th>Montant Max (FCFA)</th>
+          <th>Montant Collecté (FCFA)</th>
           <th>Statut</th>
           <th class="text-end">Actions</th>
         </tr>
@@ -49,12 +50,22 @@
               <span class="amount-badge">{{ (item.plafond?.amount ?? 0) | number:'1.0-0' }} FCFA</span>
             </td>
             <td>
+              <span class="collected-amount-badge" [class.reached]="hasReachedLimit(item)">
+                {{ (item.collected_amount ?? item.current_amount ?? item.total_collecte ?? 0) | number:'1.0-0' }} FCFA
+              </span>
+            </td>
+            <td>
               <span class="status-badge" [class.active]="item.status === '200'">
                 {{ item.status === '200' ? 'Actif' : 'Inactif' }}
               </span>
             </td>
             <td class="actions-cell">
               <div class="table-actions">
+                @if (item.agent_id) {
+                  <button type="button" title="Déplafonner" class="btn-action btn-reset-limit" (click)="resetLimit.emit(item)">
+                    <i class="bi bi-unlock"></i>
+                  </button>
+                }
                 <button type="button" title="Modifier" class="btn-action btn-edit" (click)="edit.emit(item)">
                   <i class="bi bi-pencil-square"></i>
                 </button>
@@ -67,7 +78,7 @@
         }
         @if (filteredItems().length === 0) {
           <tr>
-            <td colspan="6">
+            <td colspan="7">
               <div class="empty-state-row">
                 <i class="bi bi-info-circle"></i>
                 Aucune affectation trouvée

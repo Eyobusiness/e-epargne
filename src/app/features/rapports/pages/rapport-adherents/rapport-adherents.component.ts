@@ -27,7 +27,6 @@ import { RapportAdherentTableComponent } from '../../components/rapport-adherent
     ClassementGroupesComponent,
     RapportCotisationStatsComponent,
     AppPageHeaderComponent,
-  
     RapportAdherentTableComponent
   ],
   templateUrl: './rapport-adherents.component.html',

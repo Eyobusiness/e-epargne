@@ -60,6 +60,11 @@ export class PlafondsComponent implements OnInit {
   readonly isDeleteAffectationOpen = signal(false);
   readonly selectedAffectation = signal<CollectorLimit | null>(null);
 
+  // Reset Limit dialog state
+  readonly isResetLimitOpen = signal(false);
+  readonly isResetLoading = signal(false);
+  readonly selectedLimitToReset = signal<CollectorLimit | null>(null);
+
   ngOnInit(): void {
     this.loadPlafonds();
     this.loadAffectations();
@@ -99,7 +104,7 @@ export class PlafondsComponent implements OnInit {
   }
 
   loadAgents(): void {
-    this.utilisateurService.getAll({ limit: 1000 }).subscribe({
+    this.utilisateurService.getAll({ limit: 1000, status: '200' }).subscribe({
       next: (response) => {
         this.agents.set(response?.data?.items ?? []);
       },
@@ -310,6 +315,44 @@ export class PlafondsComponent implements OnInit {
         error: (err) => {
           this.toastService.show(
             this.extractErrorMessage(err) || 'Erreur lors de la suppression',
+            'error'
+          );
+        },
+      });
+  }
+
+  openResetLimitDialog(affectation: CollectorLimit): void {
+    this.selectedLimitToReset.set(affectation);
+    this.isResetLimitOpen.set(true);
+  }
+
+  closeResetLimitDialog(): void {
+    if (this.isResetLoading()) {
+      return;
+    }
+    this.isResetLimitOpen.set(false);
+    this.selectedLimitToReset.set(null);
+  }
+
+  resetLimit(): void {
+    const selected = this.selectedLimitToReset();
+    if (!selected?.id || this.isResetLoading()) {
+      return;
+    }
+    this.isResetLoading.set(true);
+
+    this.plafondService
+      .resetCollectorLimit(selected.id)
+      .pipe(finalize(() => this.isResetLoading.set(false)))
+      .subscribe({
+        next: () => {
+          this.loadAffectations();
+          this.closeResetLimitDialog();
+          this.toastService.show('Collecteur déplafonné avec succès', 'success');
+        },
+        error: (err) => {
+          this.toastService.show(
+            this.extractErrorMessage(err) || 'Erreur lors du déplafonnement',
             'error'
           );
         },

@@ -363,3 +363,35 @@
   background: #1c2333 !important;
 }
 
+/* ── Bouton impression ── */
+.td-actions {
+  text-align: center;
+  width: 48px;
+}
+
+.btn-print {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: none;
+  border-radius: 8px;
+  background: #eaf1f8;
+  color: #1A345C;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-print:hover {
+  background: #1A345C;
+  color: #fff;
+  transform: scale(1.08);
+  box-shadow: 0 4px 12px rgba(26, 52, 92, 0.25);
+}
+
+.btn-print:active {
+  transform: scale(0.96);
+}
+

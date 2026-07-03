@@ -5,98 +5,243 @@ import { finalize } from 'rxjs';
 import { CollectionService } from '../../services/collection.service';
 import { Collection } from '../../models/collection.model';
 import { ToastService } from '../../../../core/services/toast.service';
-
 import { AppPageHeaderComponent } from '../../../../shared/ui/app-page-header/app-page-header.component';
 import { AppEmptyStateComponent } from '../../../../shared/ui/app-empty-state/app-empty-state.component';
 
 @Component({
   selector: 'app-collection-page',
   standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    AppPageHeaderComponent,
-    AppEmptyStateComponent,
-  ],
+  imports: [CommonModule, FormsModule, AppPageHeaderComponent, AppEmptyStateComponent],
   templateUrl: './collection.component.html',
   styleUrls: ['./collection.component.css'],
 })
 export class CollectionComponent implements OnInit {
   private readonly collectionService = inject(CollectionService);
-  private readonly toastService = inject(ToastService);
+  private readonly toastService      = inject(ToastService);
 
-  readonly collections = signal<Collection[]>([]);
-  readonly search = signal('');
+  // ─── État principal ──────────────────────────────────────────────────────
+  // L'agent est embarqué dans chaque item → plus besoin de charger les adhérents
+  readonly collections   = signal<Collection[]>([]);
   readonly isPageLoading = signal(false);
+  readonly actionLoading = signal<string | null>(null);
 
+  // ─── Pagination serveur ──────────────────────────────────────────────────
   readonly currentPage = signal(1);
-  readonly pageSize = 10;
+  readonly pageSize    = 10;
+  readonly totalItems  = signal(0);
+  readonly totalPages  = computed(() => Math.max(1, Math.ceil(this.totalItems() / this.pageSize)));
 
+  // ─── Compteurs par statut (sur la page courante) ─────────────────────────
+  readonly pendingCount   = computed(() => this.collections().filter(c => c.status === '100').length);
+  readonly validatedCount = computed(() => this.collections().filter(c => c.status === '200').length);
+  readonly rejectedCount  = computed(() => this.collections().filter(c => c.status === '300').length);
+
+  // ─── Filtres ─────────────────────────────────────────────────────────────
+  readonly search       = signal('');
+  readonly filterStatus = signal('');
+  readonly startDate    = signal('');
+  readonly endDate      = signal('');
+
+  // ─── Modale de confirmation ──────────────────────────────────────────────
+  readonly confirmItem   = signal<Collection | null>(null);
+  readonly confirmAction = signal<'validate' | 'reject' | null>(null);
+
+  // ─── Init ────────────────────────────────────────────────────────────────
   ngOnInit(): void {
     this.loadCollections();
   }
 
+  // ─── Chargement ──────────────────────────────────────────────────────────
   loadCollections(): void {
     this.isPageLoading.set(true);
+
     this.collectionService
-      .getCollections()
+      .getCollections({
+        page:      this.currentPage(),
+        limit:     this.pageSize,
+        search:    this.search()       || undefined,
+        status:    this.filterStatus() || undefined,
+        startDate: this.startDate()    || undefined,
+        endDate:   this.endDate()      || undefined,
+      })
       .pipe(finalize(() => this.isPageLoading.set(false)))
       .subscribe({
-        next: (data) => this.collections.set(data),
+        next: (res) => {
+          this.collections.set(res?.data?.items ?? []);
+          this.totalItems.set(res?.meta?.total ?? 0);
+        },
         error: (err) => {
           this.collections.set([]);
-          this.toastService.show(this.extractErrorMessage(err) || 'Erreur lors du chargement des collectes', 'error');
+          this.toastService.show(
+            this.extractErrorMessage(err) || 'Erreur lors du chargement des collectes',
+            'error'
+          );
         },
       });
   }
 
+  // ─── Helpers agent (embarqué dans la réponse) ────────────────────────────
+  agentName(item: Collection): string {
+    return item.agent?.name ?? item.agent_id.substring(0, 8) + '…';
+  }
+
+  agentPhone(item: Collection): string {
+    return item.agent?.phone ?? '';
+  }
+
+  agentEmail(item: Collection): string {
+    return item.agent?.email ?? '';
+  }
+
+  agentInitial(item: Collection): string {
+    const name = item.agent?.name ?? 'A';
+    return name.charAt(0).toUpperCase();
+  }
+
+  // ─── Pagination ──────────────────────────────────────────────────────────
+  changePage(page: number): void {
+    if (page < 1 || page > this.totalPages()) return;
+    this.currentPage.set(page);
+    this.loadCollections();
+  }
+
+  get pageNumbers(): number[] {
+    const total   = this.totalPages();
+    const current = this.currentPage();
+    const range: number[] = [];
+    for (let i = Math.max(1, current - 2); i <= Math.min(total, current + 2); i++) {
+      range.push(i);
+    }
+    return range;
+  }
+
+  // ─── Filtres ─────────────────────────────────────────────────────────────
   onSearch(value: string): void {
     this.search.set(value);
     this.currentPage.set(1);
+    this.loadCollections();
   }
 
-  readonly filteredCollections = computed(() => {
-    const term = this.search().trim().toLowerCase();
-    if (!term) {
-      return this.collections();
+  onFilterStatus(value: string): void {
+    this.filterStatus.set(value);
+    this.currentPage.set(1);
+    this.loadCollections();
+  }
+
+  onDateChange(): void {
+    this.currentPage.set(1);
+    this.loadCollections();
+  }
+
+  resetFilters(): void {
+    this.search.set('');
+    this.filterStatus.set('');
+    this.startDate.set('');
+    this.endDate.set('');
+    this.currentPage.set(1);
+    this.loadCollections();
+  }
+
+  // ─── Modale de confirmation ──────────────────────────────────────────────
+  askConfirm(item: Collection, action: 'validate' | 'reject'): void {
+    this.confirmItem.set(item);
+    this.confirmAction.set(action);
+  }
+
+  cancelConfirm(): void {
+    this.confirmItem.set(null);
+    this.confirmAction.set(null);
+  }
+
+  doConfirm(): void {
+    const item   = this.confirmItem();
+    const action = this.confirmAction();
+    if (!item || !action) return;
+    this.cancelConfirm();
+    if (action === 'validate') this.validateCollection(item);
+    if (action === 'reject')   this.rejectCollection(item);
+  }
+
+  // ─── Valider → status 200 ────────────────────────────────────────────────
+  validateCollection(item: Collection): void {
+    this.actionLoading.set(item.id);
+    this.collectionService
+      .activateCollection(item.id)
+      .pipe(finalize(() => this.actionLoading.set(null)))
+      .subscribe({
+        next: (updated) => {
+          this.patchCollection(updated);
+          this.toastService.show('✅ Collecte validée avec succès', 'success');
+        },
+        error: (err) =>
+          this.toastService.show(this.extractErrorMessage(err) || 'Erreur lors de la validation', 'error'),
+      });
+  }
+
+  // ─── Rejeter → status 300 ────────────────────────────────────────────────
+  rejectCollection(item: Collection): void {
+    this.actionLoading.set(item.id);
+    this.collectionService
+      .rejectCollection(item.id)
+      .pipe(finalize(() => this.actionLoading.set(null)))
+      .subscribe({
+        next: (updated) => {
+          this.patchCollection(updated);
+          this.toastService.show('❌ Collecte rejetée', 'warning');
+        },
+        error: (err) =>
+          this.toastService.show(this.extractErrorMessage(err) || 'Erreur lors du rejet', 'error'),
+      });
+  }
+
+  // ─── Helpers statut ──────────────────────────────────────────────────────
+  statusLabel(status: string): string {
+    switch (status) {
+      case '100': return 'En attente';
+      case '200': return 'Validé';
+      case '300': return 'Rejeté';
+      case '400': return 'Supprimé';
+      default:    return status;
     }
-    return this.collections().filter((item) =>
-      (item.agent?.name ?? '').toLowerCase().includes(term) ||
-      (item.agent?.email ?? '').toLowerCase().includes(term) ||
-      (item.amount ?? '').toString().includes(term) ||
-      (item.status ?? '').toLowerCase().includes(term)
+  }
+
+  statusClass(status: string): string {
+    switch (status) {
+      case '100': return 'pending';
+      case '200': return 'validated';
+      case '300': return 'rejected';
+      case '400': return 'deleted';
+      default:    return '';
+    }
+  }
+
+  statusIcon(status: string): string {
+    switch (status) {
+      case '100': return 'bi-hourglass-split';
+      case '200': return 'bi-check-circle-fill';
+      case '300': return 'bi-x-circle-fill';
+      case '400': return 'bi-trash-fill';
+      default:    return 'bi-circle';
+    }
+  }
+
+  isPending(item: Collection): boolean   { return item.status === '100'; }
+  isValidated(item: Collection): boolean { return item.status === '200'; }
+  isRejected(item: Collection): boolean  { return item.status === '300'; }
+
+  // ─── Mise à jour locale optimiste ────────────────────────────────────────
+  private patchCollection(updated: Collection): void {
+    this.collections.update(list =>
+      list.map(c => (c.id === updated.id ? { ...c, ...updated } : c))
     );
-  });
-
-  readonly totalItems = computed(() => this.filteredCollections().length);
-  readonly totalPages = computed(() =>
-    Math.max(1, Math.ceil(this.totalItems() / this.pageSize))
-  );
-
-  readonly paginatedCollections = computed(() => {
-    const start = (this.currentPage() - 1) * this.pageSize;
-    return this.filteredCollections().slice(start, start + this.pageSize);
-  });
-
-  changePage(page: number): void {
-    if (page < 1 || page > this.totalPages()) {
-      return;
-    }
-    this.currentPage.set(page);
   }
 
   private extractErrorMessage(error: any): string {
     if (error?.error?.message && Array.isArray(error.error.message)) {
       return error.error.message
-        .map((msg: any) => (typeof msg === 'string' ? msg : msg?.message || JSON.stringify(msg)))
+        .map((m: any) => (typeof m === 'string' ? m : m?.message ?? JSON.stringify(m)))
         .join(', ');
     }
-    if (error?.error?.message) {
-      return error.error.message;
-    }
-    if (error?.message) {
-      return error.message;
-    }
-    return '';
+    return error?.error?.message ?? error?.message ?? '';
   }
 }

@@ -64,7 +64,10 @@
   @if (!isLoading()) {
 
     <app-portefeuille-operations
-      [operations]="operations()">
+      [operations]="operations()"
+      [adherentName]="adherentName()"
+      [adherentId]="portefeuille()?.adherent_id ?? ''"
+      [solde]="portefeuille()?.montant ?? 0">
     </app-portefeuille-operations>
 
   }
@@ -109,7 +112,7 @@
 
 <div class="modal-overlay">
 
-  <div class="withdraw-modal">
+  <div class="withdraw-modal withdraw-modal--wide">
 
     <div class="modal-header">
 
@@ -226,7 +229,7 @@
 
 <div class="modal-overlay">
 
-  <div class="withdraw-modal">
+  <div class="withdraw-modal withdraw-modal--narrow">
 
     <div class="modal-header">
 

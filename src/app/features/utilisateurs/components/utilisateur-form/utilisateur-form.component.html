@@ -35,12 +35,21 @@
     </div>
 
     <div class="form-group">
-      <label for="code">Code</label>
+      <label for="code">Rôle utilisateur</label>
 
-      <input
+      <select
         id="code"
-        type="text"
         formControlName="code">
+
+        <option value="" disabled>
+          Sélectionner un rôle
+        </option>
+        <option value="10">Abonné</option>
+        <option value="20">Admin</option>
+        <option value="30">Super Admin</option>
+        <option value="40">Agent</option>
+
+      </select>
     </div>
 
     <div class="form-group">

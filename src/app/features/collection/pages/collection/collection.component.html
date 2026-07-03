@@ -1,103 +1,360 @@
 <div class="collections-page">
+
+  <!-- ══════════════════════════════════════════════════════════════
+       En-tête de page
+  ══════════════════════════════════════════════════════════════════ -->
   <app-page-header
     title="Suivi des Encaissements"
-    description="Consultez l'historique et les encaissements en cours des agents collecteurs">
+    description="Consultez, validez ou rejetez les collectes soumises par les agents collecteurs">
   </app-page-header>
 
-  @if (isPageLoading()) {
-    <div class="loading-state">
-      <div class="loading-spinner"></div>
-      <p>Chargement des collectes...</p>
-    </div>
-  } @else {
-    <div class="table-toolbar">
-      <div class="results-info">
-        <span>{{ totalItems() }} collecte(s) trouvée(s)</span>
-      </div>
+  <!-- ══════════════════════════════════════════════════════════════
+       Cartes de statistiques rapides (sur la page courante)
+  ══════════════════════════════════════════════════════════════════ -->
+  <div class="stats-row">
 
+    <div class="stat-card stat-total">
+      <div class="stat-icon"><i class="bi bi-collection-fill"></i></div>
+      <div class="stat-body">
+        <span class="stat-value">{{ totalItems() }}</span>
+        <span class="stat-label">Total collectes</span>
+      </div>
+    </div>
+
+    <div class="stat-card stat-pending">
+      <div class="stat-icon"><i class="bi bi-hourglass-split"></i></div>
+      <div class="stat-body">
+        <span class="stat-value">{{ pendingCount() }}</span>
+        <span class="stat-label">En attente</span>
+      </div>
+    </div>
+
+    <div class="stat-card stat-validated">
+      <div class="stat-icon"><i class="bi bi-check-circle-fill"></i></div>
+      <div class="stat-body">
+        <span class="stat-value">{{ validatedCount() }}</span>
+        <span class="stat-label">Validées</span>
+      </div>
+    </div>
+
+    <div class="stat-card stat-rejected">
+      <div class="stat-icon"><i class="bi bi-x-circle-fill"></i></div>
+      <div class="stat-body">
+        <span class="stat-value">{{ rejectedCount() }}</span>
+        <span class="stat-label">Rejetées</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       Barre de filtres
+  ══════════════════════════════════════════════════════════════════ -->
+  <div class="table-toolbar">
+
+    <div class="results-info">
+      <span class="results-count">{{ totalItems() }}</span>
+      <span class="results-text">&nbsp;collecte(s)</span>
+    </div>
+
+    <div class="filters-row">
+
+      <!-- Recherche -->
       <div class="search-box">
         <i class="bi bi-search"></i>
         <input
           type="text"
-          placeholder="Rechercher par agent, montant..."
+          placeholder="Rechercher un agent..."
           [ngModel]="search()"
           (ngModelChange)="onSearch($event)">
       </div>
-    </div>
 
-    @if (filteredCollections().length > 0) {
+      <!-- Filtre statut -->
+      <div class="filter-group">
+        <i class="bi bi-funnel filter-icon"></i>
+        <select class="filter-select" [ngModel]="filterStatus()" (ngModelChange)="onFilterStatus($event)">
+          <option value="">Tous les statuts</option>
+          <option value="100">⏳ En attente</option>
+          <option value="200">✅ Validé</option>
+          <option value="300">❌ Rejeté</option>
+        </select>
+      </div>
+
+      <!-- Plage de dates -->
+      <div class="date-range-group">
+        <label class="date-label">Du</label>
+        <input
+          type="date"
+          class="filter-date"
+          [ngModel]="startDate()"
+          (ngModelChange)="startDate.set($event); onDateChange()">
+        <label class="date-label">Au</label>
+        <input
+          type="date"
+          class="filter-date"
+          [ngModel]="endDate()"
+          (ngModelChange)="endDate.set($event); onDateChange()">
+      </div>
+
+      <!-- Réinitialiser -->
+      <button class="btn-reset" (click)="resetFilters()" title="Réinitialiser les filtres">
+        <i class="bi bi-arrow-counterclockwise"></i>
+        Réinitialiser
+      </button>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════════
+       Contenu principal
+  ══════════════════════════════════════════════════════════════════ -->
+  @if (isPageLoading()) {
+    <div class="loading-state">
+      <div class="loading-spinner"></div>
+      <p class="loading-text">Chargement des collectes...</p>
+    </div>
+  } @else {
+
+    @if (collections().length > 0) {
       <div class="table-card">
+
+        <!-- Légende -->
+        <div class="table-legend">
+          <span class="legend-item"><span class="legend-dot dot-pending"></span>En attente de validation</span>
+          <span class="legend-item"><span class="legend-dot dot-validated"></span>Validée</span>
+          <span class="legend-item"><span class="legend-dot dot-rejected"></span>Rejetée</span>
+        </div>
+
         <div class="table-responsive">
-          <table class="table align-middle">
+          <table class="data-table">
             <thead>
               <tr>
-                <th>Agent Collecteur</th>
-                <th>Montant Encaissé</th>
-                <th>Statut</th>
-                <th>Créé le</th>
-                <th>Mis à jour le</th>
+                <th><i class="bi bi-person-badge me-1"></i>Agent collecteur</th>
+                <th><i class="bi bi-cash-coin me-1"></i>Montant</th>
+                <th><i class="bi bi-info-circle me-1"></i>Statut</th>
+                <th><i class="bi bi-calendar3 me-1"></i>Date de collecte</th>
+                <th class="th-actions">Actions</th>
               </tr>
             </thead>
             <tbody>
-              @for (item of paginatedCollections(); track item.id || $index) {
-                <tr>
+              @for (item of collections(); track item.id) {
+                <tr
+                  [class.row-pending]="isPending(item)"
+                  [class.row-validated]="isValidated(item)"
+                  [class.row-rejected]="isRejected(item)"
+                  [class.row-loading]="actionLoading() === item.id">
+
+                  <!-- Agent collecteur -->
                   <td>
-                    @if (item.agent) {
-                      <div class="user-info">
-                        <span class="fw-bold text-primary">{{ item.agent.name }}</span>
-                        <span class="email-sub">{{ item.agent.email }}</span>
+                    <div class="cell-agent">
+                      <div class="agent-avatar">{{ agentInitial(item) }}</div>
+                      <div class="agent-info">
+                        <span class="agent-name">{{ agentName(item) }}</span>
+                        @if (agentPhone(item)) {
+                          <span class="agent-sub">
+                            <i class="bi bi-telephone me-1"></i>{{ agentPhone(item) }}
+                          </span>
+                        }
+                        @if (agentEmail(item)) {
+                          <span class="agent-sub">
+                            <i class="bi bi-envelope me-1"></i>{{ agentEmail(item) }}
+                          </span>
+                        }
                       </div>
-                    } @else {
-                      <span class="text-muted">Agent ID: {{ item.agent_id }}</span>
-                    }
+                    </div>
                   </td>
+
+                  <!-- Montant -->
                   <td>
-                    <span class="amount-badge">{{ item.amount | number:'1.0-0' }} FCFA</span>
-                  </td>
-                  <td>
-                    <span class="status-badge" [class.active]="item.status === '200'">
-                      {{ item.status === '200' ? 'Confirmé' : 'En attente' }}
+                    <span class="amount-chip">
+                      {{ item.amount | number:'1.0-0' }}
+                      <small>FCFA</small>
                     </span>
                   </td>
+
+                  <!-- Statut -->
                   <td>
-                    {{ item.created_at | date:'dd/MM/yyyy HH:mm' }}
+                    <span class="status-pill" [ngClass]="statusClass(item.status)">
+                      <i class="bi" [ngClass]="statusIcon(item.status)"></i>
+                      {{ statusLabel(item.status) }}
+                    </span>
                   </td>
+
+                  <!-- Date -->
                   <td>
-                    {{ item.updated_at | date:'dd/MM/yyyy HH:mm' }}
+                    <div class="date-cell">
+                      <span class="date-main">{{ item.created_at | date:'dd/MM/yyyy' }}</span>
+                      <span class="date-time">{{ item.created_at | date:'HH:mm' }}</span>
+                    </div>
                   </td>
+
+                  <!-- Actions -->
+                  <td class="td-actions">
+                    @if (actionLoading() === item.id) {
+                      <div class="action-loading">
+                        <div class="mini-spinner"></div>
+                        <span>En cours…</span>
+                      </div>
+                    } @else {
+
+                      <!-- ── Status 100 → Boutons Valider + Rejeter ── -->
+                      @if (isPending(item)) {
+                        <div class="action-group">
+                          <button
+                            class="action-btn btn-validate"
+                            title="Valider cette collecte (→ statut 200)"
+                            (click)="askConfirm(item, 'validate')">
+                            <i class="bi bi-check-circle-fill"></i>
+                            Valider
+                          </button>
+                          <button
+                            class="action-btn btn-reject"
+                            title="Rejeter cette collecte (→ statut 300)"
+                            (click)="askConfirm(item, 'reject')">
+                            <i class="bi bi-x-circle-fill"></i>
+                            Rejeter
+                          </button>
+                        </div>
+                      }
+
+                      <!-- ── Status 200 → Badge seul ── -->
+                      @if (isValidated(item)) {
+                        <span class="done-badge badge-validated">
+                          <i class="bi bi-check-all"></i> Validée
+                        </span>
+                      }
+
+                      <!-- ── Status 300 → Badge seul ── -->
+                      @if (isRejected(item)) {
+                        <span class="done-badge badge-rejected">
+                          <i class="bi bi-dash-circle"></i> Rejetée
+                        </span>
+                      }
+
+                    }
+                  </td>
+
                 </tr>
               }
             </tbody>
           </table>
         </div>
 
+        <!-- ─── Pagination ───────────────────────────────────────── -->
         @if (totalPages() > 1) {
-          <div class="pagination-container">
-            <button
-              class="page-btn"
-              [disabled]="currentPage() === 1"
-              (click)="changePage(currentPage() - 1)">
-              <i class="bi bi-chevron-left"></i>
-              Précédent
-            </button>
-            <span class="page-info">
-              Page {{ currentPage() }} sur {{ totalPages() }}
+          <div class="pagination-bar">
+            <span class="pagination-info">
+              Page {{ currentPage() }} / {{ totalPages() }}
+              &nbsp;·&nbsp; {{ totalItems() }} élément(s)
             </span>
-            <button
-              class="page-btn"
-              [disabled]="currentPage() === totalPages()"
-              (click)="changePage(currentPage() + 1)">
-              Suivant
-              <i class="bi bi-chevron-right"></i>
-            </button>
+            <div class="pagination-controls">
+              <button class="page-btn" [disabled]="currentPage() === 1" (click)="changePage(1)" title="Première">
+                <i class="bi bi-chevron-double-left"></i>
+              </button>
+              <button class="page-btn" [disabled]="currentPage() === 1" (click)="changePage(currentPage() - 1)">
+                <i class="bi bi-chevron-left"></i>
+              </button>
+              @for (p of pageNumbers; track p) {
+                <button class="page-btn" [class.page-active]="p === currentPage()" (click)="changePage(p)">
+                  {{ p }}
+                </button>
+              }
+              <button class="page-btn" [disabled]="currentPage() === totalPages()" (click)="changePage(currentPage() + 1)">
+                <i class="bi bi-chevron-right"></i>
+              </button>
+              <button class="page-btn" [disabled]="currentPage() === totalPages()" (click)="changePage(totalPages())" title="Dernière">
+                <i class="bi bi-chevron-double-right"></i>
+              </button>
+            </div>
           </div>
         }
-      </div>
+
+      </div><!-- /.table-card -->
+
     } @else {
       <app-empty-state
         title="Aucune collecte trouvée"
-        description="Il n'y a actuellement aucune collecte enregistrée ou correspondant à votre recherche.">
+        description="Aucune collecte ne correspond à vos critères de recherche.">
       </app-empty-state>
     }
   }
-</div>
+
+</div><!-- /.collections-page -->
+
+<!-- ══════════════════════════════════════════════════════════════
+     Modale de confirmation — Valider / Rejeter
+══════════════════════════════════════════════════════════════════ -->
+@if (confirmItem()) {
+  <div class="modal-overlay" (click)="cancelConfirm()">
+    <div class="confirm-modal" (click)="$event.stopPropagation()">
+
+      <!-- Icône -->
+      <div class="modal-icon"
+           [class.icon-validate]="confirmAction() === 'validate'"
+           [class.icon-reject]="confirmAction() === 'reject'">
+        <i class="bi"
+           [class.bi-check-circle-fill]="confirmAction() === 'validate'"
+           [class.bi-x-circle-fill]="confirmAction() === 'reject'"></i>
+      </div>
+
+      <!-- Titre -->
+      <h3 class="modal-title">
+        {{ confirmAction() === 'validate' ? 'Valider la collecte ?' : 'Rejeter la collecte ?' }}
+      </h3>
+
+      <!-- Résumé -->
+      <div class="modal-summary">
+        <div class="summary-row">
+          <span class="summary-key"><i class="bi bi-person-badge me-1"></i>Agent</span>
+          <span class="summary-val">{{ agentName(confirmItem()!) }}</span>
+        </div>
+        <div class="summary-row">
+          <span class="summary-key"><i class="bi bi-cash-coin me-1"></i>Montant</span>
+          <span class="summary-val amount-hl">
+            {{ confirmItem()!.amount | number:'1.0-0' }} FCFA
+          </span>
+        </div>
+        <div class="summary-row">
+          <span class="summary-key"><i class="bi bi-arrow-right-circle me-1"></i>Nouveau statut</span>
+          <span class="summary-val">
+            @if (confirmAction() === 'validate') {
+              <span class="status-pill validated"><i class="bi bi-check-circle-fill"></i> Validé</span>
+            } @else {
+              <span class="status-pill rejected"><i class="bi bi-x-circle-fill"></i> Rejeté</span>
+            }
+          </span>
+        </div>
+      </div>
+
+      <!-- Avertissement -->
+      <p class="modal-hint">
+        @if (confirmAction() === 'validate') {
+          <i class="bi bi-info-circle-fill me-1"></i>
+          Cette action validera définitivement la collecte.
+        } @else {
+          <i class="bi bi-exclamation-triangle-fill me-1"></i>
+          Cette action rejettera la collecte. Elle sera difficile à annuler.
+        }
+      </p>
+
+      <!-- Boutons -->
+      <div class="modal-actions">
+        <button class="modal-btn modal-cancel" (click)="cancelConfirm()">
+          <i class="bi bi-x-lg"></i> Annuler
+        </button>
+        <button
+          class="modal-btn"
+          [class.modal-confirm-validate]="confirmAction() === 'validate'"
+          [class.modal-confirm-reject]="confirmAction() === 'reject'"
+          (click)="doConfirm()">
+          @if (confirmAction() === 'validate') {
+            <i class="bi bi-check-circle-fill"></i> Oui, valider
+          } @else {
+            <i class="bi bi-x-circle-fill"></i> Oui, rejeter
+          }
+        </button>
+      </div>
+
+    </div>
+  </div>
+}

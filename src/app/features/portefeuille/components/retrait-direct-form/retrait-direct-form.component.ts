@@ -66,6 +66,11 @@ export class RetraitDirectFormComponent implements OnInit {
     Math.max(0, this.montantVal() - this.commission()),
   );
 
+  /** Solde restant après retrait */
+  readonly soldeRestant = computed(() =>
+    Math.max(0, this.solde() - this.montantVal()),
+  );
+
   readonly form = this.fb.nonNullable.group({
     montant: [0, [Validators.required, Validators.min(100)]],
     moyen_operation: ['CASH', Validators.required],

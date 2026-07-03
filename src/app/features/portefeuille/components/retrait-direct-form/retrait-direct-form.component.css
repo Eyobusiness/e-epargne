@@ -359,4 +359,22 @@
 .commission-val {
   color: #d97706 !important;
 }
+
+/* ── Solde restant ── */
+.detail-row.solde-restant {
+  border-top: 1px dashed #cbd5e1;
+  padding-top: 0.75rem;
+  margin-top: 0.25rem;
+  font-size: 1rem;
+}
+
+.detail-row.solde-restant span {
+  color: #1e293b;
+  font-weight: 600;
+}
+
+.solde-restant-val {
+  color: #7CA1C4 !important;
+  font-weight: 700;
+}
 

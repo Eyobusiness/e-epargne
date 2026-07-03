@@ -14,6 +14,13 @@ export class AffectationTableComponent {
   readonly affectations = input<CollectorLimit[]>([]);
   @Output() readonly edit = new EventEmitter<CollectorLimit>();
   @Output() readonly delete = new EventEmitter<CollectorLimit>();
+  @Output() readonly resetLimit = new EventEmitter<CollectorLimit>();
+
+  hasReachedLimit(item: CollectorLimit): boolean {
+    const limit = item.plafond?.amount ?? 0;
+    const collected = item.collected_amount ?? item.current_amount ?? item.total_collecte ?? 0;
+    return limit > 0 && collected >= limit;
+  }
 
   readonly search = signal('');
   readonly currentPage = signal(1);
