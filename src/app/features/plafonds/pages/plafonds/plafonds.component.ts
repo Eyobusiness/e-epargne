@@ -7,6 +7,7 @@ import { User, Profil } from '../../../utilisateurs/models/utilisateur.model';
 import { UtilisateurService } from '../../../utilisateurs/services/utilisateur.service';
 import { ProfileService } from '../../../profil/services/profil.service';
 import { ToastService } from '../../../../core/services/toast.service';
+import { NotificationService } from '../../../../core/services/notification.service';
 
 import { AppPageHeaderComponent } from '../../../../shared/ui/app-page-header/app-page-header.component';
 import { AppModalComponent } from '../../../../shared/ui/app-modal/app-modal.component';
@@ -39,6 +40,7 @@ export class PlafondsComponent implements OnInit {
   private readonly utilisateurService = inject(UtilisateurService);
   private readonly profileService = inject(ProfileService);
   private readonly toastService = inject(ToastService);
+  private readonly notifService = inject(NotificationService);
 
   readonly activeTab = signal<PlafondTab>('limit');
   readonly plafonds = signal<Plafond[]>([]);
@@ -165,6 +167,15 @@ export class PlafondsComponent implements OnInit {
 
     request$.pipe(finalize(() => this.isLoading.set(false))).subscribe({
       next: () => {
+        const isEdit = !!selected?.id;
+        this.notifService.add({
+          type: 'plafond',
+          action: isEdit ? 'update' : 'create',
+          title: isEdit ? 'Plafond modifié' : 'Plafond créé',
+          message: isEdit
+            ? `Le plafond a été modifié avec succès.`
+            : `Un nouveau plafond a été créé.`,
+        });
         this.loadPlafonds();
         this.closePlafondModal(true);
         this.toastService.show(
@@ -194,6 +205,12 @@ export class PlafondsComponent implements OnInit {
       .pipe(finalize(() => this.isDeleteLoading.set(false)))
       .subscribe({
         next: () => {
+          this.notifService.add({
+            type: 'plafond',
+            action: 'delete',
+            title: 'Plafond supprimé',
+            message: 'Le plafond a été supprimé avec succès.',
+          });
           this.loadPlafonds();
           this.closeDeletePlafondDialog();
           this.selectedPlafond.set(null);
@@ -278,6 +295,13 @@ export class PlafondsComponent implements OnInit {
 
     request$.pipe(finalize(() => this.isLoading.set(false))).subscribe({
       next: () => {
+        const isEdit = !!selected?.id;
+        this.notifService.add({
+          type: 'plafond',
+          action: isEdit ? 'update' : 'create',
+          title: isEdit ? 'Affectation modifiée' : 'Nouvelle affectation',
+          message: isEdit ? 'L\'affectation a été mise à jour.' : 'Une affectation de plafond a été créée.',
+        });
         this.loadAffectations();
         this.closeAffectationModal(true);
         this.toastService.show(
@@ -307,6 +331,12 @@ export class PlafondsComponent implements OnInit {
       .pipe(finalize(() => this.isDeleteLoading.set(false)))
       .subscribe({
         next: () => {
+          this.notifService.add({
+            type: 'plafond',
+            action: 'delete',
+            title: 'Affectation supprimée',
+            message: 'L\'affectation de plafond a été supprimée.',
+          });
           this.loadAffectations();
           this.closeDeleteAffectationDialog();
           this.selectedAffectation.set(null);
@@ -346,6 +376,12 @@ export class PlafondsComponent implements OnInit {
       .pipe(finalize(() => this.isResetLoading.set(false)))
       .subscribe({
         next: () => {
+          this.notifService.add({
+            type: 'plafond',
+            action: 'reset',
+            title: 'Plafond réinitialisé',
+            message: 'Un collecteur a été déplafonné avec succès.',
+          });
           this.loadAffectations();
           this.closeResetLimitDialog();
           this.toastService.show('Collecteur déplafonné avec succès', 'success');

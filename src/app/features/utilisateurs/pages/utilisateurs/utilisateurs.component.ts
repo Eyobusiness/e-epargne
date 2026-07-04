@@ -26,6 +26,7 @@ import { AppConfirmDialogComponent } from '../../../../shared/ui/app-confirm-dia
 import { AppEmptyStateComponent } from '../../../../shared/ui/app-empty-state/app-empty-state.component';
 
 import { ToastService } from '../../../../core/services/toast.service';
+import { NotificationService } from '../../../../core/services/notification.service';
 
 @Component({
   selector: 'app-utilisateurs',
@@ -48,10 +49,9 @@ import { ToastService } from '../../../../core/services/toast.service';
 export class UtilisateursComponent implements OnInit {
   private readonly service = inject(UtilisateurService);
   private readonly profilService = inject(ProfileService);
-
   private readonly router = inject(Router);
-
   private readonly toastService = inject(ToastService);
+  private readonly notifService = inject(NotificationService);
 
   readonly utilisateurs = signal<User[]>([]);
   readonly statsUtilisateurs = signal<User[]>([]);
@@ -240,10 +240,15 @@ export class UtilisateursComponent implements OnInit {
         .pipe(finalize(() => this.isLoading.set(false)))
         .subscribe({
           next: () => {
+            const name = (updatePayload as any)?.name ?? selected?.name ?? '';
+            this.notifService.add({
+              type: 'utilisateur',
+              action: 'update',
+              title: 'Utilisateur modifié',
+              message: `${name} a été mis à jour.`,
+            });
             this.loadUtilisateurs();
-
             this.closeModal(true);
-
             this.toastService.show('Utilisateur modifie', 'success');
           },
           error: (error) => {
@@ -263,10 +268,15 @@ export class UtilisateursComponent implements OnInit {
       .pipe(finalize(() => this.isLoading.set(false)))
       .subscribe({
         next: () => {
+          const name = (createPayload as any)?.name ?? '';
+          this.notifService.add({
+            type: 'utilisateur',
+            action: 'create',
+            title: 'Nouvel utilisateur',
+            message: `${name} a été créé avec succès.`,
+          });
           this.closeModal(true);
-
           this.toastService.show('Utilisateur ajoute', 'success');
-
           this.loadUtilisateurs();
         },
         error: (error) => {
@@ -325,6 +335,12 @@ export class UtilisateursComponent implements OnInit {
       .pipe(finalize(() => this.isDeleteLoading.set(false)))
       .subscribe({
         next: () => {
+          this.notifService.add({
+            type: 'utilisateur',
+            action: 'delete',
+            title: 'Utilisateur supprimé',
+            message: `${selected?.name ?? 'L\'utilisateur'} a été supprimé.`,
+          });
           this.loadUtilisateurs();
 
           this.closeDeleteDialog(true);
@@ -357,6 +373,12 @@ export class UtilisateursComponent implements OnInit {
       .pipe(finalize(() => this.isPageLoading.set(false)))
       .subscribe({
         next: () => {
+          this.notifService.add({
+            type: 'utilisateur',
+            action: 'activate',
+            title: 'Utilisateur activé',
+            message: `${user.name} a été activé avec succès.`,
+          });
           this.toastService.show('Utilisateur activé', 'success');
           this.loadUtilisateurs();
         },
@@ -380,6 +402,12 @@ export class UtilisateursComponent implements OnInit {
       .pipe(finalize(() => this.isPageLoading.set(false)))
       .subscribe({
         next: () => {
+          this.notifService.add({
+            type: 'utilisateur',
+            action: 'deactivate',
+            title: 'Utilisateur désactivé',
+            message: `${user.name} a été désactivé.`,
+          });
           this.toastService.show('Utilisateur désactivé', 'success');
           this.loadUtilisateurs();
         },

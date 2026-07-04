@@ -25,6 +25,7 @@ import { AppPageHeaderComponent } from '../../../../shared/ui/app-page-header/ap
 import { AppConfirmDialogComponent } from '../../../../shared/ui/app-confirm-dialog/app-confirm-dialog.component';
 import { AppEmptyStateComponent } from '../../../../shared/ui/app-empty-state/app-empty-state.component';
 import { ToastService } from '../../../../core/services/toast.service';
+import { NotificationService } from '../../../../core/services/notification.service';
 import { extractApiErrorMessage } from '../../utils/subscription-api.utils';
 import { Adherent } from '../../../adherents/models/adherent.model';
 
@@ -50,6 +51,7 @@ export class CotisationsComponent implements OnInit {
   private readonly cotisationService = inject(CotisationService);
   private readonly adherentService = inject(AdherentService);
   private readonly toastService = inject(ToastService);
+  private readonly notifService = inject(NotificationService);
 
   readonly cotisations = signal<Cotisation[]>([]);
   readonly statsCotisations = signal<Cotisation[]>([]);
@@ -200,6 +202,13 @@ export class CotisationsComponent implements OnInit {
         .pipe(finalize(() => this.isLoading.set(false)))
         .subscribe({
           next: () => {
+            const amount = (payload as any)?.montant ? ` — ${(payload as any).montant} FCFA` : '';
+            this.notifService.add({
+              type: 'cotisation',
+              action: 'update',
+              title: 'Cotisation modifiée',
+              message: `Cotisation${amount} mise à jour.`,
+            });
             this.loadCotisations();
             this.closeModal(true);
             this.toastService.show('Cotisation modifiee', 'success');
@@ -220,6 +229,13 @@ export class CotisationsComponent implements OnInit {
       .pipe(finalize(() => this.isLoading.set(false)))
       .subscribe({
         next: () => {
+          const amount = (payload as any)?.montant ? ` — ${(payload as any).montant} FCFA` : '';
+          this.notifService.add({
+            type: 'cotisation',
+            action: 'create',
+            title: 'Nouvelle cotisation',
+            message: `Cotisation${amount} enregistrée.`,
+          });
           this.currentPage.set(1);
           this.loadCotisations();
           this.closeModal(true);
@@ -261,6 +277,12 @@ export class CotisationsComponent implements OnInit {
       .pipe(finalize(() => this.isDeleteLoading.set(false)))
       .subscribe({
         next: () => {
+          this.notifService.add({
+            type: 'cotisation',
+            action: 'delete',
+            title: 'Cotisation supprimée',
+            message: 'Une cotisation a été supprimée.',
+          });
           this.closeDeleteDialog(true);
           this.loadCotisations();
           this.toastService.show('Cotisation supprimee', 'success');
@@ -286,6 +308,12 @@ export class CotisationsComponent implements OnInit {
       .pipe(finalize(() => this.isPageLoading.set(false)))
       .subscribe({
         next: () => {
+          this.notifService.add({
+            type: 'cotisation',
+            action: 'activate',
+            title: 'Cotisation activée',
+            message: 'Une cotisation a été activée avec succès.',
+          });
           this.toastService.show('Cotisation activée', 'success');
           this.loadCotisations();
         },
@@ -310,6 +338,12 @@ export class CotisationsComponent implements OnInit {
       .pipe(finalize(() => this.isPageLoading.set(false)))
       .subscribe({
         next: () => {
+          this.notifService.add({
+            type: 'cotisation',
+            action: 'deactivate',
+            title: 'Cotisation désactivée',
+            message: 'Une cotisation a été désactivée.',
+          });
           this.toastService.show('Cotisation désactivée', 'success');
           this.loadCotisations();
         },

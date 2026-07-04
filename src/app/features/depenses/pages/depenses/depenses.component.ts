@@ -24,6 +24,7 @@ import { AppPageHeaderComponent } from '../../../../shared/ui/app-page-header/ap
 import { AppConfirmDialogComponent } from '../../../../shared/ui/app-confirm-dialog/app-confirm-dialog.component';
 import { AppEmptyStateComponent } from '../../../../shared/ui/app-empty-state/app-empty-state.component';
 import { ToastService } from '../../../../core/services/toast.service';
+import { NotificationService } from '../../../../core/services/notification.service';
 import { extractApiErrorMessage } from '../../utils/depense-api.utils';
 import { DocumentService } from '../../services/document-dpenses.service';
 
@@ -51,7 +52,7 @@ export class DepensesComponent implements OnInit {
   private readonly depenseService = inject(DepenseService);
   private readonly categorieService = inject(CategorieDepenseService);
   private readonly toastService = inject(ToastService);
-
+  private readonly notifService = inject(NotificationService);
   private readonly documentService = inject(DocumentService);
 
   loadDocument(depenseId: string): void {
@@ -280,6 +281,13 @@ loadDocumentsMap(): void {
         .pipe(finalize(() => this.isLoading.set(false)))
         .subscribe({
           next: () => {
+            const desc = (event.payload as any)?.description ?? selected?.description ?? '';
+            this.notifService.add({
+              type: 'depense',
+              action: 'update',
+              title: 'Dépense modifiée',
+              message: `${desc || 'La dépense'} a été mise à jour.`,
+            });
             this.loadDepenses();
             this.closeModal(true);
             this.toastService.show('Depense modifiee', 'success');
@@ -300,6 +308,14 @@ loadDocumentsMap(): void {
       .pipe(finalize(() => this.isLoading.set(false)))
       .subscribe({
         next: () => {
+          const desc = (event.payload as any)?.description ?? '';
+          const amount = (event.payload as any)?.montant ? ` — ${(event.payload as any).montant} FCFA` : '';
+          this.notifService.add({
+            type: 'depense',
+            action: 'create',
+            title: 'Nouvelle dépense',
+            message: `${desc || 'Dépense'}${amount} enregistrée.`,
+          });
           this.loadDepenses();
           this.currentPage.set(1);
           this.closeModal(true);
@@ -338,6 +354,12 @@ loadDocumentsMap(): void {
       .pipe(finalize(() => this.isDeleteLoading.set(false)))
       .subscribe({
         next: () => {
+          this.notifService.add({
+            type: 'depense',
+            action: 'delete',
+            title: 'Dépense supprimée',
+            message: `${depense.description || 'La dépense'} a été supprimée.`,
+          });
           this.depenses.update((items) => items.filter((item) => item.id !== depense.id));
           this.syncCurrentPage();
           this.closeDeleteDialog(true);

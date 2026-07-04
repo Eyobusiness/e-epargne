@@ -19,6 +19,7 @@ import { Profile } from '../../../profil/models/profil.model';
 import { ParametreService } from '../../../parametres/services/parametre.service';
 import { Parametre } from '../../../parametres/models/parametre.models';
 import { ToastService } from '../../../../core/services/toast.service';
+import { NotificationService } from '../../../../core/services/notification.service';
 
 type WorkflowTab = 'workflow' | 'state';
 
@@ -43,6 +44,7 @@ export class WorkflowPageComponent implements OnInit {
   private readonly profileService = inject(ProfileService);
   private readonly parametreService = inject(ParametreService);
   private readonly toastService = inject(ToastService);
+  private readonly notifService = inject(NotificationService);
 
   readonly activeTab = signal<WorkflowTab>('workflow');
   readonly filterWorkflowId = signal<string | null>(null);
@@ -197,6 +199,13 @@ export class WorkflowPageComponent implements OnInit {
 
     request.pipe(finalize(() => this.isActionLoading.set(false))).subscribe({
       next: () => {
+        const isNew = !selected?.id;
+        this.notifService.add({
+          type: 'workflow',
+          action: isNew ? 'create' : 'update',
+          title: isNew ? 'Nouvelle action workflow' : 'Action workflow modifiée',
+          message: isNew ? 'Une action a été ajoutée au workflow.' : 'L\'action workflow a été mise à jour.',
+        });
         this.loadActions();
         this.closeActionModal(true);
         this.toastService.show('Action enregistree avec succes', 'success');
@@ -235,6 +244,12 @@ export class WorkflowPageComponent implements OnInit {
       .pipe(finalize(() => this.isDeleteLoading.set(false)))
       .subscribe({
         next: () => {
+          this.notifService.add({
+            type: 'workflow',
+            action: 'delete',
+            title: 'Action workflow supprimée',
+            message: 'Une action workflow a été supprimée.',
+          });
           this.actions.update((actions) => actions.filter((action) => action.id !== id));
           this.hasLoadedActions.set(true);
           this.closeDeleteActionDialog(true);
@@ -296,6 +311,13 @@ export class WorkflowPageComponent implements OnInit {
 
     request.pipe(finalize(() => this.isStateLoading.set(false))).subscribe({
       next: () => {
+        const isNew = !selected?.id;
+        this.notifService.add({
+          type: 'workflow',
+          action: isNew ? 'create' : 'update',
+          title: isNew ? 'Nouvel état workflow' : 'État workflow modifié',
+          message: `${(sanitizedPayload as any)?.name ?? 'L\'état'} ${isNew ? 'a été créé' : 'a été mis à jour'}.`,
+        });
         this.loadStates();
         this.closeStateModal(true);
         this.toastService.show('Etat enregistre avec succes', 'success');
@@ -320,6 +342,12 @@ export class WorkflowPageComponent implements OnInit {
       .pipe(finalize(() => this.isDeleteStateLoading.set(false)))
       .subscribe({
         next: () => {
+          this.notifService.add({
+            type: 'workflow',
+            action: 'delete',
+            title: 'État workflow supprimé',
+            message: 'Un état workflow a été supprimé.',
+          });
           this.states.update((states) => states.filter((state) => state.id !== id));
           this.closeDeleteStateDialog(true);
           this.toastService.show('Etat supprime avec succes', 'success');
@@ -357,6 +385,13 @@ export class WorkflowPageComponent implements OnInit {
 
     request.pipe(finalize(() => this.isWorkflowLoading.set(false))).subscribe({
       next: () => {
+        const isNew = !selected?.id;
+        this.notifService.add({
+          type: 'workflow',
+          action: isNew ? 'create' : 'update',
+          title: isNew ? 'Nouveau workflow' : 'Workflow modifié',
+          message: `${(sanitizedPayload as any)?.label ?? 'Le workflow'} ${isNew ? 'a été créé' : 'a été mis à jour'}.`,
+        });
         this.loadWorkflows();
         this.closeWorkflowModal(true);
         this.toastService.show('Workflow enregistre avec succes', 'success');
@@ -404,6 +439,12 @@ export class WorkflowPageComponent implements OnInit {
       .pipe(finalize(() => this.isDeleteWorkflowLoading.set(false)))
       .subscribe({
         next: () => {
+          this.notifService.add({
+            type: 'workflow',
+            action: 'delete',
+            title: 'Workflow supprimé',
+            message: 'Un workflow a été supprimé.',
+          });
           this.workflows.update((workflows) => workflows.filter((workflow) => workflow.id !== id));
           this.actions.update((actions) => actions.filter((action) => action.idWorkflow !== id));
           this.hasLoadedActions.set(true);

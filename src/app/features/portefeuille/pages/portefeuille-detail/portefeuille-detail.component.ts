@@ -19,6 +19,8 @@ import { AppPageHeaderComponent } from '../../../../shared/ui/app-page-header/ap
 import { AdherentService } from '@features/adherents/services/adherent.service';
 import { Adherent } from '@features/adherents/models/adherent.model';
 import {RetraitDirectFormComponent } from'../../components/retrait-direct-form/retrait-direct-form.component';
+import { ToastService } from '../../../../core/services/toast.service';
+import { NotificationService } from '../../../../core/services/notification.service';
 
 
 
@@ -38,12 +40,12 @@ import {RetraitDirectFormComponent } from'../../components/retrait-direct-form/r
 })
 export class PortefeuilleDetailComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
-
   private readonly router = inject(Router);
-
   private readonly portefeuilleService = inject(PortefeuilleService);
-
   private readonly operationService = inject(OperationService);
+  private readonly adherentService = inject(AdherentService);
+  private readonly toastService = inject(ToastService);
+  private readonly notifService = inject(NotificationService);
 
   readonly adherentName = computed(() => this.adherent()?.name ?? '--');
 
@@ -75,8 +77,6 @@ export class PortefeuilleDetailComponent implements OnInit {
 
   readonly showDirectWithdrawModal = signal(false);
 
-  private readonly adherentService = inject(AdherentService);
-
   readonly adherent = signal<Adherent | null>(null);
 
   ngOnInit(): void {
@@ -107,11 +107,17 @@ export class PortefeuilleDetailComponent implements OnInit {
       .pipe(finalize(() => this.isActivating.set(false)))
       .subscribe({
         next: () => {
+          const adherentName = this.adherentName();
+          const amount = operation.montant ? ` — ${operation.montant} FCFA` : '';
+          this.notifService.add({
+            type: 'portefeuille',
+            action: 'validate',
+            title: 'Retrait validé',
+            message: `Demande de retrait de ${adherentName}${amount} validée.`,
+          });
           const adherentId = this.route.snapshot.paramMap.get('id');
-
           if (adherentId) {
             this.loadPortefeuille(adherentId);
-
             this.loadOperations(adherentId);
           }
         },
@@ -135,11 +141,16 @@ export class PortefeuilleDetailComponent implements OnInit {
       })
       .subscribe({
         next: () => {
+          const adherentName = this.adherentName();
+          this.notifService.add({
+            type: 'portefeuille',
+            action: 'reject',
+            title: 'Retrait rejeté',
+            message: `Demande de retrait de ${adherentName} a été rejetée.`,
+          });
           const adherentId = this.route.snapshot.paramMap.get('id');
-
           if (adherentId) {
             this.loadPortefeuille(adherentId);
-
             this.loadOperations(adherentId);
           }
         },
@@ -271,10 +282,16 @@ export class PortefeuilleDetailComponent implements OnInit {
             })
             .subscribe({
               next: () => {
+                const adherentName = this.adherentName();
+                const amount = operation.montant ? ` — ${operation.montant} FCFA` : '';
+                this.notifService.add({
+                  type: 'portefeuille',
+                  action: 'withdraw',
+                  title: 'Retrait direct effectué',
+                  message: `Retrait de ${adherentName}${amount} effectué avec succès.`,
+                });
                 this.closeDirectWithdrawModal();
-
                 this.loadPortefeuille(adherentId);
-
                 this.loadOperations(adherentId);
               },
 

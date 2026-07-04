@@ -18,6 +18,7 @@ import { AppPageHeaderComponent } from '../../../../shared/ui/app-page-header/ap
 import { AppConfirmDialogComponent } from '../../../../shared/ui/app-confirm-dialog/app-confirm-dialog.component';
 import { AppEmptyStateComponent } from '../../../../shared/ui/app-empty-state/app-empty-state.component';
 import { ToastService } from '../../../../core/services/toast.service';
+import { NotificationService } from '../../../../core/services/notification.service';
 import { AdherentStatsComponent } from '../../components/adherent-stats/adherent-stats.component';
 import { extractApiErrorMessage } from '../../utils/member-api.utils';
 
@@ -43,6 +44,7 @@ import { extractApiErrorMessage } from '../../utils/member-api.utils';
 export class AdherentsComponent implements OnInit {
   private readonly adherentService = inject(AdherentService);
   private readonly toastService = inject(ToastService);
+  private readonly notifService = inject(NotificationService);
   private readonly router = inject(Router);
 
   readonly adherents = signal<Adherent[]>([]);
@@ -182,7 +184,14 @@ export class AdherentsComponent implements OnInit {
         .update(selected.id, event.payload as UpdateMemberPayload)
         .pipe(finalize(() => this.isLoading.set(false)))
         .subscribe({
-          next: () => {
+          next: (res) => {
+            const name = res?.data?.name ?? selected?.name ?? '';
+            this.notifService.add({
+              type: 'adherent',
+              action: 'update',
+              title: 'Adhérent modifié',
+              message: `${name} a été mis à jour avec succès.`,
+            });
             this.loadAdherents();
             this.closeModal(true);
             this.toastService.show('Adherent modifie', 'success');
@@ -202,7 +211,14 @@ export class AdherentsComponent implements OnInit {
       .create(event.payload as CreateMemberPayload)
       .pipe(finalize(() => this.isLoading.set(false)))
       .subscribe({
-        next: () => {
+          next: (res) => {
+          const name = (event.payload as any)?.name ?? '';
+          this.notifService.add({
+            type: 'adherent',
+            action: 'create',
+            title: 'Nouvel adhérent',
+            message: `${name} a été enregistré avec succès.`,
+          });
           this.loadAdherents();
           this.currentPage.set(1);
           this.closeModal(true);
@@ -243,7 +259,13 @@ export class AdherentsComponent implements OnInit {
       .delete(adherent.id)
       .pipe(finalize(() => this.isDeleteLoading.set(false)))
       .subscribe({
-        next: () => {
+          next: () => {
+          this.notifService.add({
+            type: 'adherent',
+            action: 'delete',
+            title: 'Adhérent supprimé',
+            message: `${adherent.name} a été supprimé.`,
+          });
           this.adherents.update((items) => items.filter((item) => item.id !== adherent.id));
           this.syncCurrentPage();
           this.closeDeleteDialog(true);
@@ -284,6 +306,12 @@ export class AdherentsComponent implements OnInit {
       .pipe(finalize(() => this.isPageLoading.set(false)))
       .subscribe({
         next: () => {
+          this.notifService.add({
+            type: 'adherent',
+            action: 'activate',
+            title: 'Adhérent activé',
+            message: `${adherent.name} a été activé avec succès.`,
+          });
           this.toastService.show('Adhérent activé', 'success');
           this.loadAdherents();
         },
@@ -308,6 +336,12 @@ export class AdherentsComponent implements OnInit {
       .pipe(finalize(() => this.isPageLoading.set(false)))
       .subscribe({
         next: () => {
+          this.notifService.add({
+            type: 'adherent',
+            action: 'deactivate',
+            title: 'Adhérent désactivé',
+            message: `${adherent.name} a été désactivé.`,
+          });
           this.toastService.show('Adhérent désactivé', 'success');
           this.loadAdherents();
         },

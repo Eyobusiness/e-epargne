@@ -25,6 +25,7 @@ import { AppEmptyStateComponent } from '../../../../shared/ui/app-empty-state/ap
 
 
 import { ToastService } from '../../../../core/services/toast.service';
+import { NotificationService } from '../../../../core/services/notification.service';
 
 @Component({
   selector: 'app-operations',
@@ -49,6 +50,7 @@ export class OperationsComponent implements OnInit {
   private readonly service = inject(OperationService);
   private readonly adherentService = inject(AdherentService);
   private readonly toastService = inject(ToastService);
+  private readonly notifService = inject(NotificationService);
 
   readonly operations = signal<Operation[]>([]);
   readonly statsOperations = signal<Operation[]>([]);
@@ -203,9 +205,16 @@ export class OperationsComponent implements OnInit {
       .pipe(finalize(() => this.isLoading.set(false)))
       .subscribe({
         next: () => {
+          const type = selected.type_operation ?? 'opération';
+          const amount = selected.montant ? ` — ${selected.montant} FCFA` : '';
+          this.notifService.add({
+            type: 'operation',
+            action: 'validate',
+            title: 'Opération validée',
+            message: `${type}${amount} a été validée avec succès.`,
+          });
           this.closeModal(true);
           this.loadOperations();
-
           this.toastService.show('Paiement effectué', 'success');
         },
 
@@ -241,16 +250,21 @@ export class OperationsComponent implements OnInit {
       .pipe(finalize(() => this.isDeleteLoading.set(false)))
       .subscribe({
         next: () => {
+          const type = selected.type_operation ?? 'opération';
+          const amount = selected.montant ? ` — ${selected.montant} FCFA` : '';
+          this.notifService.add({
+            type: 'operation',
+            action: 'deactivate',
+            title: 'Opération annulée',
+            message: `${type}${amount} a été annulée.`,
+          });
           this.closeDeleteDialog(true);
-
           this.loadOperations();
-
           this.toastService.show('Paiement annulé', 'success');
         },
 
         error: (error) => {
           console.error(error);
-
           this.toastService.show('Erreur annulation', 'error');
         },
       });

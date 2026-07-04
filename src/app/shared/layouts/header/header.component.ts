@@ -13,15 +13,8 @@ import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 
 import { SessionService } from '../../../core/services/session.service';
+import { NotificationService, AppNotification } from '../../../core/services/notification.service';
 import { AvatarBgPipe } from '../../pipes/avatar-bg.pipe';
-
-interface NotificationItem {
-  id: string;
-  title: string;
-  message: string;
-  time: string;
-  read: boolean;
-}
 
 @Component({
   selector: 'app-header',
@@ -35,6 +28,7 @@ export class HeaderComponent {
   private readonly sessionService = inject(SessionService);
   private readonly router = inject(Router);
   private readonly platformId = inject(PLATFORM_ID);
+  readonly notifService = inject(NotificationService);
 
   @Output()
   toggleSidebar = new EventEmitter<void>();
@@ -48,13 +42,10 @@ export class HeaderComponent {
   readonly profilLabel = this.sessionService.profilLabel;
   readonly initials = this.sessionService.initials;
 
-  readonly notifications = signal<NotificationItem[]>([]);
-
-  readonly unreadCount = computed(
-    () => this.notifications().filter((item) => !item.read).length,
-  );
-
-  readonly hasUnread = computed(() => this.unreadCount() > 0);
+  // Delegate to notification service
+  readonly notifications = this.notifService.notifications;
+  readonly unreadCount = this.notifService.unreadCount;
+  readonly hasUnread = this.notifService.hasUnread;
 
   constructor() {
     this.initializeTheme();
@@ -64,7 +55,7 @@ export class HeaderComponent {
     if (isPlatformBrowser(this.platformId)) {
       const theme = localStorage.getItem('theme');
       const isDark = theme === 'dark';
-      
+
       this.isDarkMode.set(isDark);
       if (isDark) {
         document.body.classList.add('dark-mode');
@@ -86,10 +77,12 @@ export class HeaderComponent {
     }
   }
 
+  markNotifRead(id: string): void {
+    this.notifService.markAsRead(id);
+  }
+
   markAllNotificationsRead(): void {
-    this.notifications.update((items) =>
-      items.map((item) => ({ ...item, read: true })),
-    );
+    this.notifService.markAllRead();
   }
 
   toggleProfileMenu(): void {
@@ -122,6 +115,17 @@ export class HeaderComponent {
         document.body.classList.remove('dark-mode');
       }
     }
+  }
+
+  relativeTime(isoString: string): string {
+    const diff = Date.now() - new Date(isoString).getTime();
+    const minutes = Math.floor(diff / 60000);
+    if (minutes < 1) return "à l'instant";
+    if (minutes < 60) return `il y a ${minutes} min`;
+    const hours = Math.floor(minutes / 60);
+    if (hours < 24) return `il y a ${hours}h`;
+    const days = Math.floor(hours / 24);
+    return `il y a ${days}j`;
   }
 
   @HostListener('document:click', ['$event'])

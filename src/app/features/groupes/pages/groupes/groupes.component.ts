@@ -29,6 +29,7 @@ import { AppConfirmDialogComponent } from '../../../../shared/ui/app-confirm-dia
 import { AppEmptyStateComponent } from '../../../../shared/ui/app-empty-state/app-empty-state.component';
 
 import { ToastService } from '../../../../core/services/toast.service';
+import { NotificationService } from '../../../../core/services/notification.service';
 
 @Component({
   selector: 'app-groupes',
@@ -51,9 +52,8 @@ import { ToastService } from '../../../../core/services/toast.service';
 })
 export class GroupesComponent implements OnInit {
   private readonly groupeService = inject(GroupeService);
-
   private readonly toastService = inject(ToastService);
-
+  private readonly notifService = inject(NotificationService);
   private readonly router = inject(Router);
 
   readonly groupes = signal<Groupe[]>([]);
@@ -188,19 +188,20 @@ export class GroupesComponent implements OnInit {
         .pipe(finalize(() => this.isLoading.set(false)))
         .subscribe({
           next: () => {
+            this.notifService.add({
+              type: 'groupe',
+              action: 'update',
+              title: 'Groupe modifié',
+              message: `${selected?.name ?? 'Le groupe'} a été mis à jour.`,
+            });
             this.groupes.update((items) =>
               items.map((item) =>
                 item.id === selected.id
-                  ? {
-                      ...item,
-                      ...payload,
-                    }
+                  ? { ...item, ...payload }
                   : item,
               ),
             );
-
             this.closeModal(true);
-
             this.toastService.show('Groupe modifie', 'success');
           },
 
@@ -217,11 +218,15 @@ export class GroupesComponent implements OnInit {
       .pipe(finalize(() => this.isLoading.set(false)))
       .subscribe({
         next: () => {
+          this.notifService.add({
+            type: 'groupe',
+            action: 'create',
+            title: 'Nouveau groupe',
+            message: `${(payload as any)?.name ?? 'Le groupe'} a été créé avec succès.`,
+          });
           this.loadGroupes();
           this.currentPage.set(1);
-
           this.closeModal(true);
-
           this.toastService.show('Groupe ajoute', 'success');
         },
 
@@ -259,6 +264,12 @@ export class GroupesComponent implements OnInit {
       .pipe(finalize(() => this.isDeleteLoading.set(false)))
       .subscribe({
         next: () => {
+          this.notifService.add({
+            type: 'groupe',
+            action: 'delete',
+            title: 'Groupe supprimé',
+            message: `${groupe.name} a été supprimé.`,
+          });
           this.groupes.update((items) => items.filter((item) => item.id !== groupe.id));
 
           this.closeDeleteDialog(true);

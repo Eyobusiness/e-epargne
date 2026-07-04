@@ -1,0 +1,80 @@
+<app-page-header
+  title="Historique des notifications"
+  description="Consultez les 100 dernières actions effectuées sur l'application"
+  buttonText=""
+  icon="bi bi-bell">
+</app-page-header>
+
+<div class="page-content container-fluid py-4">
+  @if (notifications().length > 0) {
+    <div class="d-flex justify-content-between align-items-center mb-4 gap-2 flex-wrap">
+      <div class="d-flex align-items-center gap-2">
+        <span class="badge bg-primary-light text-primary rounded-pill px-3 py-2">
+          {{ notifications().length }} notification{{ notifications().length > 1 ? 's' : '' }} au total
+        </span>
+        @if (unreadCount() > 0) {
+          <span class="badge bg-warning-light text-warning rounded-pill px-3 py-2">
+            {{ unreadCount() }} non lue{{ unreadCount() > 1 ? 's' : '' }}
+          </span>
+        }
+      </div>
+
+      <div class="d-flex gap-2">
+        @if (unreadCount() > 0) {
+          <button
+            type="button"
+            class="btn btn-outline-primary btn-sm d-flex align-items-center gap-1 rounded-3 px-3 py-2"
+            (click)="markAllAsRead()">
+            <i class="bi bi-check-all"></i>
+            Tout marquer lu
+          </button>
+        }
+        <button
+          type="button"
+          class="btn btn-outline-danger btn-sm d-flex align-items-center gap-1 rounded-3 px-3 py-2"
+          (click)="clearAll()">
+          <i class="bi bi-trash3"></i>
+          Vider l'historique
+        </button>
+      </div>
+    </div>
+
+    <div class="notifications-list shadow-sm border rounded-4 overflow-hidden">
+      @for (item of notifications(); track item.id) {
+        <div
+          class="notification-row p-3 d-flex align-items-start gap-3 border-bottom transition-all"
+          [class.unread]="!item.read"
+          (click)="markAsRead(item.id)"
+          role="button"
+          [attr.aria-label]="item.title">
+          
+          <div class="notif-icon-container" [style.background]="item.color + '1a'">
+            <i class="bi {{ item.icon }}" [style.color]="item.color"></i>
+          </div>
+
+          <div class="notif-details flex-grow-1 min-w-0">
+            <div class="d-flex align-items-center justify-content-between gap-2 mb-1 flex-wrap">
+              <h6 class="notif-row-title mb-0 fw-bold d-flex align-items-center gap-2">
+                {{ item.title }}
+                @if (!item.read) {
+                  <span class="notif-indicator-dot"></span>
+                }
+              </h6>
+              <span class="notif-row-time text-muted small">
+                {{ relativeTime(item.timestamp) }}
+              </span>
+            </div>
+            <p class="notif-row-message mb-0 text-secondary">
+              {{ item.message }}
+            </p>
+          </div>
+        </div>
+      }
+    </div>
+  } @else {
+    <app-empty-state
+      title="Historique vide"
+      description="Vous n'avez reçu aucune notification pour le moment.">
+    </app-empty-state>
+  }
+</div>

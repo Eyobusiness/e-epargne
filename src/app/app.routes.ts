@@ -142,6 +142,16 @@ export const routes: Routes = [
           import('./features/collection/routes/collection.routes').then((m) => m.COLLECTION_ROUTES),
       },
 
+      //notifications routes
+      {
+        path: 'notifications',
+        title: 'Historique des Notifications',
+        loadChildren: () =>
+          import('./features/notifications/routes/notifications.routes').then(
+            (m) => m.NOTIFICATIONS_ROUTES,
+          ),
+      },
+
       //change password routes
       {
         path: 'auth',

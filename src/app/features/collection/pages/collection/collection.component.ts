@@ -5,6 +5,7 @@ import { finalize } from 'rxjs';
 import { CollectionService } from '../../services/collection.service';
 import { Collection } from '../../models/collection.model';
 import { ToastService } from '../../../../core/services/toast.service';
+import { NotificationService } from '../../../../core/services/notification.service';
 import { AppPageHeaderComponent } from '../../../../shared/ui/app-page-header/app-page-header.component';
 import { AppEmptyStateComponent } from '../../../../shared/ui/app-empty-state/app-empty-state.component';
 
@@ -18,6 +19,7 @@ import { AppEmptyStateComponent } from '../../../../shared/ui/app-empty-state/ap
 export class CollectionComponent implements OnInit {
   private readonly collectionService = inject(CollectionService);
   private readonly toastService      = inject(ToastService);
+  private readonly notifService      = inject(NotificationService);
 
   // ─── État principal ──────────────────────────────────────────────────────
   // L'agent est embarqué dans chaque item → plus besoin de charger les adhérents
@@ -170,6 +172,14 @@ export class CollectionComponent implements OnInit {
       .pipe(finalize(() => this.actionLoading.set(null)))
       .subscribe({
         next: (updated) => {
+          const agentName = this.agentName(item);
+          const amount = item.amount ? ` — ${item.amount} FCFA` : '';
+          this.notifService.add({
+            type: 'collection',
+            action: 'validate',
+            title: 'Collecte validée',
+            message: `Collecte de ${agentName}${amount} validée avec succès.`,
+          });
           this.patchCollection(updated);
           this.toastService.show('✅ Collecte validée avec succès', 'success');
         },
@@ -186,6 +196,14 @@ export class CollectionComponent implements OnInit {
       .pipe(finalize(() => this.actionLoading.set(null)))
       .subscribe({
         next: (updated) => {
+          const agentName = this.agentName(item);
+          const amount = item.amount ? ` — ${item.amount} FCFA` : '';
+          this.notifService.add({
+            type: 'collection',
+            action: 'reject',
+            title: 'Collecte rejetée',
+            message: `Collecte de ${agentName}${amount} a été rejetée.`,
+          });
           this.patchCollection(updated);
           this.toastService.show('❌ Collecte rejetée', 'warning');
         },
