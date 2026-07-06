@@ -109,6 +109,8 @@
 
           <th>Date</th>
 
+          <th>Opérateur</th>
+
           <th>Statut</th>
 
           <th></th>
@@ -169,6 +171,10 @@
                 | date:'dd/MM/yyyy'
               }}
 
+            </td>
+
+            <td>
+              {{ item.user_action | resolveUser }}
             </td>
 
             <td>

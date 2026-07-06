@@ -18,6 +18,8 @@
 
         <th>Date</th>
 
+        <th>Opérateur</th>
+
         <th>Statut</th>
 
         <th>Actions</th>
@@ -110,6 +112,10 @@
           </td>
 
           <td>
+            {{ item.user_action | resolveUser }}
+          </td>
+
+          <td>
 
             <span
               class="status-badge"
@@ -179,7 +185,7 @@
         <tr>
 
           <td
-            colspan="8"
+            colspan="9"
             class="empty-row">
 
             Aucune opération trouvée

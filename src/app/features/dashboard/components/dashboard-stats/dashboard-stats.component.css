@@ -7,11 +7,11 @@
   position: relative;
   display: flex;
   align-items: center;
-  gap: 20px;
-  height: 120px;
+  gap: 15px;
+  height: 96px;
   background: #ffffff;
-  border-radius: 22px;
-  padding: 1.5rem 1.25rem;
+  border-radius: 16px;
+  padding: 1rem 1.15rem;
   overflow: hidden;
   border: 1px solid #f1f5f9;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
@@ -19,28 +19,28 @@
 }
 
 .stat-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.02);
+  transform: translateY(-4px);
+  box-shadow: 0 15px 20px -5px rgba(0, 0, 0, 0.05), 0 8px 8px -5px rgba(0, 0, 0, 0.02);
   border-color: rgba(59, 130, 246, 0.15);
 }
 
 /* HOVER ICON INTERACTION */
 .stat-card:hover .icon {
-  transform: scale(1.1) rotate(4deg);
+  transform: scale(1.08) rotate(3deg);
 }
 
 /* ICON BOX STYLE */
 .icon {
-  width: 58px;
-  height: 58px;
-  min-width: 58px;
-  border-radius: 18px;
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.65rem;
+  font-size: 1.35rem;
   color: #ffffff;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.06);
   transition: all 0.3s ease;
 }
 
@@ -54,9 +54,9 @@
 .content span {
   display: block;
   color: #64748b;
-  font-size: 0.8rem;
+  font-size: 0.72rem;
   font-weight: 700;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
   text-transform: uppercase;
   letter-spacing: 0.8px;
 }
@@ -64,7 +64,7 @@
 .content h4 {
   margin: 0;
   color: #0f172a;
-  font-size: 1.35rem;
+  font-size: 1.15rem;
   font-weight: 800;
   letter-spacing: -0.5px;
 }
@@ -157,30 +157,30 @@
 }
 
 .skeleton-icon {
-  width: 58px;
-  height: 58px;
-  border-radius: 18px;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
   background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
   background-size: 200% 100%;
   animation: loading-shimmer 1.5s infinite;
 }
 
 .skeleton-text {
-  border-radius: 8px;
+  border-radius: 6px;
   background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
   background-size: 200% 100%;
   animation: loading-shimmer 1.5s infinite;
 }
 
 .skeleton-label {
-  width: 100px;
-  height: 12px;
-  margin-bottom: 10px;
+  width: 80px;
+  height: 10px;
+  margin-bottom: 8px;
 }
 
 .skeleton-value {
-  width: 140px;
-  height: 20px;
+  width: 110px;
+  height: 16px;
 }
 
 @keyframes loading-shimmer {
@@ -196,20 +196,20 @@
 @media (max-width: 768px) {
   .stat-card {
     height: auto;
-    min-height: 100px;
-    padding: 1rem;
-    gap: 14px;
+    min-height: 84px;
+    padding: 0.75rem 1rem;
+    gap: 12px;
   }
 
   .content h4 {
-    font-size: 1.15rem;
+    font-size: 1.05rem;
   }
 
   .icon {
-    width: 50px;
-    height: 50px;
-    min-width: 50px;
-    font-size: 1.4rem;
-    border-radius: 14px;
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    font-size: 1.15rem;
+    border-radius: 10px;
   }
 }

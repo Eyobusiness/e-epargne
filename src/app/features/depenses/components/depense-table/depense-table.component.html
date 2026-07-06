@@ -10,6 +10,7 @@
         <th>Montant</th>
         <th>Date</th>
         <th>Document</th>
+        <th>Opérateur</th>
         <th>Status</th>
         <th>Actions</th>
       </tr>
@@ -52,6 +53,9 @@
                 Non
               </span>
             }
+          </td>
+          <td>
+            {{ item.user_action | resolveUser }}
           </td>
           <td>
             <span class="status badge-succes" [class.active]="isActive(item.status)">

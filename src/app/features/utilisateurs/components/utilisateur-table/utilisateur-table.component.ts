@@ -3,11 +3,12 @@ import { Component, computed, effect, input, output, signal } from '@angular/cor
 
 import { User } from '../../models/utilisateur.model';
 import { AvatarBgPipe } from '../../../../shared/pipes/avatar-bg.pipe';
+import { ResolveUserPipe } from '../../../../shared/pipes/resolve-user.pipe';
 
 @Component({
   selector: 'app-utilisateur-table',
   standalone: true,
-  imports: [CommonModule, AvatarBgPipe],
+  imports: [CommonModule, AvatarBgPipe, ResolveUserPipe],
   templateUrl: './utilisateur-table.component.html',
   styleUrls: ['./utilisateur-table.component.css'],
 })

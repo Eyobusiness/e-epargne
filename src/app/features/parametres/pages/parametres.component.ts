@@ -50,8 +50,9 @@ export class ParametresComponent implements OnInit {
   readonly filteredParametres = computed(() => {
     const query = this.search().toLowerCase().trim();
     const type = this.selectedType();
+    const list = this.parametres() || [];
 
-    return this.parametres().filter((item) => {
+    return list.filter((item) => {
       if (!item) {
         return false;
       }
@@ -68,18 +69,18 @@ export class ParametresComponent implements OnInit {
     });
   });
 
-  readonly totalItems = computed(() => this.filteredParametres().length);
+  readonly totalItems = computed(() => (this.filteredParametres() || []).length);
   readonly totalPages = computed(() => Math.max(1, Math.ceil(this.totalItems() / this.itemsPerPage)));
   readonly paginatedParametres = computed(() => {
     const start = (this.currentPage() - 1) * this.itemsPerPage;
 
-    return this.filteredParametres().slice(start, start + this.itemsPerPage);
+    return (this.filteredParametres() || []).slice(start, start + this.itemsPerPage);
   });
-  readonly isEmpty = computed(() => !this.isPageLoading() && this.parametres().length === 0);
+  readonly isEmpty = computed(() => !this.isPageLoading() && (this.parametres() || []).length === 0);
   readonly hasMultiplePages = computed(() => this.totalItems() > this.itemsPerPage);
-  readonly hasStoredParametres = computed(() => !this.isPageLoading() && this.parametres().length > 0);
-  readonly hasFilteredResults = computed(() => !this.isPageLoading() && this.filteredParametres().length > 0);
-  readonly isFilterEmpty = computed(() => this.hasStoredParametres() && this.filteredParametres().length === 0);
+  readonly hasStoredParametres = computed(() => !this.isPageLoading() && (this.parametres() || []).length > 0);
+  readonly hasFilteredResults = computed(() => !this.isPageLoading() && (this.filteredParametres() || []).length > 0);
+  readonly isFilterEmpty = computed(() => this.hasStoredParametres() && (this.filteredParametres() || []).length === 0);
   readonly emptyStateDescription = computed(() => 'Aucun parametre disponible actuellement');
 
   ngOnInit(): void {
@@ -98,10 +99,14 @@ export class ParametresComponent implements OnInit {
       .pipe(finalize(() => this.isPageLoading.set(false)))
       .subscribe({
         next: (response) => {
-          this.parametres.set(response.data.items);
+          const items = Array.isArray(response?.data)
+            ? response.data
+            : (response?.data?.items ?? []);
+          this.parametres.set(items);
           this.syncCurrentPage();
         },
         error: () => {
+          this.parametres.set([]);
           this.toastService.show('Erreur chargement parametres', 'error');
         },
       });
@@ -171,7 +176,7 @@ export class ParametresComponent implements OnInit {
       .pipe(finalize(() => this.isDeleteLoading.set(false)))
       .subscribe({
         next: () => {
-          this.parametres.update((items) => items.filter((item) => item.id !== parametre.id));
+          this.parametres.update((items) => (items || []).filter((item) => item.id !== parametre.id));
           this.syncCurrentPage();
           this.closeDeleteDialog(true);
           this.closeModal(true);

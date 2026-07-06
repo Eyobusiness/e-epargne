@@ -8,11 +8,12 @@ import { ToastService } from '../../../../core/services/toast.service';
 import { NotificationService } from '../../../../core/services/notification.service';
 import { AppPageHeaderComponent } from '../../../../shared/ui/app-page-header/app-page-header.component';
 import { AppEmptyStateComponent } from '../../../../shared/ui/app-empty-state/app-empty-state.component';
+import { ResolveUserPipe } from '../../../../shared/pipes/resolve-user.pipe';
 
 @Component({
   selector: 'app-collection-page',
   standalone: true,
-  imports: [CommonModule, FormsModule, AppPageHeaderComponent, AppEmptyStateComponent],
+  imports: [CommonModule, FormsModule, AppPageHeaderComponent, AppEmptyStateComponent, ResolveUserPipe],
   templateUrl: './collection.component.html',
   styleUrls: ['./collection.component.css'],
 })

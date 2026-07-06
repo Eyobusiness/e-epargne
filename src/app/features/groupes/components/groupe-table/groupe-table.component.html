@@ -18,6 +18,8 @@
 
         <th>Montant max</th>
 
+        <th>Opérateur</th>
+
         <th>Statut</th>
 
         <th>Actions</th>
@@ -87,6 +89,10 @@
             }}
             FCFA
 
+          </td>
+
+          <td>
+            {{ item.user_action | resolveUser }}
           </td>
 
           <td>

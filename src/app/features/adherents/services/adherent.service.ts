@@ -1,5 +1,5 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Injectable, inject } from '@angular/core';
+import { Injectable, inject, signal } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { environment } from '../../../../environments/environment';
@@ -18,6 +18,36 @@ export class AdherentService {
   private readonly http = inject(HttpClient);
 
   private readonly apiUrl = `${environment.apiUrl}/members`;
+
+  readonly membersCache = signal<Adherent[]>([]);
+  private isFetchingCache = false;
+
+  loadAllMembersToCache(): void {
+    if (this.isFetchingCache) {
+      return;
+    }
+    this.isFetchingCache = true;
+
+    this.getAll(1, 1000, '', '200').subscribe({
+      next: (resActive) => {
+        const activeItems = resActive?.data?.items ?? [];
+        this.getAll(1, 1000, '', '300').subscribe({
+          next: (resInactive) => {
+            const inactiveItems = resInactive?.data?.items ?? [];
+            this.membersCache.set([...activeItems, ...inactiveItems]);
+            this.isFetchingCache = false;
+          },
+          error: () => {
+            this.membersCache.set(activeItems);
+            this.isFetchingCache = false;
+          }
+        });
+      },
+      error: () => {
+        this.isFetchingCache = false;
+      }
+    });
+  }
 
   getAll(page = 1, limit = 10, search = '', status?: string): Observable<MemberListResponse> {
     let params = new HttpParams()

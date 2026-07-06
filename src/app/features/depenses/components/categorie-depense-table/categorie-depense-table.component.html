@@ -11,6 +11,7 @@
         <th>Description</th>
         <th>Code</th>
         <th>Status</th>
+        <th>Opérateur</th>
         <th>Date creation</th>
         <th class="actions-column">Actions</th>
       </tr>
@@ -57,6 +58,10 @@
           {{ item.status === '200' ? 'Actif' : 'Inactif' }}
 
         </span>
+      </td>
+
+      <td>
+        {{ item.user_action | resolveUser }}
       </td>
 
       <td>

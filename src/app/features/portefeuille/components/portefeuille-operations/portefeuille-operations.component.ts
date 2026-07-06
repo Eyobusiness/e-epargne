@@ -4,11 +4,12 @@ import { FormsModule } from '@angular/forms';
 
 import { Operation } from '../../../operations/models/operation.model';
 import { FormatMontantPipe } from '@shared/pipes/pipe.component';
+import { ResolveUserPipe } from '../../../../shared/pipes/resolve-user.pipe';
 
 @Component({
   selector: 'app-portefeuille-operations',
   standalone: true,
-  imports: [CommonModule, FormsModule, FormatMontantPipe],
+  imports: [CommonModule, FormsModule, FormatMontantPipe, ResolveUserPipe],
   providers: [DatePipe],
   templateUrl: './portefeuille-operations.component.html',
   styleUrls: ['./portefeuille-operations.component.css'],
@@ -245,7 +246,7 @@ export class PortefeuilleOperationsComponent {
 </head>
 <body>
   <div class="recu-header">
-    <div class="recu-logo">e<span>-</span>Épargne</div>
+    <div class="recu-logo">e<span>-</span>Cotisation</div>
     <div class="recu-meta">
       <strong>REÇU DE ${typeLabel.toUpperCase()}</strong><br>
       Réf : ${item.id?.slice(0, 12).toUpperCase() ?? 'N/A'}<br>
@@ -300,7 +301,7 @@ export class PortefeuilleOperationsComponent {
 
   <div class="recu-footer">
     <div>Ce reçu est généré automatiquement et fait foi de l'opération effectuée.</div>
-    <div>e-Épargne — Système de gestion de tontine</div>
+    <div>e-cotisation — Système de gestion de cotisation</div>
     ${item.status === '200' ? '<div class="stamp">Validé</div>' : ''}
   </div>
 </body>

@@ -35,6 +35,8 @@ export interface Operation {
 
   adherent?: Adherent;
 
+  user_action?:string;
+
   created_at?: string;
 
   updated_at?: string;

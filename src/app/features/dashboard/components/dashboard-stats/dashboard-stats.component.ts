@@ -24,5 +24,7 @@ export class DashboardStatsComponent {
   readonly adherentInactif = computed(() => this.stats()?.adherentInactif ?? 0);
   readonly totalCommissionRetrait = computed(() => this.stats()?.totalCommissionRetrait ?? 0);
   readonly soldeCommission = computed(() => this.stats()?.soldeCommission ?? 0);
-  readonly tauxCommissionRetrait = computed(() => this.stats()?.tauxCommissionRetrait ?? 0);
+  readonly tauxcotisation = computed(() => this.totalDapotPaye()/this.totalDepot()*100);
+  readonly totalDepense = computed(() => this.stats()?.totalDepense ?? 0);
 }
+

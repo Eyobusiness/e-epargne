@@ -4,11 +4,12 @@ import { CommonModule } from '@angular/common';
 import { Component, input, output } from '@angular/core';
 
 import { CategorieDepense } from '../../models/categorie-depense.model';
+import { ResolveUserPipe } from '../../../../shared/pipes/resolve-user.pipe';
 
 @Component({
   selector: 'app-categorie-depense-table',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ResolveUserPipe],
   templateUrl: './categorie-depense-table.component.html',
   styleUrls: ['./categorie-depense-table.component.css'],
 })

@@ -3,11 +3,12 @@ import { Component, input, output } from '@angular/core';
 
 import { Operation } from '../../models/operation.model';
 import { AvatarBgPipe } from '../../../../shared/pipes/avatar-bg.pipe';
+import { ResolveUserPipe } from '../../../../shared/pipes/resolve-user.pipe';
 
 @Component({
   selector: 'app-operation-table',
   standalone: true,
-  imports: [CommonModule, AvatarBgPipe],
+  imports: [CommonModule, AvatarBgPipe, ResolveUserPipe],
   templateUrl: './operation-table.component.html',
   styleUrls: ['./operation-table.component.css'],
 })

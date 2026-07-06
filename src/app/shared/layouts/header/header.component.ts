@@ -54,8 +54,17 @@ export class HeaderComponent {
   readonly unreadCount = this.notifService.unreadCount;
   readonly hasUnread = this.notifService.hasUnread;
 
+  private nowTime = Date.now();
+
   constructor() {
     this.initializeTheme();
+    this.notifService.loadNotifications();
+
+    if (isPlatformBrowser(this.platformId)) {
+      setInterval(() => {
+        this.nowTime = Date.now();
+      }, 30000);
+    }
   }
 
   private initializeTheme(): void {
@@ -245,7 +254,7 @@ export class HeaderComponent {
   }
 
   relativeTime(isoString: string): string {
-    const diff = Date.now() - new Date(isoString).getTime();
+    const diff = this.nowTime - new Date(isoString).getTime();
     const minutes = Math.floor(diff / 60000);
     if (minutes < 1) return "à l'instant";
     if (minutes < 60) return `il y a ${minutes} min`;

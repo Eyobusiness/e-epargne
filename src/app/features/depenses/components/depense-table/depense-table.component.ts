@@ -3,11 +3,12 @@ import { Component, input, output } from '@angular/core';
 
 import { Depense } from '../../models/depense.model';
 import { getCategorieLabel, isDepenseActive } from '../../utils/depense-api.utils';
+import { ResolveUserPipe } from '../../../../shared/pipes/resolve-user.pipe';
 
 @Component({
   selector: 'app-depense-table',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ResolveUserPipe],
   templateUrl: './depense-table.component.html',
   styleUrls: ['./depense-table.component.css'],
 })

@@ -8,6 +8,7 @@
         <th>Email</th>
         <th>Adresse</th>
         <th>Matricule</th>
+        <th>Opérateur</th>
         <th>Statut</th>
         <th>Actions</th>
       </tr>
@@ -28,6 +29,7 @@
           <td>{{ item.email }}</td>
           <td><span class="address">{{ item.address }}</span></td>
           <td>{{ item.matricule || '--' }}</td>
+          <td>{{ item.user_action | resolveUser }}</td>
           <td>
             <span class="status-badge" [class.active]="isActive(item.status)">
               {{ statusLabel(item.status) }}
@@ -61,7 +63,7 @@
         </tr>
       } @empty {
         <tr>
-          <td colspan="8">Aucun adherent</td>
+          <td colspan="9">Aucun adherent</td>
         </tr>
       }
     </tbody>

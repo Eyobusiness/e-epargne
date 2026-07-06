@@ -109,6 +109,16 @@
         </div>
       </div>
     </div>
+    <!-- DEPENSES -->
+    <div class="col-xl-3 col-lg-4 col-md-6">
+      <div class="stat-card stat-orange">
+        <div class="icon"><i class="bi bi-cart-dash-fill"></i></div>
+        <div class="content">
+          <span>Total dépenses</span>
+          <h4>{{ totalDepense() | formatMontant }} FCFA</h4>
+        </div>
+      </div>
+    </div>
 
     <!-- ACTIFS -->
     <div class="col-xl-3 col-lg-4 col-md-6">
@@ -133,7 +143,7 @@
     </div>
 
     <!-- COMMISSION RETRAIT -->
-    <div class="col-xl-4 col-md-6">
+    <div class="col-xl-3 col-lg-4 col-md-6">
       <div class="stat-card stat-purple">
         <div class="icon"><i class="bi bi-percent"></i></div>
         <div class="content">
@@ -144,7 +154,7 @@
     </div>
 
     <!-- SOLDE COMMISSION -->
-    <div class="col-xl-4 col-md-6">
+    <div class="col-xl-3 col-lg-4 col-md-6">
       <div class="stat-card stat-dark">
         <div class="icon"><i class="bi bi-bank"></i></div>
         <div class="content">
@@ -155,12 +165,12 @@
     </div>
 
     <!-- TAUX -->
-    <div class="col-xl-4 col-md-12">
+    <div class="col-xl-3 col-lg-4 col-md-6">
       <div class="stat-card stat-cyan">
         <div class="icon"><i class="bi bi-graph-up-arrow"></i></div>
         <div class="content">
-          <span>Taux commission</span>
-          <h4>{{ tauxCommissionRetrait() }} %</h4>
+          <span>Taux de cotisations</span>
+          <h4>{{ tauxcotisation() | number:'1.2-2' }} %</h4>
         </div>
       </div>
     </div>

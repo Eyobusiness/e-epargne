@@ -6,11 +6,12 @@ import { Component, input, output } from '@angular/core';
 import { Groupe } from '../../models/groupe.model';
 import { getGroupStatusLabel, isGroupActive } from '../../utils/group-status.utils';
 import { AvatarBgPipe } from '../../../../shared/pipes/avatar-bg.pipe';
+import { ResolveUserPipe } from '../../../../shared/pipes/resolve-user.pipe';
 
 @Component({
   selector: 'app-groupe-table',
   standalone: true,
-  imports: [CommonModule, AvatarBgPipe],
+  imports: [CommonModule, AvatarBgPipe, ResolveUserPipe],
   templateUrl: './groupe-table.component.html',
   styleUrls: ['./groupe-table.component.css'],
 })

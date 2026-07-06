@@ -5,11 +5,12 @@ import { Component, input, output } from '@angular/core';
 
 import { CotisationAdherent } from '../../models/cotisation-adherent.model';
 import { AvatarBgPipe } from '../../../../shared/pipes/avatar-bg.pipe';
+import { ResolveUserPipe } from '../../../../shared/pipes/resolve-user.pipe';
 
 @Component({
   selector: 'app-cotisation-adherent-table',
   standalone: true,
-  imports: [CommonModule, AvatarBgPipe],
+  imports: [CommonModule, AvatarBgPipe, ResolveUserPipe],
   templateUrl: './cotisation-adherent-table.component.html',
   styleUrls: ['./cotisation-adherent-table.component.css'],
 })

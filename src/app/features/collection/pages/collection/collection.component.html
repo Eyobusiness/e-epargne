@@ -133,6 +133,7 @@
               <tr>
                 <th><i class="bi bi-person-badge me-1"></i>Agent collecteur</th>
                 <th><i class="bi bi-cash-coin me-1"></i>Montant</th>
+                <th><i class="bi bi-person me-1"></i>Opérateur</th>
                 <th><i class="bi bi-info-circle me-1"></i>Statut</th>
                 <th><i class="bi bi-calendar3 me-1"></i>Date de collecte</th>
                 <th class="th-actions">Actions</th>
@@ -173,6 +174,11 @@
                       {{ item.amount | number:'1.0-0' }}
                       <small>FCFA</small>
                     </span>
+                  </td>
+
+                  <!-- Opérateur -->
+                  <td>
+                    <span>{{ item.user_action | resolveUser }}</span>
                   </td>
 
                   <!-- Statut -->

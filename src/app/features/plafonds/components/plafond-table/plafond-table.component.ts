@@ -2,11 +2,12 @@ import { Component, EventEmitter, Output, input, signal, computed } from '@angul
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Plafond } from '../../models/plafond.model';
+import { ResolveUserPipe } from '../../../../shared/pipes/resolve-user.pipe';
 
 @Component({
   selector: 'app-plafond-table',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ResolveUserPipe],
   templateUrl: './plafond-table.component.html',
   styleUrls: ['./plafond-table.component.css'],
 })

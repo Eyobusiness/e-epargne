@@ -17,6 +17,7 @@
           <th>Nom</th>
           <th>Montant Max (FCFA)</th>
           <th>Description</th>
+          <th>Opérateur</th>
           <th>Statut</th>
           <th class="text-end">Actions</th>
         </tr>
@@ -31,6 +32,7 @@
               <span class="amount-badge">{{ item.amount | number:'1.0-0' }} FCFA</span>
             </td>
             <td>{{ item.description || '--' }}</td>
+            <td>{{ item.user_action | resolveUser }}</td>
             <td>
               <button
                 type="button"
@@ -56,7 +58,7 @@
         }
         @if (filteredItems().length === 0) {
           <tr>
-            <td colspan="5">
+            <td colspan="6">
               <div class="empty-state-row">
                 <i class="bi bi-info-circle"></i>
                 Aucun plafond trouvé

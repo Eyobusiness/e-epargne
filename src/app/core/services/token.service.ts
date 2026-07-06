@@ -15,7 +15,7 @@ export class TokenService {
       return;
     }
 
-    localStorage.setItem(this.TOKEN_KEY, token);
+    sessionStorage.setItem(this.TOKEN_KEY, token);
   }
 
   getToken(): string | null {
@@ -23,7 +23,7 @@ export class TokenService {
       return null;
     }
 
-    return localStorage.getItem(this.TOKEN_KEY);
+    return sessionStorage.getItem(this.TOKEN_KEY);
   }
 
   removeToken(): void {
@@ -31,7 +31,7 @@ export class TokenService {
       return;
     }
 
-    localStorage.removeItem(this.TOKEN_KEY);
+    sessionStorage.removeItem(this.TOKEN_KEY);
   }
 
   hasToken(): boolean {

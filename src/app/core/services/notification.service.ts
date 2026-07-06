@@ -3,6 +3,8 @@ import { isPlatformBrowser } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
+import { TokenService } from './token.service';
+import { ToastService } from './toast.service';
 
 export type NotifType =
   | 'adherent'
@@ -37,6 +39,7 @@ export interface AppNotification {
   read: boolean;
   icon: string;
   color: string;
+  isServerNotif?: boolean;
 }
 
 const STORAGE_KEY = 'ee_notifications';
@@ -49,8 +52,11 @@ const DISPLAY_COUNT = 10;
 export class NotificationService {
   private readonly platformId = inject(PLATFORM_ID);
   private readonly http = inject(HttpClient);
+  private readonly tokenService = inject(TokenService);
+  private readonly toastService = inject(ToastService);
 
   private readonly _notifications = signal<AppNotification[]>(this.loadFromStorage());
+  private isFirstLoad = true;
 
   /** Les 10 dernières notifications affichées dans le panel */
   readonly notifications = computed(() => this._notifications().slice(0, DISPLAY_COUNT));
@@ -63,6 +69,63 @@ export class NotificationService {
   );
 
   readonly hasUnread = computed(() => this.unreadCount() > 0);
+
+  constructor() {
+    if (isPlatformBrowser(this.platformId)) {
+      // Chargement initial après un court instant
+      setTimeout(() => {
+        this.loadNotifications();
+      }, 1000);
+
+      // Polling toutes les 30 secondes
+      setInterval(() => {
+        this.loadNotifications();
+      }, 30000);
+    }
+  }
+
+  loadNotifications(): void {
+    if (!isPlatformBrowser(this.platformId) || !this.tokenService.hasToken()) {
+      return;
+    }
+
+    this.http.get<any>(`${environment.apiUrl}/users/notifications/all?page=1&limit=50`).subscribe({
+      next: (res) => {
+        const serverItems = res?.data?.items ?? [];
+        const mappedServer: AppNotification[] = serverItems.map((item: any) => this.mapServerNotification(item));
+
+        // Conserver uniquement les notifications locales (qui n'ont pas isServerNotif: true)
+        const localOnly = this.loadFromStorage().filter((n) => !n.isServerNotif);
+
+        // Détecter les nouvelles notifications serveur non lues pour afficher un Toast
+        const currentNotifs = this._notifications();
+        if (!this.isFirstLoad && currentNotifs.length > 0) {
+          const existingIds = new Set(currentNotifs.map((n) => n.id));
+          const newUnreadServerNotifs = mappedServer.filter(
+            (n) => !n.read && !existingIds.has(n.id)
+          );
+
+          newUnreadServerNotifs.forEach((n) => {
+            // Afficher un toast d'alerte pour chaque nouvelle notification du serveur (ex: retrait)
+            this.toastService.show(`${n.title} : ${n.message}`, 'warning');
+          });
+        }
+        this.isFirstLoad = false;
+
+        // Fusionner et trier
+        const combined = [...mappedServer, ...localOnly];
+        combined.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+
+        const updated = combined.slice(0, MAX_HISTORY);
+
+        this._notifications.set(updated);
+        this.saveToStorage(updated);
+      },
+      error: (err) => {
+        console.error('Erreur chargement des notifications serveur:', err);
+      },
+    });
+  }
 
   add(params: {
     type: NotifType;
@@ -90,18 +153,38 @@ export class NotificationService {
   }
 
   markAsRead(id: string): void {
+    const target = this._notifications().find((n) => n.id === id);
+
     this._notifications.update((list) => {
       const updated = list.map((n) => (n.id === id ? { ...n, read: true } : n));
       this.saveToStorage(updated);
       return updated;
     });
+
+    if (target?.isServerNotif) {
+      this.http.put<any>(`${environment.apiUrl}/users/notifications/${id}/read`, {}).subscribe({
+        error: (err) => {
+          console.error(`Erreur lors du marquage comme lu de la notification ${id} sur le serveur:`, err);
+        },
+      });
+    }
   }
 
   markAllRead(): void {
+    const unreadServerNotifs = this._notifications().filter((n) => n.isServerNotif && !n.read);
+
     this._notifications.update((list) => {
       const updated = list.map((n) => ({ ...n, read: true }));
       this.saveToStorage(updated);
       return updated;
+    });
+
+    unreadServerNotifs.forEach((n) => {
+      this.http.put<any>(`${environment.apiUrl}/users/notifications/${n.id}/read`, {}).subscribe({
+        error: (err) => {
+          console.error(`Erreur lors du marquage comme lu de la notification ${n.id} sur le serveur:`, err);
+        },
+      });
     });
   }
 
@@ -115,6 +198,52 @@ export class NotificationService {
   }
 
   // ─── Private helpers ─────────────────────────────────────────────────────
+
+  private mapServerNotification(item: any): AppNotification {
+    const isRead = item.read_at !== null;
+    let type: NotifType = 'operation';
+    let action: NotifAction = 'withdraw';
+
+    const typeStr = (item.type || '').toUpperCase();
+    if (typeStr.includes('RETRAIT') || typeStr.includes('WITHDRAWAL')) {
+      type = 'operation';
+      action = 'withdraw';
+    } else if (typeStr.includes('ADHERENT') || typeStr.includes('MEMBER')) {
+      type = 'adherent';
+      action = 'create';
+    } else if (typeStr.includes('COTISATION') || typeStr.includes('SAVING')) {
+      type = 'cotisation';
+      action = 'create';
+    } else if (typeStr.includes('USER') || typeStr.includes('UTILISATEUR')) {
+      type = 'utilisateur';
+      action = 'create';
+    } else if (typeStr.includes('GROUPE') || typeStr.includes('GROUP')) {
+      type = 'groupe';
+      action = 'create';
+    } else if (typeStr.includes('DEPENSE') || typeStr.includes('EXPENSE')) {
+      type = 'depense';
+      action = 'create';
+    } else if (typeStr.includes('WORKFLOW')) {
+      type = 'workflow';
+      action = 'create';
+    } else {
+      type = 'operation';
+      action = 'withdraw';
+    }
+
+    return {
+      id: item.id,
+      type,
+      action,
+      title: item.title || 'Notification',
+      message: item.body || item.message || '',
+      timestamp: item.created_at || new Date().toISOString(),
+      read: isRead,
+      icon: this.getIcon(type, action),
+      color: this.getColor(type, action),
+      isServerNotif: true,
+    };
+  }
 
   private generateId(): string {
     return `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;

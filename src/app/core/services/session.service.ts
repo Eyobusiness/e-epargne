@@ -1,5 +1,6 @@
 import { Injectable, computed, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
+import { HttpBackend, HttpClient } from '@angular/common/http';
 import { catchError, finalize, of, tap } from 'rxjs';
 
 import { SessionUser, SessionUserProfil } from '../models/session-user.model';
@@ -9,6 +10,7 @@ import {
   getUserIdFromToken,
   parseSessionUserFromToken,
 } from '../utils/jwt-session.utils';
+import { environment } from '../../../environments/environment';
 
 const USER_STORAGE_KEY = 'current_user';
 
@@ -19,6 +21,7 @@ export class SessionService {
   private readonly router = inject(Router);
   private readonly tokenService = inject(TokenService);
   private readonly utilisateurService = inject(UtilisateurService);
+  private readonly httpBackend = inject(HttpBackend);
 
   readonly currentUser = signal<SessionUser | null>(null);
   readonly isLoadingProfile = signal(false);
@@ -66,7 +69,34 @@ export class SessionService {
     const token = this.tokenService.getToken();
 
     if (!token) {
-      this.clearSessionState();
+      const refreshToken = localStorage.getItem('refreshToken');
+      if (refreshToken) {
+        const refreshClient = new HttpClient(this.httpBackend);
+        this.isLoadingProfile.set(true);
+        refreshClient.post<any>(`${environment.apiUrl}/users/refresh`, { refreshToken }).subscribe({
+          next: (res) => {
+            const newToken = res?.token ?? res?.data?.token;
+            const newRefreshToken = res?.refreshToken ?? res?.data?.refreshToken;
+            if (newToken) {
+              this.tokenService.setToken(newToken);
+              if (newRefreshToken) {
+                localStorage.setItem('refreshToken', newRefreshToken);
+              }
+              const userId = getUserIdFromToken(newToken);
+              if (userId) {
+                this.loadUserProfile(userId);
+              }
+            } else {
+              this.clearSessionState();
+            }
+          },
+          error: () => {
+            this.clearSessionState();
+          }
+        });
+      } else {
+        this.clearSessionState();
+      }
       return;
     }
 

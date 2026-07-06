@@ -14,6 +14,8 @@
 
         <th>Profil</th>
 
+        <th>Opérateur</th>
+
         <!-- <th>Code</th> -->
 
         <th>Statut</th>
@@ -64,6 +66,10 @@
 
           <td>
             {{ item.profil?.name || $any(item.profil)?.libelle || '--' }}
+          </td>
+
+          <td>
+            {{ item.user_action | resolveUser }}
           </td>
 
           <!-- <td>

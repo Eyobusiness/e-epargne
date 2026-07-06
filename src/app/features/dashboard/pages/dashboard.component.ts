@@ -1,6 +1,6 @@
     import { Component, OnInit, inject, signal } from '@angular/core';
-
     import { CommonModule } from '@angular/common';
+    import { forkJoin } from 'rxjs';
 
     import { DashboardService } from '../services/dashboard.service';
     import { DashboardStats } from '../models/dashboard.model';
@@ -15,6 +15,7 @@
     import { ClassementGroupe } from '../../rapports/models/classement-groupe.model';
     import { ClassementGroupesComponent } from '../../rapports/components/classement-groupes/classement-groupes.component';
     import { DashboardGroupChartComponent } from '../components/dashboard-group-chart/dashboard-group-chart.component';
+    import { DepenseService } from '../../depenses/services/depense.service';
 
 
 
@@ -37,6 +38,7 @@
       private readonly dashboardService = inject(DashboardService);
       private readonly operationService = inject(OperationService);
       private readonly rapportService = inject(RapportService);
+      private readonly depenseService = inject(DepenseService);
 
       readonly dashboard = signal<DashboardStats | null>(null);
       readonly recentOperations = signal<any[]>([]);
@@ -102,62 +104,59 @@ mettreAJourDateHeure(): void {
 
         this.dashboardService.getStats().subscribe({
           next: (stats) => {
-            this.operationService
-              .getAll({
-                page: 1,
-                limit: 10000000,
-              })
-              .subscribe({
-                next: (response) => {
-                  const operations: Operation[] = response?.data?.items ?? [];
+            forkJoin({
+              operationsRes: this.operationService.getAll({ page: 1, limit: 10000000 }),
+              depensesRes: this.depenseService.getAll(1, 1000000, '')
+            }).subscribe({
+              next: ({ operationsRes, depensesRes }) => {
+                const operations: Operation[] = operationsRes?.data?.items ?? [];
+                const depenses = depensesRes?.data?.items ?? [];
 
-                  const totalDepotPaye = operations
-                    .filter((o) => o.type_operation === 'DEPOT' && o.status === '200')
-                    .reduce((sum, o) => sum + o.montant, 0);
+                const totalDepotPaye = operations
+                  .filter((o) => o.type_operation === 'DEPOT' && o.status === '200')
+                  .reduce((sum, o) => sum + o.montant, 0);
 
-                  const totalDepotEnAttente = operations
-                    .filter((o) => o.type_operation === 'DEPOT' && o.status === '100')
-                    .reduce((sum, o) => sum + o.montant, 0);
+                const totalDepotEnAttente = operations
+                  .filter((o) => o.type_operation === 'DEPOT' && o.status === '100')
+                  .reduce((sum, o) => sum + o.montant, 0);
 
-                  const totalDepotAnnule = operations
-                    .filter((o) => o.type_operation === 'DEPOT' && o.status === '300')
-                    .reduce((sum, o) => sum + o.montant, 0);
+                const totalDepotAnnule = operations
+                  .filter((o) => o.type_operation === 'DEPOT' && o.status === '300')
+                  .reduce((sum, o) => sum + o.montant, 0);
 
-                  const totalRetrait = operations
-                    .filter((o) => o.type_operation === 'RETRAIT' && o.status === '200')
-                    .reduce((sum, o) => sum + o.montant, 0);
+                const totalRetrait = operations
+                  .filter((o) => o.type_operation === 'RETRAIT' && o.status === '200')
+                  .reduce((sum, o) => sum + o.montant, 0);
 
-                  const totalDepot = stats.totalDepot ?? 0;
-                  const Solde = totalDepotPaye - totalRetrait;
+                const totalDepense = depenses.reduce((sum, d) => sum + Number(d.amount ?? 0), 0);
 
-                  this.dashboard.set({
-                    ...stats,
+                const totalDepot = stats.totalDepot ?? 0;
+                const Solde = totalDepotPaye - totalRetrait;
 
-                    totalDepot,
-                    totalDepotPaye,
-                    totalDepotEnAttente,
-                    totalDepotAnnule,
+                this.dashboard.set({
+                  ...stats,
 
-                    totalRetrait,
-                    Solde,
-                  });
+                  totalDepot,
+                  totalDepotPaye,
+                  totalDepotEnAttente,
+                  totalDepotAnnule,
 
-                  this.isLoading.set(false);
-                },
+                  totalRetrait,
+                  Solde,
+                  totalDepense,
+                });
 
-                error: (error) => {
-                  console.error(error);
-
-                  this.dashboard.set(stats);
-
-                  this.isLoading.set(false);
-                },
-              });
+                this.isLoading.set(false);
+              },
+              error: (error) => {
+                console.error(error);
+                this.dashboard.set(stats);
+                this.isLoading.set(false);
+              }
+            });
           },
-
           error: (error) => {
             console.error(error);
-
             this.isLoading.set(false);
           },
         });

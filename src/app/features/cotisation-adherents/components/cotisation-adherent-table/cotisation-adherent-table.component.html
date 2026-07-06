@@ -9,6 +9,7 @@
         <th>Groupe</th>
         <th>Montant</th>
         <th>Date cotisation</th>
+        <th>Opérateur</th>
         <th>Statut</th>
         <!-- <th>Actions</th> -->
       </tr>
@@ -63,6 +64,10 @@
                 : '--'
             }}
 
+          </td>
+
+          <td>
+            {{ item.user_action | resolveUser }}
           </td>
 
           <td>
