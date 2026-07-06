@@ -8,7 +8,7 @@
 //    400 → Supprimé
 // ═══════════════════════════════════════════════════════════
 
-export type CollectionStatus = '100' | '200' | '300' | '400';
+export type CollectionStatus = '100' | '110' | '200' | '300' | '400';
 
 /** Objet Agent embarqué dans la réponse */
 export interface CollectionAgent {

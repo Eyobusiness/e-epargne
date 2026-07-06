@@ -50,9 +50,19 @@
               <span class="amount-badge">{{ (item.plafond?.amount ?? 0) | number:'1.0-0' }} FCFA</span>
             </td>
             <td>
-              <span class="collected-amount-badge" [class.reached]="hasReachedLimit(item)">
-                {{ (item.collected_amount ?? item.current_amount ?? item.total_collecte ?? 0) | number:'1.0-0' }} FCFA
-              </span>
+              <div class="collected-amount-container">
+                <span class="collected-amount-badge" [class.reached]="hasReachedLimit(item)">
+                  {{ (item.collected_amount ?? item.current_amount ?? item.total_collecte ?? item.montantCollecte ?? 0) | number:'1.0-0' }} FCFA
+                </span>
+                @if (item.tauxUtilisation !== undefined && item.tauxUtilisation !== null) {
+                  <span 
+                    class="utilisation-rate" 
+                    [class.reached]="hasReachedLimit(item)" 
+                    [title]="'Montant restant: ' + ((item.montantRestant !== undefined && item.montantRestant !== null ? item.montantRestant : ((item.plafond?.amount ?? 0) - (item.collected_amount ?? 0))) | number:'1.0-0') + ' FCFA'">
+                    {{ (item.tauxUtilisation * 100) | number:'1.0-0' }}%
+                  </span>
+                }
+              </div>
             </td>
             <td>
               <span class="status-badge" [class.active]="item.status === '200'">

@@ -1,6 +1,7 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { finalize } from 'rxjs';
+import { finalize, forkJoin } from 'rxjs';
+import { CollectionService } from '../../../collection/services/collection.service';
 import { PlafondService } from '../../services/plafond.service';
 import { Plafond, CollectorLimit } from '../../models/plafond.model';
 import { User, Profil } from '../../../utilisateurs/models/utilisateur.model';
@@ -38,6 +39,7 @@ type PlafondTab = 'limit' | 'affectation';
 export class PlafondsComponent implements OnInit {
   private readonly plafondService = inject(PlafondService);
   private readonly utilisateurService = inject(UtilisateurService);
+  private readonly collectionService = inject(CollectionService);
   private readonly profileService = inject(ProfileService);
   private readonly toastService = inject(ToastService);
   private readonly notifService = inject(NotificationService);
@@ -94,15 +96,50 @@ export class PlafondsComponent implements OnInit {
   }
 
   loadAffectations(): void {
-    this.plafondService
-      .getCollectorLimits()
-      .subscribe({
-        next: (data) => this.affectations.set(data),
-        error: (err) => {
-          this.affectations.set([]);
-          this.toastService.show(this.extractErrorMessage(err) || 'Erreur chargement des affectations', 'error');
-        },
-      });
+    forkJoin({
+      limits: this.plafondService.getCollectorLimits(),
+      collections: this.collectionService.getCollections({ limit: 100000 }),
+      agentsResponse: this.utilisateurService.getAll({ limit: 1000, status: '200' })
+    }).subscribe({
+      next: ({ limits, collections, agentsResponse }) => {
+        const collectionsList = collections?.data?.items ?? [];
+        const agentsList = agentsResponse?.data?.items ?? [];
+        
+        const mapped = limits.map(item => {
+          let sum = 0;
+          if (item.agent_id) {
+            sum = collectionsList
+              .filter(c => c.agent_id === item.agent_id && c.status !== '300' && c.status !== '400')
+              .reduce((acc, c) => acc + (c.amount ?? 0), 0);
+          } else if (item.profil_id) {
+            const profileAgents = agentsList.filter((a: any) => a.profil_id === item.profil_id);
+            const agentIds = profileAgents.map((a: any) => a.id);
+            sum = collectionsList
+              .filter(c => c.agent_id && agentIds.includes(c.agent_id) && c.status !== '300' && c.status !== '400')
+              .reduce((acc, c) => acc + (c.amount ?? 0), 0);
+          }
+
+          const agent = item.agent ?? agentsList.find((a: any) => a.id === item.agent_id) ?? null;
+          const profil = item.profil ?? this.profiles().find((p: any) => p.id === item.profil_id) ?? null;
+          const val = item.montantCollecte !== undefined && item.montantCollecte !== null ? item.montantCollecte : sum;
+
+          return {
+            ...item,
+            agent,
+            profil,
+            collected_amount: val,
+            current_amount: val,
+            total_collecte: val
+          };
+        });
+        
+        this.affectations.set(mapped);
+      },
+      error: (err) => {
+        this.affectations.set([]);
+        this.toastService.show(this.extractErrorMessage(err) || 'Erreur chargement des affectations', 'error');
+      }
+    });
   }
 
   loadAgents(): void {

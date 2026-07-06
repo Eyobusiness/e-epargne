@@ -15,11 +15,16 @@ import { Router, RouterModule } from '@angular/router';
 import { SessionService } from '../../../core/services/session.service';
 import { NotificationService, AppNotification } from '../../../core/services/notification.service';
 import { AvatarBgPipe } from '../../pipes/avatar-bg.pipe';
+import { AppModalComponent } from '../../ui/app-modal/app-modal.component';
+import { AdherentService } from '../../../features/adherents/services/adherent.service';
+import { Adherent } from '../../../features/adherents/models/adherent.model';
+import { FormsModule } from '@angular/forms';
+import { ToastService } from '../../../core/services/toast.service';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule, RouterModule, AvatarBgPipe],
+  imports: [CommonModule, RouterModule, AvatarBgPipe, AppModalComponent, FormsModule],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css'],
 })
@@ -29,6 +34,8 @@ export class HeaderComponent {
   private readonly router = inject(Router);
   private readonly platformId = inject(PLATFORM_ID);
   readonly notifService = inject(NotificationService);
+  private readonly adherentService = inject(AdherentService);
+  private readonly toastService = inject(ToastService);
 
   @Output()
   toggleSidebar = new EventEmitter<void>();
@@ -115,6 +122,126 @@ export class HeaderComponent {
         document.body.classList.remove('dark-mode');
       }
     }
+  }
+
+  // State for sending notification modal
+  readonly isSendModalOpen = signal(false);
+  readonly allAdherents = signal(true);
+  readonly selectedAdherentIds = signal<string[]>([]);
+  readonly notificationTitle = signal('');
+  readonly notificationBody = signal('');
+  readonly notificationType = signal('GENERAL');
+  readonly isSending = signal(false);
+
+  // Loaded adherents
+  readonly adherents = signal<Adherent[]>([]);
+  readonly searchAdherentQuery = signal('');
+  readonly filteredAdherents = computed(() => {
+    const query = this.searchAdherentQuery().toLowerCase().trim();
+    if (!query) return this.adherents();
+    return this.adherents().filter(a => a.name.toLowerCase().includes(query) || (a.phone && a.phone.includes(query)));
+  });
+
+  openSendModal(): void {
+    this.isSendModalOpen.set(true);
+    this.isNotificationsOpen.set(false);
+    this.isProfileMenuOpen.set(false);
+    // Reset state
+    this.allAdherents.set(true);
+    this.selectedAdherentIds.set([]);
+    this.notificationTitle.set('');
+    this.notificationBody.set('');
+    this.notificationType.set('GENERAL');
+    this.searchAdherentQuery.set('');
+
+    // Fetch active adherents
+    this.adherentService.getAll(1, 1000, '', '200').subscribe({
+      next: (res) => {
+        this.adherents.set(res?.data?.items ?? []);
+      },
+      error: (err) => {
+        console.error('Erreur chargement adhérents', err);
+      }
+    });
+  }
+
+  toggleAdherentSelection(id: string): void {
+    this.selectedAdherentIds.update(ids => {
+      if (ids.includes(id)) {
+        return ids.filter(x => x !== id);
+      } else {
+        return [...ids, id];
+      }
+    });
+  }
+
+  isAdherentSelected(id: string): boolean {
+    return this.selectedAdherentIds().includes(id);
+  }
+
+  toggleAllAdherentsSelection(event: Event): void {
+    const checked = (event.target as HTMLInputElement).checked;
+    const filteredIds = this.filteredAdherents().map(a => a.id).filter((id): id is string => !!id);
+    if (checked) {
+      this.selectedAdherentIds.update(ids => {
+        const uniqueIds = new Set([...ids, ...filteredIds]);
+        return Array.from(uniqueIds);
+      });
+    } else {
+      this.selectedAdherentIds.update(ids => ids.filter(id => !filteredIds.includes(id)));
+    }
+  }
+
+  areAllAdherentsSelected(): boolean {
+    const filtered = this.filteredAdherents();
+    if (filtered.length === 0) return false;
+    return filtered.every(a => a.id && this.selectedAdherentIds().includes(a.id));
+  }
+
+  sendNotification(): void {
+    if (!this.notificationTitle().trim() || !this.notificationBody().trim()) {
+      this.toastService.show('Veuillez remplir le titre et le message de la notification', 'warning');
+      return;
+    }
+
+    if (!this.allAdherents() && this.selectedAdherentIds().length === 0) {
+      this.toastService.show('Veuillez sélectionner au moins un adhérent', 'warning');
+      return;
+    }
+
+    this.isSending.set(true);
+
+    const payload = {
+      allAdherents: this.allAdherents(),
+      adherentIds: this.allAdherents() ? [] : this.selectedAdherentIds(),
+      title: this.notificationTitle().trim(),
+      body: this.notificationBody().trim(),
+      type: this.notificationType(),
+      data: {
+        idObject: this.allAdherents() ? undefined : this.selectedAdherentIds()[0],
+        type: this.notificationType()
+      }
+    };
+
+    this.notifService.sendAdherentNotification(payload).subscribe({
+      next: (res) => {
+        this.isSending.set(false);
+        this.isSendModalOpen.set(false);
+        this.toastService.show(res?.message || 'Notifications envoyées avec succès !', 'success');
+        // Add local notif
+        this.notifService.add({
+          type: 'adherent',
+          action: 'validate',
+          title: 'Notification envoyée',
+          message: `Notification "${payload.title}" envoyée à ${this.allAdherents() ? 'tous les' : this.selectedAdherentIds().length} adhérent(s).`
+        });
+      },
+      error: (err) => {
+        this.isSending.set(false);
+        const errMsg = err?.error?.message || 'Erreur lors de l\'envoi des notifications';
+        this.toastService.show(errMsg, 'error');
+      }
+    });
   }
 
   relativeTime(isoString: string): string {

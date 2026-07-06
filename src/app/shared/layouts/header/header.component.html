@@ -8,7 +8,7 @@
     </button>
 
     <div class="header-brand d-flex align-items-center gap-2">
-      <div class="brand-mark d-inline-flex align-items-center justify-content-center overflow-hidden">
+      <div class="brand-mark d-none d-sm-inline-flex align-items-center justify-content-center overflow-hidden">
         <img src="assets/images/logo.png" alt="Logo" class="w-100 h-100 object-fit-contain">
       </div>
 
@@ -29,6 +29,15 @@
       } @else {
         <i class="bi bi-moon-stars-fill"></i>
       }
+    </button>
+
+    <button
+      type="button"
+      class="header-action btn btn-light"
+      title="Envoyer une notification aux adhérents"
+      aria-label="Envoyer une notification"
+      (click)="openSendModal()">
+      <i class="bi bi-chat-left-text"></i>
     </button>
 
     <div class="notifications-dropdown">
@@ -171,3 +180,161 @@
     </div>
   </div>
 </header>
+
+<!-- ── MODAL D'ENVOI DE NOTIFICATION AUX ADHÉRENTS ── -->
+<app-modal
+  [isOpen]="isSendModalOpen()"
+  [title]="'Envoyer une Notification aux Adhérents'"
+  [width]="'600px'"
+  (close)="isSendModalOpen.set(false)">
+  <form (submit)="$event.preventDefault(); sendNotification()" class="notif-send-form p-1">
+    
+    <!-- Titre -->
+    <div class="mb-3">
+      <label for="notifTitle" class="form-label fw-semibold">Titre de la notification</label>
+      <input
+        type="text"
+        id="notifTitle"
+        class="form-control"
+        placeholder="Ex: Rappel de cotisation"
+        [ngModel]="notificationTitle()"
+        (ngModelChange)="notificationTitle.set($event)"
+        name="title"
+        required>
+    </div>
+
+    <!-- Message -->
+    <div class="mb-3">
+      <label for="notifBody" class="form-label fw-semibold">Message</label>
+      <textarea
+        id="notifBody"
+        class="form-control"
+        rows="3"
+        placeholder="Votre message ici..."
+        [ngModel]="notificationBody()"
+        (ngModelChange)="notificationBody.set($event)"
+        name="body"
+        required></textarea>
+    </div>
+
+    <!-- Type -->
+    <div class="mb-3">
+      <label for="notifType" class="form-label fw-semibold">Type de notification</label>
+      <select
+        id="notifType"
+        class="form-select"
+        [ngModel]="notificationType()"
+        (ngModelChange)="notificationType.set($event)"
+        name="type">
+        <option value="GENERAL">Général (GENERAL)</option>
+        <option value="RAPPEL">Rappel (RAPPEL)</option>
+        <option value="ALERTE">Alerte (ALERTE)</option>
+      </select>
+    </div>
+
+    <!-- Destinataires Option -->
+    <div class="mb-3">
+      <label class="form-label fw-semibold d-block">Destinataires</label>
+      <div class="form-check form-check-inline me-3">
+        <input
+          class="form-check-input"
+          type="radio"
+          id="destAll"
+          [value]="true"
+          [ngModel]="allAdherents()"
+          (ngModelChange)="allAdherents.set($event)"
+          name="destOption">
+        <label class="form-check-label" for="destAll">Tous les adhérents</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input
+          class="form-check-input"
+          type="radio"
+          id="destSelect"
+          [value]="false"
+          [ngModel]="allAdherents()"
+          (ngModelChange)="allAdherents.set($event)"
+          name="destOption">
+        <label class="form-check-label" for="destSelect">Sélectionner des adhérents spécifiques</label>
+      </div>
+    </div>
+
+    <!-- Destinataires Sélection (si non allAdherents) -->
+    @if (!allAdherents()) {
+      <div class="adherent-selection-box mb-3 border rounded-3 p-3">
+        <label class="form-label fw-semibold mb-2">Sélectionner les adhérents ({{ selectedAdherentIds().length }} sélectionnés)</label>
+        
+        <!-- Barre de recherche adhérent -->
+        <div class="search-input-group mb-2">
+          <i class="bi bi-search search-icon"></i>
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Rechercher par nom ou téléphone..."
+            [ngModel]="searchAdherentQuery()"
+            (ngModelChange)="searchAdherentQuery.set($event)"
+            name="searchQuery">
+        </div>
+
+        <!-- Liste scrollable d'adhérents -->
+        <div class="adherents-scroll-list border rounded p-2">
+          <div class="select-all-header mb-2 pb-2 border-bottom sticky-top">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              id="selectAllAdherents"
+              [checked]="areAllAdherentsSelected()"
+              (change)="toggleAllAdherentsSelection($event)">
+            <label class="form-check-label fw-bold" for="selectAllAdherents">Tout sélectionner</label>
+          </div>
+
+          @if (filteredAdherents().length === 0) {
+            <div class="empty-adherents text-center py-3">Aucun adhérent trouvé</div>
+          } @else {
+            <div class="adherents-checkboxes">
+              @for (adh of filteredAdherents(); track adh.id) {
+                <div class="form-check adherent-list-item py-1">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    [id]="'adh-' + adh.id"
+                    [checked]="isAdherentSelected(adh.id!)"
+                    (change)="toggleAdherentSelection(adh.id!)">
+                  <label class="form-check-label" [for]="'adh-' + adh.id">
+                    <span class="adh-name fw-medium">{{ adh.name }}</span>
+                    @if (adh.phone) { 
+                      <span class="adh-phone text-muted ms-2">({{ adh.phone }})</span> 
+                    }
+                  </label>
+                </div>
+              }
+            </div>
+          }
+        </div>
+      </div>
+    }
+
+    <!-- Actions -->
+    <div class="d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
+      <button
+        type="button"
+        class="btn btn-outline-secondary rounded-pill px-4"
+        (click)="isSendModalOpen.set(false)"
+        [disabled]="isSending()">
+        Annuler
+      </button>
+      <button
+        type="submit"
+        class="btn btn-primary rounded-pill px-4 d-flex align-items-center gap-2"
+        [disabled]="isSending()">
+        @if (isSending()) {
+          <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+          Envoi...
+        } @else {
+          <i class="bi bi-send-fill"></i>
+          Envoyer
+        }
+      </button>
+    </div>
+  </form>
+</app-modal>

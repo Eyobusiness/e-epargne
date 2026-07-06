@@ -18,7 +18,7 @@ export class AffectationTableComponent {
 
   hasReachedLimit(item: CollectorLimit): boolean {
     const limit = item.plafond?.amount ?? 0;
-    const collected = item.collected_amount ?? item.current_amount ?? item.total_collecte ?? 0;
+    const collected = item.collected_amount ?? item.current_amount ?? item.total_collecte ?? item.montantCollecte ?? 0;
     return limit > 0 && collected >= limit;
   }
 

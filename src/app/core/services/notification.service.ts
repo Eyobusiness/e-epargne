@@ -1,5 +1,8 @@
 import { Injectable, PLATFORM_ID, computed, inject, signal } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 export type NotifType =
   | 'adherent'
@@ -45,6 +48,7 @@ const DISPLAY_COUNT = 10;
 })
 export class NotificationService {
   private readonly platformId = inject(PLATFORM_ID);
+  private readonly http = inject(HttpClient);
 
   private readonly _notifications = signal<AppNotification[]>(this.loadFromStorage());
 
@@ -104,6 +108,10 @@ export class NotificationService {
   clear(): void {
     this._notifications.set([]);
     this.saveToStorage([]);
+  }
+
+  sendAdherentNotification(payload: any): Observable<any> {
+    return this.http.post<any>(`${environment.apiUrl}/notifications/adherents/send`, payload);
   }
 
   // ─── Private helpers ─────────────────────────────────────────────────────

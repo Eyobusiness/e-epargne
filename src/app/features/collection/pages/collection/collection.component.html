@@ -74,7 +74,8 @@
         <i class="bi bi-funnel filter-icon"></i>
         <select class="filter-select" [ngModel]="filterStatus()" (ngModelChange)="onFilterStatus($event)">
           <option value="">Tous les statuts</option>
-          <option value="100">⏳ En attente</option>
+          <option value="100">💵 En attente de paiement</option>
+          <option value="110">⏳ En attente de validation</option>
           <option value="200">✅ Validé</option>
           <option value="300">❌ Rejeté</option>
         </select>
@@ -120,7 +121,8 @@
 
         <!-- Légende -->
         <div class="table-legend">
-          <span class="legend-item"><span class="legend-dot dot-pending"></span>En attente de validation</span>
+          <span class="legend-item"><span class="legend-dot dot-pending-payment"></span>En attente de paiement</span>
+          <span class="legend-item"><span class="legend-dot dot-pending-validation"></span>En attente de validation</span>
           <span class="legend-item"><span class="legend-dot dot-validated"></span>Validée</span>
           <span class="legend-item"><span class="legend-dot dot-rejected"></span>Rejetée</span>
         </div>
@@ -139,7 +141,8 @@
             <tbody>
               @for (item of collections(); track item.id) {
                 <tr
-                  [class.row-pending]="isPending(item)"
+                  [class.row-pending]="item.status === '100'"
+                  [class.row-pending-validation]="item.status === '110'"
                   [class.row-validated]="isValidated(item)"
                   [class.row-rejected]="isRejected(item)"
                   [class.row-loading]="actionLoading() === item.id">
@@ -197,23 +200,27 @@
                       </div>
                     } @else {
 
-                      <!-- ── Status 100 → Boutons Valider + Rejeter ── -->
+                      <!-- ── Status 100/110 → Boutons Valider + Rejeter ── -->
                       @if (isPending(item)) {
                         <div class="action-group">
-                          <button
-                            class="action-btn btn-validate"
-                            title="Valider cette collecte (→ statut 200)"
-                            (click)="askConfirm(item, 'validate')">
-                            <i class="bi bi-check-circle-fill"></i>
-                            Valider
-                          </button>
-                          <button
-                            class="action-btn btn-reject"
-                            title="Rejeter cette collecte (→ statut 300)"
-                            (click)="askConfirm(item, 'reject')">
-                            <i class="bi bi-x-circle-fill"></i>
-                            Rejeter
-                          </button>
+                          @if (canValidate(item)) {
+                            <button
+                              class="action-btn btn-validate"
+                              title="Valider cette collecte (→ statut 200)"
+                              (click)="askConfirm(item, 'validate')">
+                              <i class="bi bi-check-circle-fill"></i>
+                              Valider
+                            </button>
+                          }
+                          @if (canReject(item)) {
+                            <button
+                              class="action-btn btn-reject"
+                              title="Rejeter cette collecte (→ statut 300)"
+                              (click)="askConfirm(item, 'reject')">
+                              <i class="bi bi-x-circle-fill"></i>
+                              Rejeter
+                            </button>
+                          }
                         </div>
                       }
 

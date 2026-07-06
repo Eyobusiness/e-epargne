@@ -34,7 +34,7 @@ export class CollectionComponent implements OnInit {
   readonly totalPages  = computed(() => Math.max(1, Math.ceil(this.totalItems() / this.pageSize)));
 
   // ─── Compteurs par statut (sur la page courante) ─────────────────────────
-  readonly pendingCount   = computed(() => this.collections().filter(c => c.status === '100').length);
+  readonly pendingCount   = computed(() => this.collections().filter(c => c.status === '100' || c.status === '110').length);
   readonly validatedCount = computed(() => this.collections().filter(c => c.status === '200').length);
   readonly rejectedCount  = computed(() => this.collections().filter(c => c.status === '300').length);
 
@@ -215,7 +215,8 @@ export class CollectionComponent implements OnInit {
   // ─── Helpers statut ──────────────────────────────────────────────────────
   statusLabel(status: string): string {
     switch (status) {
-      case '100': return 'En attente';
+      case '100': return 'En attente de paiement';
+      case '110': return 'En attente de validation';
       case '200': return 'Validé';
       case '300': return 'Rejeté';
       case '400': return 'Supprimé';
@@ -226,6 +227,7 @@ export class CollectionComponent implements OnInit {
   statusClass(status: string): string {
     switch (status) {
       case '100': return 'pending';
+      case '110': return 'pending-validation';
       case '200': return 'validated';
       case '300': return 'rejected';
       case '400': return 'deleted';
@@ -235,7 +237,8 @@ export class CollectionComponent implements OnInit {
 
   statusIcon(status: string): string {
     switch (status) {
-      case '100': return 'bi-hourglass-split';
+      case '100': return 'bi-cash';
+      case '110': return 'bi-hourglass-split';
       case '200': return 'bi-check-circle-fill';
       case '300': return 'bi-x-circle-fill';
       case '400': return 'bi-trash-fill';
@@ -243,9 +246,17 @@ export class CollectionComponent implements OnInit {
     }
   }
 
-  isPending(item: Collection): boolean   { return item.status === '100'; }
+  isPending(item: Collection): boolean   { return item.status === '100' || item.status === '110'; }
   isValidated(item: Collection): boolean { return item.status === '200'; }
   isRejected(item: Collection): boolean  { return item.status === '300'; }
+
+  canValidate(item: Collection): boolean {
+    return item.status === '110';
+  }
+
+  canReject(item: Collection): boolean {
+    return item.status === '100' || item.status === '110';
+  }
 
   // ─── Mise à jour locale optimiste ────────────────────────────────────────
   private patchCollection(updated: Collection): void {

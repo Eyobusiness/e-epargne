@@ -30,4 +30,9 @@ export interface CollectorLimit {
   collected_amount?: number;
   current_amount?: number;
   total_collecte?: number;
+  montantCollecte?: number;
+  montantRestant?: number;
+  tauxUtilisation?: number;
+  last_plafond_reset_at?: string;
+  lastPlafondResetAt?: string;
 }
