@@ -10,7 +10,7 @@ import { RapportFinancier } from '../models/rapport-financier.model';
 import { RapportFinancierLigne } from '../models/rapport-financier-ligne.model';
 import { FormatMontantPipe } from '../../../shared/pipes/pipe.component';
 
-const APP_NAME = 'E-Épargne';
+const APP_NAME = 'E-COTISATION';
 const PRIMARY_COLOR: [number, number, number] = [37, 99, 235];   // blue-600
 const HEADER_BG: [number, number, number] = [30, 58, 138];       // blue-900
 const HEADER_FG: [number, number, number] = [255, 255, 255];
