@@ -1,7 +1,7 @@
 import { Injectable, PLATFORM_ID, computed, inject, signal } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Observable, forkJoin } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { TokenService } from './token.service';
 import { ToastService } from './toast.service';
@@ -89,40 +89,70 @@ export class NotificationService {
       return;
     }
 
-    this.http.get<any>(`${environment.apiUrl}/users/notifications/all?page=1&limit=50`).subscribe({
-      next: (res) => {
-        const serverItems = res?.data?.items ?? [];
+    const now = new Date();
+    const startDate = `${now.getFullYear() - 2}-01-01`;
+    const endDate = `${now.getFullYear() + 4}-12-31`;
+
+    const notifParams = new HttpParams()
+      .set('page', '1')
+      .set('limit', '100')
+      .set('sort', 'created_at')
+      .set('startDate', startDate)
+      .set('endDate', endDate)
+      .set('status', '100,200');
+
+    const opParams = new HttpParams()
+      .set('page', '1')
+      .set('limit', '50')
+      .set('status', '100');
+
+    forkJoin({
+      notifs: this.http.get<any>(`${environment.apiUrl}/users/notifications/all`, { params: notifParams }),
+      ops: this.http.get<any>(`${environment.apiUrl}/operations/all`, { params: opParams })
+    }).subscribe({
+      next: ({ notifs, ops }) => {
+        const serverItems = notifs?.data?.items ?? [];
         const mappedServer: AppNotification[] = serverItems.map((item: any) => this.mapServerNotification(item));
 
-        // Conserver uniquement les notifications locales (qui n'ont pas isServerNotif: true)
-        const localOnly = this.loadFromStorage().filter((n) => !n.isServerNotif);
+        const opItems = ops?.data?.items ?? [];
+        const pendingWithdrawals = opItems.filter((op: any) => op.type_operation === 'RETRAIT');
 
-        // Détecter les nouvelles notifications serveur non lues pour afficher un Toast
+        const existingLocalNotifs = this.loadFromStorage();
+        const readOpIds = new Set(
+          existingLocalNotifs.filter(n => n.id.startsWith('op-') && n.read).map(n => n.id)
+        );
+
+        const mappedOps: AppNotification[] = pendingWithdrawals.map((op: any) => {
+          const notifId = `op-${op.id}`;
+          const isRead = readOpIds.has(notifId);
+          return this.mapOperationToNotification(op, isRead);
+        });
+
+        const localOnly = existingLocalNotifs.filter((n) => !n.isServerNotif);
+
+        const combined = [...mappedServer, ...mappedOps, ...localOnly];
+        combined.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+
+        const updated = combined.slice(0, MAX_HISTORY);
+
         const currentNotifs = this._notifications();
         if (!this.isFirstLoad && currentNotifs.length > 0) {
           const existingIds = new Set(currentNotifs.map((n) => n.id));
-          const newUnreadServerNotifs = mappedServer.filter(
+          const newUnreadServerNotifs = combined.filter(
             (n) => !n.read && !existingIds.has(n.id)
           );
 
           newUnreadServerNotifs.forEach((n) => {
-            // Afficher un toast d'alerte pour chaque nouvelle notification du serveur (ex: retrait)
             this.toastService.show(`${n.title} : ${n.message}`, 'warning');
           });
         }
         this.isFirstLoad = false;
 
-        // Fusionner et trier
-        const combined = [...mappedServer, ...localOnly];
-        combined.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
-
-        const updated = combined.slice(0, MAX_HISTORY);
-
         this._notifications.set(updated);
         this.saveToStorage(updated);
       },
       error: (err) => {
-        console.error('Erreur chargement des notifications serveur:', err);
+        console.error('Erreur chargement des notifications et opérations serveur:', err);
       },
     });
   }
@@ -162,6 +192,9 @@ export class NotificationService {
     });
 
     if (target?.isServerNotif) {
+      if (id.startsWith('op-')) {
+        return;
+      }
       this.http.put<any>(`${environment.apiUrl}/users/notifications/${id}/read`, {}).subscribe({
         error: (err) => {
           console.error(`Erreur lors du marquage comme lu de la notification ${id} sur le serveur:`, err);
@@ -180,6 +213,9 @@ export class NotificationService {
     });
 
     unreadServerNotifs.forEach((n) => {
+      if (n.id.startsWith('op-')) {
+        return;
+      }
       this.http.put<any>(`${environment.apiUrl}/users/notifications/${n.id}/read`, {}).subscribe({
         error: (err) => {
           console.error(`Erreur lors du marquage comme lu de la notification ${n.id} sur le serveur:`, err);
@@ -241,6 +277,24 @@ export class NotificationService {
       read: isRead,
       icon: this.getIcon(type, action),
       color: this.getColor(type, action),
+      isServerNotif: true,
+    };
+  }
+
+  private mapOperationToNotification(op: any, isRead: boolean): AppNotification {
+    const amount = Number(op.montant || 0);
+    const amountStr = amount ? ` de ${amount.toLocaleString('fr-FR')} F CFA` : '';
+    const name = op.adherent?.name || 'Un adhérent';
+    return {
+      id: `op-${op.id}`,
+      type: 'operation',
+      action: 'withdraw',
+      title: 'Nouvelle demande de retrait',
+      message: `${name} a demandé un retrait${amountStr}.`,
+      timestamp: op.created_at || op.date_operation || new Date().toISOString(),
+      read: isRead,
+      icon: this.getIcon('operation', 'withdraw'),
+      color: this.getColor('operation', 'withdraw'),
       isServerNotif: true,
     };
   }

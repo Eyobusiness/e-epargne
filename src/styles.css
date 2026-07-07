@@ -480,5 +480,37 @@ body:not(.dark-mode) table thead th {
   border-bottom: 2px solid #cbd5e1 !important;
 }
 
+/* Force text in all tables to be nowrap */
+table th,
+table td,
+.table th,
+.table td,
+.custom-table th,
+.custom-table td,
+.app-table th,
+.app-table td {
+  white-space: nowrap !important;
+}
+
+/* Hide scrollbars for table containers while maintaining scroll functionality */
+.table-container,
+.table-wrapper,
+.table-responsive,
+.custom-table,
+.app-table,
+table {
+  -ms-overflow-style: none !important;  /* IE and Edge */
+  scrollbar-width: none !important;  /* Firefox */
+}
+
+.table-container::-webkit-scrollbar,
+.table-wrapper::-webkit-scrollbar,
+.table-responsive::-webkit-scrollbar,
+.custom-table::-webkit-scrollbar,
+.app-table::-webkit-scrollbar,
+table::-webkit-scrollbar {
+  display: none !important; /* Chrome, Safari and Opera */
+}
+
 
 
