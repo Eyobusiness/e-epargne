@@ -3,10 +3,12 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CommissionConfig } from '../../models/commission.model';
 
+import { AppPaginationComponent } from '../../../../shared/ui/app-pagination/app-pagination.component';
+
 @Component({
   selector: 'app-commission-table',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, AppPaginationComponent],
   templateUrl: './commission-table.component.html',
   styleUrls: ['./commission-table.component.css'],
 })

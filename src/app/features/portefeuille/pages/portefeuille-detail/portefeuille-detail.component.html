@@ -72,39 +72,13 @@
 
   }
 
-  <div class="pagination-container">
-
-    <button
-      class="btn btn-outline-primary"
-      [disabled]="currentPage() === 1"
-      (click)="previousPage()">
-
-      <i class="bi bi-chevron-left"></i>
-
-      Précédent
-
-    </button>
-
-    <span class="page-info">
-
-      Page {{ currentPage() }}
-      sur {{ totalPages() }}
-
-    </span>
-
-    <button
-      class="btn btn-outline-primary"
-      [disabled]="currentPage() >= totalPages()"
-      (click)="nextPage()">
-
-      Suivant
-
-      <i class="bi bi-chevron-right"></i>
-
-    </button>
-
-  </div>
-
+  @if (totalPages() > 1) {
+    <app-pagination
+      [currentPage]="currentPage()"
+      [totalPages]="totalPages()"
+      (pageChange)="changePage($event)">
+    </app-pagination>
+  }
 </div>
 
 

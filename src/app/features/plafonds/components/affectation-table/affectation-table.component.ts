@@ -4,10 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { CollectorLimit } from '../../models/plafond.model';
 import { ResolveUserPipe } from '../../../../shared/pipes/resolve-user.pipe';
 
+import { AppPaginationComponent } from '../../../../shared/ui/app-pagination/app-pagination.component';
+
 @Component({
   selector: 'app-affectation-table',
   standalone: true,
-  imports: [CommonModule, FormsModule, ResolveUserPipe],
+  imports: [CommonModule, FormsModule, ResolveUserPipe, AppPaginationComponent],
   templateUrl: './affectation-table.component.html',
   styleUrls: ['./affectation-table.component.css'],
 })

@@ -19,10 +19,38 @@ export class AppPaginationComponent {
   @Output()
   readonly pageChange = new EventEmitter<number>();
 
-  readonly pages = computed(() => {
-    const totalPages = Math.max(this.totalPages(), 1);
+  readonly pages = computed<(number | string)[]>(() => {
+    const current = this.currentPage();
+    const total = Math.max(this.totalPages(), 1);
 
-    return Array.from({ length: totalPages }, (_, index) => index + 1);
+    if (total <= 5) {
+      return Array.from({ length: total }, (_, index) => index + 1);
+    }
+
+    const items: (number | string)[] = [];
+
+    // Always show page 1
+    items.push(1);
+
+    if (current <= 3) {
+      // Near the start: 1, 2, 3, 4, '...', total
+      items.push(2, 3, 4);
+      items.push('...');
+      items.push(total);
+    } else if (current >= total - 2) {
+      // Near the end: 1, '...', total-3, total-2, total-1, total
+      items.push('...');
+      items.push(total - 3, total - 2, total - 1);
+      items.push(total);
+    } else {
+      // In the middle: 1, '...', current-1, current, current+1, '...', total
+      items.push('...');
+      items.push(current - 1, current, current + 1);
+      items.push('...');
+      items.push(total);
+    }
+
+    return items;
   });
 
   previous(): void {
@@ -45,7 +73,10 @@ export class AppPaginationComponent {
     }
   }
 
-  goTo(page: number): void {
+  goTo(page: number | string): void {
+    if (typeof page === 'string') {
+      return;
+    }
     if (this.disabled()) {
       return;
     }

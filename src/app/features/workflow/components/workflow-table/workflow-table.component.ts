@@ -11,12 +11,15 @@ import { FormsModule } from '@angular/forms';
 
 import { Workflow } from '../../models/workflow.model';
 
+import { AppPaginationComponent } from '../../../../shared/ui/app-pagination/app-pagination.component';
+
 @Component({
   selector: 'app-workflow-table',
   standalone: true,
   imports: [
     CommonModule,
     FormsModule,
+    AppPaginationComponent,
   ],
   templateUrl: './workflow-table.component.html',
   styleUrls: ['./workflow-table.component.css'],

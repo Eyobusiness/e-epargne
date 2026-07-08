@@ -4,10 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { Plafond } from '../../models/plafond.model';
 import { ResolveUserPipe } from '../../../../shared/pipes/resolve-user.pipe';
 
+import { AppPaginationComponent } from '../../../../shared/ui/app-pagination/app-pagination.component';
+
 @Component({
   selector: 'app-plafond-table',
   standalone: true,
-  imports: [CommonModule, FormsModule, ResolveUserPipe],
+  imports: [CommonModule, FormsModule, ResolveUserPipe, AppPaginationComponent],
   templateUrl: './plafond-table.component.html',
   styleUrls: ['./plafond-table.component.css'],
 })

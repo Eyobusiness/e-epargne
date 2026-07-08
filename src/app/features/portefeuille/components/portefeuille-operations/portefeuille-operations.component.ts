@@ -6,10 +6,12 @@ import { Operation } from '../../../operations/models/operation.model';
 import { FormatMontantPipe } from '@shared/pipes/pipe.component';
 import { ResolveUserPipe } from '../../../../shared/pipes/resolve-user.pipe';
 
+import { AppPaginationComponent } from '../../../../shared/ui/app-pagination/app-pagination.component';
+
 @Component({
   selector: 'app-portefeuille-operations',
   standalone: true,
-  imports: [CommonModule, FormsModule, FormatMontantPipe, ResolveUserPipe],
+  imports: [CommonModule, FormsModule, FormatMontantPipe, ResolveUserPipe, AppPaginationComponent],
   providers: [DatePipe],
   templateUrl: './portefeuille-operations.component.html',
   styleUrls: ['./portefeuille-operations.component.css'],

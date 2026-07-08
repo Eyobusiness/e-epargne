@@ -24,6 +24,8 @@ import { NotificationService } from '../../../../core/services/notification.serv
 
 
 
+import { AppPaginationComponent } from '../../../../shared/ui/app-pagination/app-pagination.component';
+
 @Component({
   selector: 'app-portefeuille-detail',
   standalone: true,
@@ -34,6 +36,7 @@ import { NotificationService } from '../../../../core/services/notification.serv
     PortefeuilleOperationsComponent,
     RetraitDirectFormComponent,
     FormatMontantPipe,
+    AppPaginationComponent,
   ],
   templateUrl: './portefeuille-detail.component.html',
   styleUrls: ['./portefeuille-detail.component.css'],
@@ -336,6 +339,17 @@ export class PortefeuilleDetailComponent implements OnInit {
 
     const adherentId = this.route.snapshot.paramMap.get('id');
 
+    if (adherentId) {
+      this.loadOperations(adherentId);
+    }
+  }
+
+  changePage(page: number): void {
+    if (page < 1 || page > this.totalPages()) {
+      return;
+    }
+    this.currentPage.set(page);
+    const adherentId = this.route.snapshot.paramMap.get('id');
     if (adherentId) {
       this.loadOperations(adherentId);
     }

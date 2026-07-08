@@ -6,10 +6,12 @@ import { FormatMontantPipe } from '../../../../shared/pipes/pipe.component';
 
 import { RapportAdherent } from '../../models/rapport-adherent.model';
 
+import { AppPaginationComponent } from '../../../../shared/ui/app-pagination/app-pagination.component';
+
 @Component({
   selector: 'app-rapport-adherent-table',
   standalone: true,
-  imports: [CommonModule, FormsModule, FormatMontantPipe],
+  imports: [CommonModule, FormsModule, FormatMontantPipe, AppPaginationComponent],
   templateUrl: './rapport-adherent-table.component.html',
   styleUrls: ['./rapport-adherent-table.component.css'],
 })

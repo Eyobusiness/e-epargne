@@ -218,41 +218,12 @@
 
   </div>
 
-  <!-- PAGINATION -->
-
   @if (totalPages() > 1) {
-
-    <div
-      class="d-flex justify-content-center align-items-center gap-2 mt-3">
-
-      <button
-        class="btn btn-outline-primary"
-        (click)="changePage(currentPage() - 1)"
-        [disabled]="currentPage() === 1">
-
-        Précédent
-
-      </button>
-
-      <span>
-
-        Page {{ currentPage() }}
-
-        / {{ totalPages() }}
-
-      </span>
-
-      <button
-        class="btn btn-outline-primary"
-        (click)="changePage(currentPage() + 1)"
-        [disabled]="currentPage() === totalPages()">
-
-        Suivant
-
-      </button>
-
-    </div>
-
+    <app-pagination
+      [currentPage]="currentPage()"
+      [totalPages]="totalPages()"
+      (pageChange)="changePage($event)">
+    </app-pagination>
   }
 
 </div>

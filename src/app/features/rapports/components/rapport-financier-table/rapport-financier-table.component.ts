@@ -6,10 +6,12 @@ import { ChangerDatePipe } from '../../../../shared/pipes/changer-date.pipe';
 
 import { RapportFinancierLigne } from '../../models/rapport-financier-ligne.model';
 
+import { AppPaginationComponent } from '../../../../shared/ui/app-pagination/app-pagination.component';
+
 @Component({
   selector: 'app-rapport-financier-table',
   standalone: true,
-  imports: [CommonModule, FormsModule, FormatMontantPipe, ChangerDatePipe],
+  imports: [CommonModule, FormsModule, FormatMontantPipe, ChangerDatePipe, AppPaginationComponent],
   templateUrl: './rapport-financier-table.component.html',
   styleUrls: ['./rapport-financier-table.component.css'],
 })

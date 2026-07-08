@@ -7,10 +7,12 @@ import { WorkflowState } from '../../models/workflow-state.model';
 import { WorkflowAction } from '../../models/workflow-action.model';
 import { Profile } from '../../../profil/models/profil.model';
 
+import { AppPaginationComponent } from '../../../../shared/ui/app-pagination/app-pagination.component';
+
 @Component({
   selector: 'app-workflow-actions',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, AppPaginationComponent],
   templateUrl: './workflow-actions.component.html',
   styleUrls: ['./workflow-actions.component.css'],
 })

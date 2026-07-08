@@ -239,9 +239,9 @@ export class PlafondsComponent implements OnInit {
 
     this.plafondService
       .deleteLimit(selected.id)
-      .pipe(finalize(() => this.isDeleteLoading.set(false)))
       .subscribe({
         next: () => {
+          this.isDeleteLoading.set(false);
           this.notifService.add({
             type: 'plafond',
             action: 'delete',
@@ -254,6 +254,7 @@ export class PlafondsComponent implements OnInit {
           this.toastService.show('Plafond supprimé avec succès', 'success');
         },
         error: (err) => {
+          this.isDeleteLoading.set(false);
           this.toastService.show(
             this.extractErrorMessage(err) || 'Erreur lors de la suppression',
             'error'
@@ -365,9 +366,9 @@ export class PlafondsComponent implements OnInit {
 
     this.plafondService
       .deleteCollectorLimit(selected.id)
-      .pipe(finalize(() => this.isDeleteLoading.set(false)))
       .subscribe({
         next: () => {
+          this.isDeleteLoading.set(false);
           this.notifService.add({
             type: 'plafond',
             action: 'delete',
@@ -380,6 +381,7 @@ export class PlafondsComponent implements OnInit {
           this.toastService.show('Affectation supprimée avec succès', 'success');
         },
         error: (err) => {
+          this.isDeleteLoading.set(false);
           this.toastService.show(
             this.extractErrorMessage(err) || 'Erreur lors de la suppression',
             'error'
@@ -410,9 +412,9 @@ export class PlafondsComponent implements OnInit {
 
     this.plafondService
       .resetCollectorLimit(selected.id)
-      .pipe(finalize(() => this.isResetLoading.set(false)))
       .subscribe({
         next: () => {
+          this.isResetLoading.set(false);
           this.notifService.add({
             type: 'plafond',
             action: 'reset',
@@ -424,6 +426,7 @@ export class PlafondsComponent implements OnInit {
           this.toastService.show('Collecteur déplafonné avec succès', 'success');
         },
         error: (err) => {
+          this.isResetLoading.set(false);
           this.toastService.show(
             this.extractErrorMessage(err) || 'Erreur lors du déplafonnement',
             'error'

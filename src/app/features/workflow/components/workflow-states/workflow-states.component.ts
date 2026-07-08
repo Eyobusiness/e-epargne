@@ -11,12 +11,15 @@ import { FormsModule } from '@angular/forms';
 
 import { WorkflowState } from '../../models/workflow-state.model';
 
+import { AppPaginationComponent } from '../../../../shared/ui/app-pagination/app-pagination.component';
+
 @Component({
   selector: 'app-workflow-states',
   standalone: true,
   imports: [
     CommonModule,
     FormsModule,
+    AppPaginationComponent,
   ],
   templateUrl: './workflow-states.component.html',
   styleUrls: ['./workflow-states.component.css'],

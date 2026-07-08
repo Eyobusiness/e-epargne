@@ -10,10 +10,19 @@ import { AppPageHeaderComponent } from '../../../../shared/ui/app-page-header/ap
 import { AppEmptyStateComponent } from '../../../../shared/ui/app-empty-state/app-empty-state.component';
 import { ResolveUserPipe } from '../../../../shared/pipes/resolve-user.pipe';
 
+import { AppPaginationComponent } from '../../../../shared/ui/app-pagination/app-pagination.component';
+
 @Component({
   selector: 'app-collection-page',
   standalone: true,
-  imports: [CommonModule, FormsModule, AppPageHeaderComponent, AppEmptyStateComponent, ResolveUserPipe],
+  imports: [
+    CommonModule,
+    FormsModule,
+    AppPageHeaderComponent,
+    AppEmptyStateComponent,
+    ResolveUserPipe,
+    AppPaginationComponent,
+  ],
   templateUrl: './collection.component.html',
   styleUrls: ['./collection.component.css'],
 })
@@ -106,16 +115,6 @@ export class CollectionComponent implements OnInit {
     if (page < 1 || page > this.totalPages()) return;
     this.currentPage.set(page);
     this.loadCollections();
-  }
-
-  get pageNumbers(): number[] {
-    const total   = this.totalPages();
-    const current = this.currentPage();
-    const range: number[] = [];
-    for (let i = Math.max(1, current - 2); i <= Math.min(total, current + 2); i++) {
-      range.push(i);
-    }
-    return range;
   }
 
   // ─── Filtres ─────────────────────────────────────────────────────────────
