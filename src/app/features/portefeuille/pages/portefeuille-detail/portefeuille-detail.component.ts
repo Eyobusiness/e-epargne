@@ -254,9 +254,11 @@ export class PortefeuilleDetailComponent implements OnInit {
 
     this.isLoading.set(true);
 
+    const { montant_commission, montant_net, ...cleanedOperation } = operation;
+
     this.operationService
       .create({
-        ...operation,
+        ...cleanedOperation,
         adherent_id: adherentId,
       })
       .pipe(finalize(() => this.isLoading.set(false)))

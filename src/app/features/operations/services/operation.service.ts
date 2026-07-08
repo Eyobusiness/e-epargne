@@ -35,11 +35,13 @@ export class OperationService {
   }
 
   create(payload: Operation): Observable<any> {
-    return this.http.post(this.apiUrl, payload);
+    const { montant_commission, montant_net, ...cleanedPayload } = payload;
+    return this.http.post(this.apiUrl, cleanedPayload);
   }
 
   update(id: string, payload: Partial<Operation>): Observable<any> {
-    return this.http.put(`${this.apiUrl}/${id}`, payload);
+    const { montant_commission, montant_net, ...cleanedPayload } = payload;
+    return this.http.put(`${this.apiUrl}/${id}`, cleanedPayload);
   }
 
   activate(
