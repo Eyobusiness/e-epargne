@@ -127,27 +127,29 @@
 
         <div
           class="activity-icon"
-          [class.success]="operation.status === '200'"
-          [class.warning]="operation.status === '100'"
-          [class.danger]="operation.status === '300'">
-
-          {{
-            operation.adherent?.name
-              ?.substring(0,2)
-              ?.toUpperCase()
-          }}
-
+          [class.success]="operation.type_operation === 'DEPOT'"
+          [class.danger]="operation.type_operation === 'RETRAIT'">
+          @if (operation.type_operation === 'DEPOT') {
+            <i class="bi bi-arrow-down-left-circle-fill fs-5"></i>
+          } @else {
+            <i class="bi bi-arrow-up-right-circle-fill fs-5"></i>
+          }
         </div>
 
         <div class="activity-content">
 
-          <strong>
-
-            {{
-              operation.type_operation
-            }}
-
-          </strong>
+          <div class="d-flex align-items-center gap-2 mb-1 flex-wrap">
+            <strong>
+              {{ getTypeLabel(operation.type_operation) }}
+            </strong>
+            <span
+              class="status-badge-sm"
+              [class.pending]="operation.status === '100'"
+              [class.valid]="operation.status === '200'"
+              [class.cancel]="operation.status === '300'">
+              {{ getStatusLabel(operation.status) }}
+            </span>
+          </div>
 
           <span>
 
@@ -157,18 +159,19 @@
 
             •
 
-            {{
-              operation.montant
-                | formatMontant
-            }}
-
-            FCFA
+            <strong>
+              {{
+                operation.montant
+                  | formatMontant
+              }}
+              FCFA
+            </strong>
 
           </span>
 
         </div>
 
-        <small>
+        <small class="text-muted ms-auto">
 
           {{
             operation.date_operation

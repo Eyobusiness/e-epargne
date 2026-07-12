@@ -22,8 +22,8 @@ export class DashboardStatsComponent {
   readonly Solde = computed(() => this.stats()?.Solde ?? 0);
   readonly adherentActif = computed(() => this.stats()?.adherentActif ?? 0);
   readonly adherentInactif = computed(() => this.stats()?.adherentInactif ?? 0);
-  readonly totalCommissionRetrait = computed(() => this.stats()?.totalCommissionRetrait ?? 0);
-  readonly soldeCommission = computed(() => this.stats()?.soldeCommission ?? 0);
+  readonly totalCommission = computed(() => this.stats()?.soldeCommission ?? 0);
+  readonly soldeCommission = computed(() => this.stats()?.soldeCommission - this.totalDepense());
   readonly tauxcotisation = computed(() => this.totalDapotPaye()/this.totalDepot()*100);
   readonly totalDepense = computed(() => this.stats()?.totalDepense ?? 0);
 }

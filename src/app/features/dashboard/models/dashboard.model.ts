@@ -13,11 +13,11 @@ export interface DashboardStats {
 
   totalDepense: number;
 
-  totalCommissionRetrait: number;
+  totalCommission: number;
 
   soldeCommission: number;
 
-  tauxCommissionRetrait: number;
+  tauxCommission: number;
 
   adherentActif: number;
 

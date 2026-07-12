@@ -185,4 +185,29 @@ mettreAJourDateHeure(): void {
           },
         });
       }
+
+      getStatusLabel(status?: string): string {
+        switch (status) {
+          case '100':
+            return 'En attente';
+          case '200':
+            return 'Payé';
+          case '300':
+            return 'Annulé';
+          default:
+            return status ?? '-';
+        }
+      }
+
+      getTypeLabel(type: string): string {
+        switch (type) {
+          case 'DEPOT':
+            return 'Dépôt';
+          case 'RETRAIT':
+            return 'Retrait';
+          default:
+            return type;
+        }
+      }
     }
+
