@@ -12,6 +12,8 @@ import {
   UpdateCotisationAdherentPayload,
 } from '../../models/cotisation-adherent.model';
 
+import { AppSearchableSelectComponent, SearchableSelectOption } from '../../../../shared/ui/app-searchable-select/app-searchable-select.component';
+
 export type CotisationAdherentFormPayload =
   | CreateCotisationAdherentPayload
   | UpdateCotisationAdherentPayload;
@@ -19,8 +21,7 @@ export type CotisationAdherentFormPayload =
 @Component({
   selector: 'app-cotisation-adherent-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule,
-    NgSelectComponent],
+  imports: [CommonModule, ReactiveFormsModule, NgSelectComponent, AppSearchableSelectComponent],
   templateUrl: './cotisation-adherent-form.component.html',
   styleUrls: ['./cotisation-adherent-form.component.css'],
 })
@@ -34,6 +35,14 @@ export class CotisationAdherentFormComponent {
   readonly cotisations = input<Cotisation[]>([]);
 
   readonly isLoading = input(false);
+
+  readonly adherentSelectOptions = computed<SearchableSelectOption[]>(() =>
+    this.adherents().map((adh) => ({
+      label: adh.name,
+      value: String(adh.id ?? ''),
+      subtitle: [adh.matricule, adh.phone].filter(Boolean).join(' • '),
+    })),
+  );
 
   readonly submitForm = output<CotisationAdherentFormPayload>();
 

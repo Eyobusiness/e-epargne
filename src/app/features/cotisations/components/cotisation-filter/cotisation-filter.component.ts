@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component, input, output, signal } from '@angular/core';
+import { Component, computed, input, output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { Adherent } from '../../../adherents/models/adherent.model';
+import { AppSearchableSelectComponent, SearchableSelectOption } from '../../../../shared/ui/app-searchable-select/app-searchable-select.component';
 
 export interface CotisationFilter {
   startDate: string;
@@ -15,13 +16,21 @@ export interface CotisationFilter {
 @Component({
   selector: 'app-cotisation-filter',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, AppSearchableSelectComponent],
   templateUrl: './cotisation-filter.component.html',
   styleUrls: ['./cotisation-filter.component.css'],
 })
 export class CotisationFilterComponent {
   readonly adherents = input<Adherent[]>([]);
   readonly filterChange = output<CotisationFilter>();
+
+  readonly adherentSelectOptions = computed<SearchableSelectOption[]>(() =>
+    this.adherents().map((adh) => ({
+      label: adh.name,
+      value: String(adh.id ?? ''),
+      subtitle: [adh.matricule, adh.phone].filter(Boolean).join(' • '),
+    })),
+  );
 
   readonly startDate = signal('');
   readonly endDate = signal('');

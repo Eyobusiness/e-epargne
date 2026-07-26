@@ -3,17 +3,19 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed, effect, input, output } from '@angular/core';
 
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { Adherent } from '../../../adherents/models/adherent.model';
 
 import { Groupe } from '../../models/groupe.model';
 import { AffectationAdherent } from '../../models/affectation-adherent.model';
 
+import { AppSearchableSelectComponent, SearchableSelectOption } from '../../../../shared/ui/app-searchable-select/app-searchable-select.component';
+
 @Component({
   selector: 'app-affectation-adherent-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, AppSearchableSelectComponent],
   templateUrl: './affectation-adherent-form.component.html',
   styleUrls: ['./affectation-adherent-form.component.css'],
 })
@@ -28,11 +30,15 @@ export class AffectationAdherentFormComponent {
 
   readonly isLoading = input(false);
 
-  // Multi-select: on émet un payload AffectationAdherent basé sur le premier choix
-  // (tant que GroupeDetailComponent ne gère pas encore l'envoi multi).
+  readonly adherentSelectOptions = computed<SearchableSelectOption[]>(() =>
+    this.adherents().map((adh) => ({
+      label: adh.name,
+      value: String(adh.id ?? ''),
+      subtitle: [adh.matricule, adh.phone].filter(Boolean).join(' • '),
+    })),
+  );
+
   readonly submitForm = output<AffectationAdherent>();
-
-
 
   readonly cancel = output<void>();
 
@@ -41,6 +47,13 @@ export class AffectationAdherentFormComponent {
 
     adherent_ids: [[] as string[], [Validators.required, Validators.minLength(1)]],
   });
+
+  onAdherentSelect(val: string): void {
+    this.form.patchValue({
+      adherent_ids: val ? [val] : [],
+    });
+    this.form.get('adherent_ids')?.markAsTouched();
+  }
 
 
 

@@ -1,0 +1,84 @@
+<div class="searchable-select-container" [class.has-error]="error()" [class.disabled]="isDisabled() || disabled()">
+  @if (label()) {
+    <label [for]="id()" class="select-label">{{ label() }}</label>
+  }
+
+  <div class="select-trigger" [class.open]="isOpen()" (click)="toggleOpen()">
+    <div class="selected-text">
+      @if (selectedOption()) {
+        <span class="option-label">{{ selectedOption()?.label }}</span>
+        @if (selectedOption()?.subtitle) {
+          <span class="option-subtitle"> ({{ selectedOption()?.subtitle }})</span>
+        }
+      } @else {
+        <span class="placeholder-text">{{ placeholder() }}</span>
+      }
+    </div>
+
+    <div class="trigger-actions">
+      @if (clearable() && selectedOption() && !isDisabled() && !disabled()) {
+        <button type="button" class="btn-clear" title="Effacer la sélection" (click)="clearSelection($event)">
+          <i class="bi bi-x-circle-fill"></i>
+        </button>
+      }
+      <i class="bi bi-chevron-down arrow-icon" [class.rotated]="isOpen()"></i>
+    </div>
+  </div>
+
+  @if (isOpen()) {
+    <div class="select-dropdown">
+      <div class="search-box" (click)="$event.stopPropagation()">
+        <i class="bi bi-search search-icon"></i>
+        <input
+          type="text"
+          class="search-input"
+          [placeholder]="searchPlaceholder()"
+          [value]="searchQuery()"
+          (input)="onSearchInput($event)"
+          autofocus
+        />
+      </div>
+
+      <ul class="options-list">
+        @if (clearable()) {
+          <li
+            class="option-item reset-option"
+            [class.selected]="!selectedValue()"
+            (click)="selectOption(null, $event)"
+          >
+            <span class="option-label">-- {{ placeholder() }} --</span>
+          </li>
+        }
+
+        @for (opt of filteredOptions(); track opt.value) {
+          <li
+            class="option-item"
+            [class.selected]="opt.value === selectedValue()"
+            (click)="selectOption(opt, $event)"
+          >
+            <div class="option-content">
+              <span class="option-label">{{ opt.label }}</span>
+              @if (opt.subtitle) {
+                <span class="option-subtitle">{{ opt.subtitle }}</span>
+              }
+            </div>
+            @if (opt.value === selectedValue()) {
+              <i class="bi bi-check2 check-icon"></i>
+            }
+          </li>
+        }
+
+        @if (filteredOptions().length === 0) {
+          <li class="no-results">
+            <i class="bi bi-search"></i>
+            <span>Aucun résultat trouvé</span>
+          </li>
+        }
+      </ul>
+    </div>
+  }
+
+  @if (error()) {
+    <span class="error-message">{{ error() }}</span>
+  }
+</div>

@@ -2,12 +2,17 @@ import { Adherent } from '../../adherents/models/adherent.model';
 
 export interface Cotisation {
   id?: string;
+  description?: string;
   periodicite: string;
   montant: number;
   adherent_id?: string;
   status?: string;
   date_debut: string;
   date_fin: string;
+  commission_cycle_enabled?: boolean;
+  commission_mode?: string;
+  commission_valeur?: number;
+  commission_cycle_size?: number;
   adherent?: Adherent;
   created_at?: string;
   updated_at?: string;
@@ -32,21 +37,31 @@ export interface CotisationListResponse {
 }
 
 export interface CreateCotisationPayload {
+  description?: string;
   periodicite: string;
   montant: number;
   adherent_id?: string;
   date_debut: string;
   date_fin: string;
+  commission_cycle_enabled?: boolean;
+  commission_mode?: string;
+  commission_valeur?: number;
+  commission_cycle_size?: number;
 }
 
 
 export interface UpdateCotisationPayload {
+  description?: string;
   periodicite?: string;
   montant?: number;
   adherent_id?: string;
   status?: string;
   date_debut?: string;
   date_fin?: string;
+  commission_cycle_enabled?: boolean;
+  commission_mode?: string;
+  commission_valeur?: number;
+  commission_cycle_size?: number;
 }
 
 

@@ -48,40 +48,16 @@
     </div>
 
     <div class="form-group">
-
-      <label>
-        Adhérents (multi)
-      </label>
-
-      <select
-        title="Selectionner"
-        formControlName="adherent_ids"
-        multiple
-        size="6"
-        [class.invalid]="hasError('adherent_ids')"
-      >
-
-        @for (
-          item of adherents();
-          track item.id
-        ) {
-
-          <option [value]="item.id">
-            {{ item.name }}
-          </option>
-
-        }
-
-      </select>
-
-      @if (hasError('adherent_ids')) {
-
-        <small class="error-text">
-          Au moins un adhérent est obligatoire
-        </small>
-
-      }
-
+      <app-searchable-select
+        label="Adhérent à affecter"
+        placeholder="Sélectionner un adhérent"
+        searchPlaceholder="Rechercher par nom, matricule..."
+        [options]="adherentSelectOptions()"
+        [ngModel]="form.get('adherent_ids')?.value?.[0] || ''"
+        [ngModelOptions]="{standalone: true}"
+        (selectionChange)="onAdherentSelect($event)"
+        [error]="hasError('adherent_ids') ? 'Au moins un adhérent est obligatoire' : null">
+      </app-searchable-select>
     </div>
 
   </div>

@@ -1,14 +1,15 @@
 import { CommonModule } from '@angular/common';
-import { Component, input, output } from '@angular/core';
+import { Component, computed, input, output } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { Adherent } from '../../../adherents/models/adherent.model';
 import { GenerateCotisationAdherentPayload } from '../../models/cotisation-adherent.model';
+import { AppSearchableSelectComponent, SearchableSelectOption } from '../../../../shared/ui/app-searchable-select/app-searchable-select.component';
 
 @Component({
   selector: 'app-cotisation-generate',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, AppSearchableSelectComponent],
   templateUrl: './cotisation-generate.component.html',
   styleUrls: ['./cotisation-generate.component.css'],
 })
@@ -18,6 +19,14 @@ export class CotisationGenerateComponent {
   readonly adherents = input<Adherent[]>([]);
 
   readonly isLoading = input(false);
+
+  readonly adherentSelectOptions = computed<SearchableSelectOption[]>(() =>
+    this.adherents().map((adh) => ({
+      label: adh.name,
+      value: String(adh.id ?? ''),
+      subtitle: [adh.matricule, adh.phone].filter(Boolean).join(' • '),
+    })),
+  );
 
   readonly generate = output<GenerateCotisationAdherentPayload>();
 

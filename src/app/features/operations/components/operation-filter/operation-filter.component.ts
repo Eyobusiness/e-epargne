@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component, input, output, signal } from '@angular/core';
+import { Component, computed, input, output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { Adherent } from '../../../adherents/models/adherent.model';
+import { AppSearchableSelectComponent, SearchableSelectOption } from '../../../../shared/ui/app-searchable-select/app-searchable-select.component';
 
 export interface OperationFilter {
   adherentId: string;
@@ -15,7 +16,7 @@ export interface OperationFilter {
 @Component({
   selector: 'app-operation-filter',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, AppSearchableSelectComponent],
   templateUrl: './operation-filter.component.html',
   styleUrls: ['./operation-filter.component.css'],
 })
@@ -23,6 +24,14 @@ export class OperationFilterComponent {
   readonly adherents = input<Adherent[]>([]);
 
   readonly filterChange = output<OperationFilter>();
+
+  readonly adherentSelectOptions = computed<SearchableSelectOption[]>(() =>
+    this.adherents().map((adh) => ({
+      label: adh.name,
+      value: String(adh.id ?? ''),
+      subtitle: [adh.matricule, adh.phone].filter(Boolean).join(' • '),
+    })),
+  );
 
   readonly adherentId = signal('');
 

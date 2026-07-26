@@ -1,32 +1,40 @@
 <form class="cotisation-form" [formGroup]="form" (ngSubmit)="save()">
   <div class="form-grid">
     <div class="form-group full-width">
-  <label for="periodicite">Périodicité</label>
+      <label for="description">Description (optionnelle)</label>
+      <input
+        id="description"
+        type="text"
+        formControlName="description"
+        placeholder="Description de la souscription">
+    </div>
 
-  <select
-  id="periodicite"
-  formControlName="periodicite"
-  [class.invalid]="hasError('periodicite')">
+    <div class="form-group">
+      <label for="periodicite">Périodicité</label>
 
-  <option value="">
-    Sélectionner une périodicité
-  </option>
+      <select
+        id="periodicite"
+        formControlName="periodicite"
+        [class.invalid]="hasError('periodicite')">
 
-  @for (item of periodicites; track item.value) {
-    <option [value]="item.value">
-      {{ item.label }}
-    </option>
-  }
+        <option value="">
+          Sélectionner une périodicité
+        </option>
 
-</select>
+        @for (item of periodicites; track item.value) {
+          <option [value]="item.value">
+            {{ item.label }}
+          </option>
+        }
 
-  @if (hasError('periodicite')) {
-    <small class="error-text">
-      La périodicité est obligatoire
-    </small>
-  }
-</div>
+      </select>
 
+      @if (hasError('periodicite')) {
+        <small class="error-text">
+          La périodicité est obligatoire
+        </small>
+      }
+    </div>
 
     <div class="form-group">
       <label for="montant">Montant</label>
@@ -42,13 +50,13 @@
     </div>
 
     <div class="form-group">
-      <label for="adherent_id">Adherent (optionnel)</label>
-      <select id="adherent_id" formControlName="adherent_id">
-        <option value="">Aucun</option>
-        @for (item of adherents(); track item.id) {
-          <option [value]="item.id">{{ item.name }}</option>
-        }
-      </select>
+      <app-searchable-select
+        label="Adhérent (optionnel)"
+        placeholder="Aucun adhérent sélectionné"
+        searchPlaceholder="Rechercher par nom, matricule..."
+        [options]="adherentSelectOptions()"
+        formControlName="adherent_id">
+      </app-searchable-select>
     </div>
 
     <div class="form-group">
@@ -68,6 +76,48 @@
         formControlName="date_fin"
         [class.invalid]="hasError('date_fin')">
     </div>
+
+    <!-- COMMISSION CONFIGURATION -->
+    <div class="form-group full-width commission-section">
+      <div class="checkbox-toggle">
+        <input
+          id="commission_cycle_enabled"
+          type="checkbox"
+          formControlName="commission_cycle_enabled">
+        <label for="commission_cycle_enabled">
+          <strong>Activer les commissions sur cette souscription</strong>
+        </label>
+      </div>
+    </div>
+
+    @if (form.get('commission_cycle_enabled')?.value) {
+      <div class="form-group">
+        <label for="commission_mode">Mode de commission</label>
+        <select id="commission_mode" formControlName="commission_mode">
+          @for (mode of commissionModes; track mode.value) {
+            <option [value]="mode.value">{{ mode.label }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="commission_valeur">Valeur de la commission</label>
+        <input
+          id="commission_valeur"
+          type="number"
+          formControlName="commission_valeur"
+          placeholder="Ex: 1000 ou 5">
+      </div>
+
+      <div class="form-group full-width">
+        <label for="commission_cycle_size">Taille du cycle (en jours)</label>
+        <input
+          id="commission_cycle_size"
+          type="number"
+          formControlName="commission_cycle_size"
+          placeholder="30">
+      </div>
+    }
   </div>
 
   <div class="form-actions">

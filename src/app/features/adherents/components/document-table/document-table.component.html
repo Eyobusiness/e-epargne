@@ -10,6 +10,7 @@
          target="_blank" 
          rel="noopener" 
          title="Cliquer pour ouvrir dans un nouvel onglet"
+         (click)="openInNewTab(item, $event)"
       >
         <div class="preview-container">
           @if (isImage(item.extension) && !hasImageError(item)) {
@@ -74,15 +75,14 @@
 
       <!-- ACTION -->
       <div class="document-actions">
-        <a
+        <button
+          type="button"
           class="btn-action-premium"
-          [href]="getFileUrl(item)"
-          target="_blank"
-          rel="noopener"
+          (click)="openInNewTab(item, $event)"
         >
           <i class="bi bi-box-arrow-up-right"></i>
           <span>Ouvrir dans un autre onglet</span>
-        </a>
+        </button>
       </div>
 
     </div>

@@ -41,6 +41,19 @@ export class CotisationTableComponent {
     }
   }
 
+  getCommissionLabel(item: Cotisation): string {
+    if (!item.commission_cycle_enabled) {
+      return 'Désactivée';
+    }
+
+    const val = item.commission_valeur ?? 0;
+    const isPercent = item.commission_mode === 'PERCENT';
+    const formattedVal = isPercent ? `${val}%` : `${val} FCFA`;
+    const cycle = item.commission_cycle_size ? ` / ${item.commission_cycle_size}j` : '';
+
+    return `${formattedVal}${cycle}`;
+  }
+
   onEdit(item: Cotisation): void {
     this.edit.emit(item);
   }

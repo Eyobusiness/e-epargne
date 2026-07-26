@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, input, signal } from '@angular/core';
+import { Component, effect, inject, input, signal } from '@angular/core';
 
 import { DocumentIdentite } from '../../models/document.model';
 import { DocumentService } from '../../services/document.service';
@@ -16,13 +16,46 @@ export class DocumentTableComponent {
 
   readonly documents = input<DocumentIdentite[]>([]);
   readonly imageLoadErrors = signal<Record<string, boolean>>({});
+  readonly blobUrls = signal<Record<string, string>>({});
+
+  constructor() {
+    effect(() => {
+      const items = this.documents();
+      items.forEach((item) => {
+        const key = item.id || item.type;
+        if (!key) return;
+
+        const resolvedUrl = this.documentService.resolveReadUrl(item);
+        if (resolvedUrl && (resolvedUrl.startsWith('http://') || resolvedUrl.startsWith('https://'))) {
+          this.documentService.fetchBlobUrl(resolvedUrl, item.extension).subscribe((blobUrl) => {
+            this.blobUrls.update((current) => ({
+              ...current,
+              [key]: blobUrl,
+            }));
+          });
+        }
+      });
+    });
+  }
 
   trackById(_index: number, item: DocumentIdentite): string {
     return item.id ?? String(_index);
   }
 
   getFileUrl(item: DocumentIdentite): string {
+    const key = item.id || item.type;
+    if (key && this.blobUrls()[key]) {
+      return this.blobUrls()[key];
+    }
     return this.documentService.resolveReadUrl(item);
+  }
+
+  openInNewTab(item: DocumentIdentite, event?: Event): void {
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+    this.documentService.openInNewTab(item);
   }
 
   isImage(extension?: string): boolean {

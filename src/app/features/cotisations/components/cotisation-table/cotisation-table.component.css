@@ -78,6 +78,21 @@ tbody tr:hover {
   color: #16a34a;
 }
 
+.commission-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  background: #f3f4f6;
+  color: #6b7280;
+}
+
+.commission-badge.enabled {
+  background: #e0e7ff;
+  color: #4338ca;
+}
+
 .actions {
   display: flex;
   align-items: center;

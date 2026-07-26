@@ -13,14 +13,6 @@ export const GROUPES_ROUTES: Routes = [
   },
 
   {
-    path: 'commissions',
-    loadComponent: () =>
-      import('../../commissions/pages/commissions/commissions.component').then(
-        (m) => m.CommissionsComponent,
-      ),
-  },
-
-  {
     path: ':id',
     component: GroupeDetailComponent,
   },

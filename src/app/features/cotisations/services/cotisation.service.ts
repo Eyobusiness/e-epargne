@@ -47,12 +47,17 @@ export class CotisationService {
   activate(id: string, cotisation: Cotisation): Observable<any> {
     const payload = {
       id: cotisation.id,
-      label: (cotisation as any).label || 'Monthly contribution',
+      description: cotisation.description,
+      periodicite: cotisation.periodicite,
       montant: cotisation.montant,
       adherent_id: cotisation.adherent_id,
       status: '200',
       date_debut: cotisation.date_debut?.split('T')[0] ?? cotisation.date_debut,
       date_fin: cotisation.date_fin?.split('T')[0] ?? cotisation.date_fin,
+      commission_cycle_enabled: cotisation.commission_cycle_enabled,
+      commission_mode: cotisation.commission_mode,
+      commission_valeur: cotisation.commission_valeur,
+      commission_cycle_size: cotisation.commission_cycle_size,
     };
     return this.http.put<any>(`${this.apiUrl}/${id}/activate`, payload);
   }
@@ -60,12 +65,17 @@ export class CotisationService {
   deactivate(id: string, cotisation: Cotisation): Observable<any> {
     const payload = {
       id: cotisation.id,
-      label: (cotisation as any).label || 'Monthly contribution',
+      description: cotisation.description,
+      periodicite: cotisation.periodicite,
       montant: cotisation.montant,
       adherent_id: cotisation.adherent_id,
       status: '300',
       date_debut: cotisation.date_debut?.split('T')[0] ?? cotisation.date_debut,
       date_fin: cotisation.date_fin?.split('T')[0] ?? cotisation.date_fin,
+      commission_cycle_enabled: cotisation.commission_cycle_enabled,
+      commission_mode: cotisation.commission_mode,
+      commission_valeur: cotisation.commission_valeur,
+      commission_cycle_size: cotisation.commission_cycle_size,
     };
     return this.http.put<any>(`${this.apiUrl}/${id}/deactivate`, payload);
   }

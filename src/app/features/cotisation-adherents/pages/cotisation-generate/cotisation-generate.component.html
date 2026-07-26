@@ -6,32 +6,13 @@
   <div class="form-grid">
 
     <div class="form-group">
-
-      <label for="adherentId">
-        Adhérent
-      </label>
-
-      <select
-        id="adherentId"
+      <app-searchable-select
+        label="Adhérent"
+        placeholder="Tous les adhérents"
+        searchPlaceholder="Rechercher par nom, matricule..."
+        [options]="adherentSelectOptions()"
         formControlName="adherentId">
-
-        <option value="">
-          Tous les adhérents
-        </option>
-
-        @for (
-          item of adherents();
-          track item.id
-        ) {
-
-          <option [value]="item.id">
-            {{ item.name }}
-          </option>
-
-        }
-
-      </select>
-
+      </app-searchable-select>
     </div>
 
     <div class="form-group">
