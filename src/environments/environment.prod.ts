@@ -1,7 +1,9 @@
 export const environment = {
-  production: false,
+  production: true,
 
-  apiUrl: 'https://tontine.sds-apps.com/api/v1',
+  apiUrl: 'https://tontine-api.sds-techs.com/api/v1',
+   
+  
 
   // HMAC
   hmacEnabled: true,
