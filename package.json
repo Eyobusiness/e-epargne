@@ -9,7 +9,13 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "serve:ssr:e-tontine": "node dist/e-tontine/server/server.mjs"
+    "serve:ssr:e-tontine": "node dist/e-tontine/server/server.mjs",
+    "pm2:start": "pm2 start ecosystem.config.cjs",
+    "pm2:prod": "pm2 start ecosystem.config.cjs --env production",
+    "pm2:stop": "pm2 stop tontine-app",
+    "pm2:restart": "pm2 restart tontine-app",
+    "pm2:reload": "pm2 reload tontine-app",
+    "pm2:logs": "pm2 logs tontine-app"
   },
   "private": true,
   "packageManager": "npm@11.6.2",

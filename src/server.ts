@@ -5,28 +5,17 @@ import {
   writeResponseToNodeResponse,
 } from '@angular/ssr/node';
 import express from 'express';
-import { join } from 'node:path';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const browserDistFolder = join(import.meta.dirname, '../browser');
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const browserDistFolder = join(__dirname, '../browser');
 
 const app = express();
 const angularApp = new AngularNodeAppEngine();
 
-/**
- * Example Express Rest API endpoints can be defined here.
- * Uncomment and define endpoints as necessary.
- *
- * Example:
- * ```ts
- * app.get('/api/{*splat}', (req, res) => {
- *   // Handle API request
- * });
- * ```
- */
-
-/**
- * Serve static files from /browser
- */
 app.use(
   express.static(browserDistFolder, {
     maxAge: '1y',
@@ -35,9 +24,6 @@ app.use(
   }),
 );
 
-/**
- * Handle all other requests by rendering the Angular application.
- */
 app.use((req, res, next) => {
   angularApp
     .handle(req)
@@ -48,21 +34,39 @@ app.use((req, res, next) => {
 });
 
 /**
- * Start the server if this module is the main entry point, or it is ran via PM2.
- * The server listens on the port defined by the `PORT` environment variable, or defaults to 4000.
+ * PM2 change process.argv → isMainModule() peut renvoyer false.
+ * On écoute donc dès qu'on n'est pas explicitement en mode CLI Angular.
  */
-if (isMainModule(import.meta.url) || process.env['pm_id']) {
-  const port = process.env['PORT'] || 4000;
-  app.listen(port, (error) => {
-    if (error) {
-      throw error;
-    }
-
-    console.log(`Node Express server listening on http://localhost:${port}`);
-  });
+function shouldListen(): boolean {
+  if (process.env['SKIP_SSR_LISTEN'] === '1') {
+    return false;
+  }
+  // Toujours en prod / PM2 / forçage explicite
+  if (
+    process.env['RUN_SSR_SERVER'] === '1' ||
+    process.env['NODE_ENV'] === 'production' ||
+    process.env['PM2_HOME'] ||
+    process.env['pm_id'] != null
+  ) {
+    return true;
+  }
+  try {
+    return isMainModule(import.meta.url);
+  } catch {
+    return true;
+  }
 }
 
-/**
- * Request handler used by the Angular CLI (for dev-server and during build) or Firebase Cloud Functions.
- */
+if (shouldListen()) {
+  const port = Number(process.env['PORT'] || 3200);
+  const host = process.env['HOST'] || '0.0.0.0';
+  app.listen(port, host, () => {
+    console.log(
+      `Node Express server listening on http://${host}:${port} (pid=${process.pid})`,
+    );
+  });
+} else {
+  console.log('SSR module loaded without listen (Angular CLI / SKIP_SSR_LISTEN)');
+}
+
 export const reqHandler = createNodeRequestHandler(app);
